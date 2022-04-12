@@ -1,20 +1,21 @@
-// import { createRoot } from 'react-dom/client';
 
-// Create JSX element and log it.
 
-// Create root element to render other elements into, add root element to DOM.
 
-// Render the myEl JSX element into the root element with React.
+/** React 18 */
 
-// const rootHook = createRoot(rootHTMLElement)
-// rootHook.render(<p>jo</p>)
-
-/** React 17 */
-import { render } from "react-dom";
-import rootReactElement from "./non-initial-chunk.js";
+import React from 'react';
+import { createRoot } from 'react-dom/client';
 const rootHTMLElement = document.createElement("div");
 document.body.appendChild(rootHTMLElement);
-render(rootReactElement, rootHTMLElement);
+const rootHook = createRoot(rootHTMLElement)
+rootHook.render(<p>jo</p>)
+
+/** React 17 */
+// import ReactDOM from "react-dom";
+// import rootReactElement from "./non-initial-chunk.js";
+// const rootHTMLElement = document.createElement("div");
+// document.body.appendChild(rootHTMLElement);
+// ReactDOM.render(rootReactElement, rootHTMLElement);
 
 /** PREVIOUS */
 
