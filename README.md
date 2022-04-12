@@ -7,7 +7,6 @@ https://golila.herokuapp.com/
 Join a room, choose your team and wait for game to start.
 Owner of room starts the game. Match the sequence of cryptochains by keypress.
 
-
 ### Scoring
 
 Each matching cryptochain will give you 1 point per coin.
@@ -131,9 +130,11 @@ Heroku Postgres does not allow dropping of database. Before clean migration, res
 
 [ ] Optimise settle game statistics by storing information and call database
 
-[ ] Production Database #1246: Resetting, migration and seeding. 
+[ ] Production Database #1246: Resetting, migration and seeding.
 
 [ ] Expiry for user id tokens.
+
+[ ] Organise webpack config. (Unify commonalities)
 
 ### SPRINT VIEWS
 

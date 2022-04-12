@@ -1,5 +1,7 @@
 import "./root.css";
 
+import "./alt.css";
+
 import getLoginPage from "./components/pages/unauthenticated.js";
 import getLobbyPage from "./components/pages/lobby.js";
 import getNavBar from "./components/frames/navbar.js";
@@ -21,6 +23,7 @@ class Scene {
   constructor(io) {
     this.root = document.getElementById("root");
     ADD_CLASS(this.root, "root-frame");
+    ADD_CLASS(this.root, "grey--");
     this.clientAuth = new ClientAuth(io);
     this.clientGame = new ClientGame(io);
     this.clientUser = new ClientUser(io);

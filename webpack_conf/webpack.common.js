@@ -21,7 +21,18 @@ export default {
     rules: [
       {
         test: /\.css$/i,
-        use: ["style-loader", "css-loader"],
+        use: ["style-loader", { loader: "css-loader" }],
+      },
+
+      {
+        test: /\.(js|mjs|jsx)$/,
+        exclude: /node_modules/,
+        use: {
+          loader: "babel-loader",
+          options: {
+            presets: ["@babel/preset-env", "@babel/preset-react"],
+          },
+        },
       },
       {
         test: /\.(png|jpe?g|gif)$/i,

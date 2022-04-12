@@ -17,18 +17,4 @@ export default merge(common, {
       template: path.resolve(__dirname, "..", "client", "main.html"),
     }),
   ],
-  module: {
-    rules: [
-      {
-        test: /\.(js|mjs|jsx)$/,
-        exclude: /node_modules/,
-        use: {
-          loader: "babel-loader",
-          options: {
-            presets: ["@babel/preset-env"],
-          },
-        },
-      },
-    ],
-  },
 });
