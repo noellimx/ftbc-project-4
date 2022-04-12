@@ -13,7 +13,7 @@ Owner of room starts the game. Match the sequence of cryptochains by keypress.
 Each matching cryptochain will give you 1 point per coin.
 Game runs for 70 + 5 seconds and bonus points for winning team!
 
-![alt text](keys.png)
+![alt text](readme/keys.png)
 
 # Development Notes
 
