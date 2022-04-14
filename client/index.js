@@ -1,14 +1,12 @@
-
-
-
 /** React 18 */
 
-import React from 'react';
-import { createRoot } from 'react-dom/client';
+import { createRoot } from "react-dom/client";
+
+import App from "./react_components/App.jsx";
 const rootHTMLElement = document.createElement("div");
 document.body.appendChild(rootHTMLElement);
-const rootHook = createRoot(rootHTMLElement)
-rootHook.render(<p>jo</p>)
+const rootHook = createRoot(rootHTMLElement);
+rootHook.render(App);
 
 /** React 17 */
 // import ReactDOM from "react-dom";
