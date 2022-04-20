@@ -1,1 +1,1 @@
-DROP DATABASE IF EXISTS p3_development;
+DROP DATABASE IF EXISTS react_development;

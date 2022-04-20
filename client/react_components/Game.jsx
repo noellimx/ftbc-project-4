@@ -46,37 +46,38 @@ export default () => {
   const [winner, setWinner] = useState({ player: "", result: "" });
 
   const dealCards = () => {
-    if (cardDeck.length == 0) {
-      setHand(emptyHand());
-      setHand2(emptyHand());
-      setCardDeck(makeDeck());
-      return;
-    }
-    const draw1 = drawDeck(2, cardDeck);
-    const draw2 = drawDeck(2, cardDeck);
-
-    setHand((prev) => {
-      return [...prev, ...draw1];
-    });
-    setHand2((prev) => {
-      return [...prev, ...draw2];
-    });
-    setCardDeck(() => {
-      return [...cardDeck];
-    });
-
-    const maxVal1 = Math.max(...draw1.map(({ value }) => value));
-    const maxVal2 = Math.max(...draw2.map(({ value }) => value));
-
-    console.table([maxVal1, maxVal2]);
-    setWinner((_) => {
-      if (maxVal1 == maxVal2) {
-        return { player: "", result: "draw" };
-      } else if (maxVal1 > maxVal2) {
-        return { player: "1", result: "winner " };
-      } else {
-        return { player: "2", result: "winner " };
+    setCardDeck((cardDeck) => {
+      console.log(`cardDeck ${cardDeck}`);
+      console.table(cardDeck);
+      if (cardDeck.length == 0) {
+        setHand(emptyHand());
+        setHand2(emptyHand());
+        return makeDeck();
       }
+      const draw1 = drawDeck(2, cardDeck);
+      const draw2 = drawDeck(2, cardDeck);
+
+      setHand((prev) => {
+        return [...prev, ...draw1];
+      });
+      setHand2((prev) => {
+        return [...prev, ...draw2];
+      });
+
+      const maxVal1 = Math.max(...draw1.map(({ value }) => value));
+      const maxVal2 = Math.max(...draw2.map(({ value }) => value));
+      setWinner((_) => {
+        if (maxVal1 == maxVal2) {
+          return { player: "", result: "draw" };
+        } else if (maxVal1 > maxVal2) {
+          return { player: "1", result: "winner " };
+        } else {
+          return { player: "2", result: "winner " };
+        }
+      });
+      console.log(` End cardDeck ${cardDeck}`);
+
+      return [...cardDeck];
     });
   };
 
@@ -98,7 +99,7 @@ export default () => {
   });
   return (
     <div>
-      <div> Deck Count : {cardDeck.length}</div>
+      <div> Deck Count : {cardDeck ? cardDeck.length : "?"}</div>
       <div>
         {" "}
         this round result is {winner.result} {winner.player}
@@ -113,7 +114,7 @@ export default () => {
       <p>
         <button style={{ border: "1px solid black" }} onClick={dealCards}>
           {" "}
-        { cardDeck.length === 0 ? `Reset` : "Play"}
+          {cardDeck.length === 0 ? `Reset` : "Play"}
         </button>
       </p>
     </div>

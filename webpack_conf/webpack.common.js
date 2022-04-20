@@ -8,7 +8,7 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 
 export default {
   entry: {
-    main: "./client/index.js",
+    main: "./client/index.tsx",
   },
   output: {
     filename: "[name]-[contenthash].bundle.js",
@@ -30,10 +30,15 @@ export default {
         use: {
           loader: "babel-loader",
           options: {
-            presets: ["@babel/preset-env", "@babel/preset-react"],
+            presets: [
+              "@babel/preset-env",
+              "@babel/preset-react",
+              "@babel/preset-typescript",
+            ],
           },
         },
       },
+
       {
         test: /\.(png|jpe?g|gif)$/i,
         use: [
@@ -42,6 +47,14 @@ export default {
           },
         ],
       },
+      {
+        test: /\.tsx?$/,
+        use: "ts-loader",
+        exclude: /node_modules/,
+      },
     ],
+  },
+  resolve: {
+    extensions: [".tsx", ".ts", ".js"],
   },
 };
