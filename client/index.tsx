@@ -5,6 +5,8 @@ import * as React from "react";
 import { createRoot } from "react-dom/client";
 import { Link as MLink } from "@mui/material";
 
+import axios from "axios";
+
 // import App from "./react_components/App.tsx";
 const rootHTMLElement: HTMLElement = document.createElement("div");
 document.body.appendChild(rootHTMLElement);
@@ -183,6 +185,18 @@ const SubmitUrlButton: React.FC<SubmitUrlButtonProps> = ({
   );
 };
 
+const isUrlOk = async (url: string): Promise<boolean> => {
+  return new Promise((resolve, reject) => {
+    var oReq = new XMLHttpRequest();
+    oReq.addEventListener("load", () => resolve(true));
+    oReq.addEventListener("error", () => resolve(false));
+    oReq.addEventListener("abort", () => resolve(false));
+    oReq.open("GET", url, true);
+    oReq.send();
+  });
+  // return url.length > 5;
+};
+
 const App: React.FC = () => {
   const [links, setLinks] = React.useState<Links>(mockLinks());
   const [newUrlValue, setNewUrlValue] = React.useState<string>("");
@@ -209,19 +223,9 @@ const App: React.FC = () => {
   };
 
   React.useEffect(() => {
-    //  const _use = (async () => {
-    //     try {
-    //       const some = await fetch(newUrlValue);
-    //       console.log("some")
-    //       console.log(some);
-    //       setIsUrlValueValid((_) => true);
-    //     } catch {
-    //       setIsUrlValueValid((_) => false);
-    //     }
-    //   });
-
     const _use: TrulyImpure = async () => {
-      setIsUrlValueValid((_) => newUrlValue.length > 5);
+      const is = await isUrlOk(newUrlValue);
+      setIsUrlValueValid((_) => is);
     };
     _use();
 
