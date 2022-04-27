@@ -1,9 +1,0 @@
-.default-new-tag {
-  display: flex;
-}
-.token--- {
-  max-height: min(15vh, 40px);
-
-  margin-left: 5px;
-  margin-right: 5px;
-}

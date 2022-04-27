@@ -5,7 +5,6 @@ import * as React from "react";
 import { createRoot } from "react-dom/client";
 import { Link as MLink } from "@mui/material";
 
-import axios from "axios";
 
 // import App from "./react_components/App.tsx";
 const rootHTMLElement: HTMLElement = document.createElement("div");
