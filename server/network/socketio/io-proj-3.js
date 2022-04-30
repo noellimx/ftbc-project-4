@@ -1,40 +1,9 @@
 import cookier from "cookie";
-import { getSecurityToken, validateToken, decodeUserId } from "../auth/auth.js";
-
 import {
-  createAndJoinRoom,
-  joinRoom,
-  whichRoomIdIsUserIn,
-  getLineUp,
-  leaveRoom,
-  getAllRoomsNotInActivePlay,
-  getRoomData,
-  checkLineUpByUserId,
-  isGameStarted,
-  changeTeam,
-  isUserSomeCreator,
-  getSocketsOfRoomByParticipatingUserId,
-  initGameplay,
-  getChainOfGameplayForUser,
-  submitChain,
-  lockGameOfUser,
-  changeChainOfGameOfUser,
-  howLongMoreMs,
-  isGameActive,
-  getUsernameById,
-  getTallyOfMostRecentRoundOfUser,
-  getCreditOf,
-  settleGame,
-  registerUser,
-  getMyTeam,
-} from "../database/actions/game.js";
-import {
-  getSocketsOfUsers,
-  getSocketsOfUser,
-  updateSession,
-  removeSession,
-} from "../database/api/session.js";
-
+  getSecurityToken,
+  validateToken,
+  decodeUserId,
+} from "../../auth/auth.js";
 const _getCookies = (socket) => socket.handshake.headers.cookie;
 
 const _getDbUserIdOfSocket = (socket) => {
@@ -52,7 +21,8 @@ const _getDbUserIdOfSocket = (socket) => {
     return null;
   }
 };
-const bindSocketEvents = (socket, io) => {
+
+const bindSocketProj3Events = (socket, io) => {
   socket.on("login-request", async (credentials, resCb) => {
     const { username, password } = credentials;
     console.log("[socket.on login - request] Getting security token. . . ");
@@ -397,12 +367,4 @@ const bindSocketEvents = (socket, io) => {
   });
 }; //// End of socket binding
 
-export default (io) => {
-  io.on("connection", (socket) => {
-    console.log(`[io.on connection] new socket connected ${socket.id}`);
-
-    const cookie = socket.handshake.headers.cookie;
-    console.log(`[io.on connection] cookie ${cookie}`);
-    bindSocketEvents(socket, io);
-  });
-};
+export default bindSocketProj3Events;
