@@ -63,7 +63,7 @@ Custom scripts:
 
 ### Client
 
-`npm run client-dev` build client hot.
+`npm run client-dev-build` build client hot.
 
 # Deployment (Heroku)
 
