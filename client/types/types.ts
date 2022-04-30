@@ -1,5 +1,3 @@
-
-
 export interface Link {
   id: number;
   url: string;
@@ -13,5 +11,3 @@ export type LinkBooleanFieldModifierHandler = (id: number) => void;
 export type LinkStringFieldModifierHandler = (val: string) => void;
 
 export type TrulyImpure = () => void;
-
-

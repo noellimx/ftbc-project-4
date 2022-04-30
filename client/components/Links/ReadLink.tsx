@@ -1,10 +1,6 @@
-
-
-
-
 import * as React from "react";
 
-import {Link,LinkBooleanFieldModifierHandler } from "../../types/types";
+import { Link, LinkBooleanFieldModifierHandler } from "../../types/types";
 
 import { Link as MLink } from "@mui/material";
 
@@ -13,7 +9,7 @@ interface ReadLinkProps {
   linkIsFresh: LinkBooleanFieldModifierHandler;
 }
 
- const ReadLink: React.FC<ReadLinkProps> = ({ link, linkIsFresh }) => {
+const ReadLink: React.FC<ReadLinkProps> = ({ link, linkIsFresh }) => {
   const { id, url } = link;
   const onClickUnReadFn = () => linkIsFresh(id);
   return (
@@ -31,6 +27,5 @@ interface ReadLinkProps {
     </>
   );
 };
-
 
 export default ReadLink;

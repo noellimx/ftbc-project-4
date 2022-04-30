@@ -1,12 +1,8 @@
-
-
 import * as React from "react";
 
 import { Links, LinkBooleanFieldModifierHandler } from "../../types/types";
 
-
 import FreshLink from "./FreshLink";
-
 
 interface FreshLinksViewProps {
   links: Links;
@@ -25,6 +21,5 @@ const FreshLinksView: React.FC<FreshLinksViewProps> = ({
     </>
   );
 };
-
 
 export default FreshLinksView;

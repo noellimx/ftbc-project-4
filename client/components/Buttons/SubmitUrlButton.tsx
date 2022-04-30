@@ -1,4 +1,3 @@
-
 import * as React from "react";
 
 import { TrulyImpure } from "../../types/types";
@@ -24,5 +23,4 @@ const SubmitUrlButton: React.FC<SubmitUrlButtonProps> = ({
   );
 };
 
-
-export default SubmitUrlButton
+export default SubmitUrlButton;

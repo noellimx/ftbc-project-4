@@ -1,13 +1,8 @@
-
-
-
 import * as React from "react";
 
 import { Link, LinkBooleanFieldModifierHandler } from "../../types/types";
 
 import { Link as MLink } from "@mui/material";
-
-
 
 interface FreshLinkProps {
   link: Link;
@@ -32,5 +27,4 @@ const FreshLink: React.FC<FreshLinkProps> = ({ link, linkIsRead }) => {
   );
 };
 
-
-export default FreshLink
+export default FreshLink;

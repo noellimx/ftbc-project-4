@@ -2,7 +2,7 @@ import * as React from "react";
 
 import { Links, LinkBooleanFieldModifierHandler } from "../../types/types";
 
-import ReadLinksView from "./ReadLinksView"
+import ReadLinksView from "./ReadLinksView";
 import FreshLinksView from "./FreshLinksView";
 interface LinksViewProps {
   links: Links;
@@ -30,6 +30,5 @@ const LinksView: React.FC<LinksViewProps> = ({
     </>
   );
 };
-
 
 export default LinksView;

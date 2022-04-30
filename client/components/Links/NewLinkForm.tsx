@@ -1,8 +1,5 @@
-
-
-
 import * as React from "react";
-import {  LinkStringFieldModifierHandler } from "../../types/types";
+import { LinkStringFieldModifierHandler } from "../../types/types";
 
 interface NewLinkFormProps {
   newUrlValue: string;
@@ -25,6 +22,4 @@ const NewLinkForm: React.FC<NewLinkFormProps> = ({
   );
 };
 
-
-
-export default NewLinkForm
+export default NewLinkForm;

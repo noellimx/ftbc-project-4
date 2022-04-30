@@ -1,10 +1,8 @@
-
 import * as React from "react";
 
-import {Links, LinkBooleanFieldModifierHandler} from "../../types/types"
+import { Links, LinkBooleanFieldModifierHandler } from "../../types/types";
 
 import ReadLink from "./ReadLink";
-
 
 interface ReadLinksViewProps {
   links: Links;
@@ -23,7 +21,5 @@ const ReadLinksView: React.FC<ReadLinksViewProps> = ({
     </>
   );
 };
-
-
 
 export default ReadLinksView;

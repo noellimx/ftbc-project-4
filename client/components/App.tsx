@@ -8,11 +8,9 @@ import {
   LinkBooleanFieldModifierHandler,
 } from "../types/types";
 
-
 import NewLinkForm from "./Links/NewLinkForm";
 import LinksView from "./Links/LinksView";
 import SubmitUrlButton from "./Buttons/SubmitUrlButton";
-
 
 const mockLinks = () => [
   { url: "http://www.some.com", isRead: false, id: 1 },
