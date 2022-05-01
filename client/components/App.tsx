@@ -1,34 +1,10 @@
 import * as React from "react";
 
-import {
+import {} from "./types/types";
 
-} from "../types/types";
-
-
-
-interface AppProps {
-
-
-
-}
+interface AppProps {}
 export const App: React.FC<AppProps> = () => {
+  React.useEffect(() => {}, []);
 
-  const [isAuth,setAuth] = React.useState<boolean>(false);
-
-
-  React.useEffect(
-    ()=>{
-
-
-
-
-    }
-    ,[]
-  )
- 
-  return (
-    <>
-     
-    </>
-  );
+  return <>hi</>;
 };

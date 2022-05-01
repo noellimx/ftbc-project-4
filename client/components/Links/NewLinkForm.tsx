@@ -1,5 +1,5 @@
 import * as React from "react";
-import { LinkStringFieldModifierHandler } from "../../types/types";
+import { LinkStringFieldModifierHandler } from "../types/types";
 
 interface NewLinkFormProps {
   newUrlValue: string;

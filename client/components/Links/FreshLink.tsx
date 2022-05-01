@@ -1,6 +1,6 @@
 import * as React from "react";
 
-import { Link, LinkBooleanFieldModifierHandler } from "../../types/types";
+import { Link, LinkBooleanFieldModifierHandler } from "../types/types";
 
 import { Link as MLink } from "@mui/material";
 

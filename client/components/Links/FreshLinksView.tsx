@@ -1,6 +1,6 @@
 import * as React from "react";
 
-import { Links, LinkBooleanFieldModifierHandler } from "../../types/types";
+import { Links, LinkBooleanFieldModifierHandler } from "../types/types";
 
 import FreshLink from "./FreshLink";
 
