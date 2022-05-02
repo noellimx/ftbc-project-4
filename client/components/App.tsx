@@ -1,10 +1,12 @@
 import * as React from "react";
 
-import {} from "./types/types";
+import { useSelector } from "react-redux";
+
+import { TheState } from "../utils/my-types";
 
 interface AppProps {}
 export const App: React.FC<AppProps> = () => {
-  React.useEffect(() => {}, []);
+  const countOfPing = useSelector((state: TheState) => state.ping);
 
-  return <>hi</>;
+  return <>The Server Pinged {countOfPing} Times</>;
 };

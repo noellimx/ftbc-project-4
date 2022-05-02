@@ -11,6 +11,10 @@ const app = express(); // framework
 const server = http.createServer(app); // communications
 const io = new Server(server); // upgrade / mounting
 
+io.on("connection", (socket) => {
+  console.log("[io] socket connected");
+  socket.emit("copy", 0);
+});
 app.use(cors({ origin: "*" }));
 
 app.use(express.static("dist"));
