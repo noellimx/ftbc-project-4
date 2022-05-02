@@ -1,5 +1,5 @@
 import * as Cookies from "js-cookie";
-import { NO_OP } from "./components/helpers.js";
+import { NO_OP } from "./components/helpers.js.js";
 const cookier = Cookies.default;
 
 const ClientAuth = (io) => {

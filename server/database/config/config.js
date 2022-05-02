@@ -2,7 +2,7 @@ export default {
   development: {
     username: "noellim",
     password: null,
-    database: "react_development",
+    database: "p4",
     host: "127.0.0.1",
     dialect: "postgres",
   },
