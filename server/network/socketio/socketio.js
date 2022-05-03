@@ -1,4 +1,7 @@
 
+// Authentication
+
+
 
 export default (io) => {
   io.on("connection", (socket) => {
@@ -11,7 +14,7 @@ export default (io) => {
     // Authentication
     socket.on("is-token-valid", async (token, chanSend) => {
       console.log(`[isTokenValid] ?= ${token}`);
-      chanSend("aa");
+      chanSend(false);
     });
   });
 };

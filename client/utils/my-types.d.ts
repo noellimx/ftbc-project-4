@@ -37,6 +37,7 @@ export interface SioResponse {
 
 export interface AuthenticationTrigger extends EventTrigger {
   updateValidToken: TrulyImpure;
+  presentToken: TrulyImpure;
 }
 
 export interface GeneralTrigger extends EventTrigger {

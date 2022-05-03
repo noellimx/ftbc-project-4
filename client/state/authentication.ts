@@ -7,7 +7,7 @@ enum AuthenticationCommand {
 
 export type AuthenticationInjection = PayloadAction<AuthenticationStatus>;
 
-type AuthenticationInjector = (
+type AuthenticationStatusInjector = (
   _: AuthenticationStatus
 ) => AuthenticationInjection;
 type AuthenticationPipe = (
@@ -15,7 +15,10 @@ type AuthenticationPipe = (
   __: AuthenticationInjection
 ) => AuthenticationStatus;
 
-const authenticationInjector: AuthenticationInjector = (status) => ({
+
+
+
+export const authenticationStatuInjector: AuthenticationStatusInjector = (status) => ({
   type: AuthenticationCommand.UPDATE,
   payload: status,
 });
@@ -25,8 +28,6 @@ export const authenticationStatusPipe: AuthenticationPipe = (
   injection
 ) => {
   const { type, payload } = injection;
-  console.log(`[pingPipe] status ?= ${status}`);
-  console.log(`[pingPipe] injection ?= ${JSON.stringify(injection)}`);
   if (type === AuthenticationCommand.UPDATE) {
     return payload;
   } else {

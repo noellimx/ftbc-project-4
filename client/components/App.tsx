@@ -18,7 +18,7 @@ export const App: React.FC<AppProps> = ({client}) => {
   >((state) => state.authenticationStatus);
 
   React.useEffect( () => {
-
+    client.authentication.presentToken()
   },[])
 
   return (

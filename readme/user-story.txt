@@ -32,7 +32,8 @@
           [ ] If not valid -> respond as not valid
         [ ] Client
           [ ] If valid -> proceed to Authenticated Page
-          [ ] If not valid -> proceed to Login Page
+          [x] If not valid -> proceed to Login Page
   [ ] Authenticated Page
+
 
 
