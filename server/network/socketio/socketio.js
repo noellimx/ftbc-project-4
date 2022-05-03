@@ -1,11 +1,17 @@
-import bindSocketProj3Events from "./io-proj-3.js";
+
 
 export default (io) => {
   io.on("connection", (socket) => {
-    console.log(`[io.on connection] new socket connected ${socket.id}`);
+    console.log("[io] socket connected");
 
-    const cookie = socket.handshake.headers.cookie;
-    console.log(`[io.on connection] cookie ${cookie}`);
-    bindSocketProj3Events(socket, io);
+    // General
+    socket.emit("copy", 0);
+    socket.on("do-you-acknowledge", (chanSend) => chanSend("acknowledged"));
+
+    // Authentication
+    socket.on("is-token-valid", async (token, chanSend) => {
+      console.log(`[isTokenValid] ?= ${token}`);
+      chanSend("aa");
+    });
   });
 };

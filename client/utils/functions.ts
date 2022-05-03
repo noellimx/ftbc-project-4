@@ -1,2 +1,2 @@
-type NO_OP_TYPE = () => void;
-export const no_op: NO_OP_TYPE = () => {};
+import { TrulyImpure } from "./my-types";
+export const no_op: TrulyImpure = () => {};

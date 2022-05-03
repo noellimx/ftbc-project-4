@@ -23,7 +23,11 @@ export default {
         test: /\.css$/i,
         use: ["style-loader", { loader: "css-loader" }],
       },
-
+      {
+        test: /\.tsx?$/,
+        use: "ts-loader",
+        exclude: /node_modules/,
+      },
       {
         test: /\.(js|mjs|jsx)$/,
         exclude: /node_modules/,
@@ -46,11 +50,6 @@ export default {
             loader: "file-loader",
           },
         ],
-      },
-      {
-        test: /\.tsx?$/,
-        use: "ts-loader",
-        exclude: /node_modules/,
       },
     ],
   },
