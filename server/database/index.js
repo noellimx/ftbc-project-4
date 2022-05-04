@@ -1,26 +1,22 @@
 import { Sequelize } from "sequelize";
 import DbModel from "./models/index.js";
-import newDbApi from "./api/index.js";
+import newDbAuthApi from "./api/index.js";
 
 
 
 
 // Enforces Model Initialization via inheritance.
-class InitDatabase extends DbModel {
+export class Database extends DbModel {
 
   _seed = async () => {
     const username = "1";
     const password = "1";
-    await this.dbApi.registerUser({username, plainPassword: password, password2: password })
+    await this.auth.registerUser({username, plainPassword: password, password2: password })
   }
   constructor(sequelize) {
     super(sequelize);
     // Initialize
     this.sequelize = sequelize;
-    this.dbApi = newDbApi(this.sequelize);
-
-
-    
   }
 
   wipe = async () => {
@@ -28,18 +24,24 @@ class InitDatabase extends DbModel {
       await models.destroy({ where: {} });
     }
   };
-
-  close = () => this.sequelize.close();
   seed = this._seed;
+  close = () => this.sequelize.close();
+
+
+  auth = newDbAuthApi(this.sequelize);
 }
+
+
+
+
 
 /**
  *
  * @param {Sequelize} sequelize
- * @returns
+ * @returns {Database}
  */
 export const initDatabase = (sequelize) => {
-  return new InitDatabase(sequelize);
+  return new Database(sequelize);
 };
 
 export default initDatabase;

@@ -32,5 +32,10 @@ const getUserDoor = (algo, key, _) => {
   };
 };
 
+
+const newAccessToken = (payload) => {
+  return payload
+}
+
 const UserDoor = getUserDoor(ALGO_USER_DOOR, KEY_USER_DOOR, IV_USER_DOOR);
-export { hashPassword };
+export { hashPassword, newAccessToken };

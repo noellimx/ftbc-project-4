@@ -1,7 +1,7 @@
 
-import { hashPassword } from "../../auth/crypt.js";
+import { hashPassword, newAccessToken } from "../../auth/crypt.js";
 
-const newDbApi = (sequelize) => {
+const newDbAuthApi = (sequelize) => {
   const { user: User } = sequelize.models;
 
   const createUser = async (username, plainPassword) => {
@@ -40,9 +40,38 @@ const newDbApi = (sequelize) => {
     return [usernameRetrieved, `Registration Success: ${usernameRetrieved} `];
   };
 
+  const getAccessToken = async ({ username, password: clearPassword }) => {
+    if (!username) {
+      return {
+        securityToken: null,
+        msg: "User field should not be empty :(",
+      };
+    }
+    const details = await getUserByUsername(username);
+    if (!details) {
+      return {
+        securityToken: null,
+        msg: "User not found.",
+      };
+    }
+    const passwordReceivedHashed = hashPassword(clearPassword);
+    const passwordDatabaseHashed = details.getDataValue("password");
+
+    const user_id = details.getDataValue("id");
+    const isMatch = passwordReceivedHashed === passwordDatabaseHashed;
+
+    const userId = isMatch ? user_id : null;
+    const msg = isMatch ? "ok" : "Credentials mismatch.";
+
+    const accessToken = newAccessToken({ sub: userId, msg
+});
+    return {accessToken, msg};
+  };
+
+
   return {
-    registerUser,
+    registerUser, getAccessToken
   };
 };
 
-export default newDbApi;
+export default newDbAuthApi;

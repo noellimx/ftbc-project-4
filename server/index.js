@@ -5,7 +5,7 @@ import { Server } from "socket.io";
 import http from "http";
 import cors from "cors";
 import bindEvents from "./network/socketio/socketio.js";
-import initDatabase from "./database/index.js";
+import initDatabase, {Database} from "./database/index.js";
 
 import { dbConfig, systemConfig } from "./config/index.js";
 import connectSequelize from "./database/connection/index.js";

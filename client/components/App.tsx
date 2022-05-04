@@ -3,6 +3,7 @@ import * as React from "react";
 import { useSelector } from "react-redux";
 
 import { TheState, AuthenticationStatus, Client } from "../utils/my-types";
+import NotLoggedIn from "./pages/NotLoggedIn";
 
 interface AppProps {
   client: Client;
@@ -26,7 +27,7 @@ const App: React.FC<AppProps> = ({ client }) => {
         {authenticationStatus === AuthenticationStatus.UNCERTAIN ? (
           <div>Uncertain User</div>
         ) : authenticationStatus === AuthenticationStatus.FALSE ? (
-          <div>Not Logged In</div>
+          <NotLoggedIn client={client}/>
         ) : authenticationStatus === AuthenticationStatus.TRUE ? (
           <div>Logged In</div>
         ) : (

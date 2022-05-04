@@ -8,6 +8,13 @@ export const getAccessToken = () => {
 
   const accessToken = window.localStorage.getItem(ACCESS_TOKEN_KEY_NAME);
 
-  window.localStorage.removeItem(ACCESS_TOKEN_KEY_NAME);
   return accessToken;
 };
+
+
+export const storeAccessToken = (token:string) => {
+
+  window.localStorage.setItem(ACCESS_TOKEN_KEY_NAME, token);
+
+  return getAccessToken();
+}

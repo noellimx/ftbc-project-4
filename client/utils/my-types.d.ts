@@ -28,9 +28,15 @@ export interface SioResponse {
   data: any;
 }
 
+
+
+export type UserPassSubmitFn = (username:string, password:string) => void;
+
+
 export interface AuthenticationTrigger extends EventTrigger {
   updateValidToken: TrulyImpure;
   presentToken: TrulyImpure;
+  login: UserPassSubmitFn;
 }
 
 export interface GeneralTrigger extends EventTrigger {

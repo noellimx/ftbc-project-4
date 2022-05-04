@@ -22,7 +22,6 @@ interface ThemeOptions {
     fontFamily: string;
   };
 }
-type Theme = ThemeOptions;
 
 const themeOptions: ThemeOptions = {
   palette: {
@@ -38,7 +37,7 @@ const themeOptions: ThemeOptions = {
       paper: "#ffffff",
     },
     text: {
-      primary: "blue",
+      primary: "#4e342e",
     },
   },
   typography: {

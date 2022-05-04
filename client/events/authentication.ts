@@ -1,12 +1,18 @@
 import {
   UpLinkSub,
   ChannelReceive,
-  SioResponse,
+  UserPassSubmitFn,
   AuthenticationTrigger,
   AuthenticationStatus,
 } from "../utils/my-types";
-import { getAccessToken } from "../operations/authentication";
+import { getAccessToken , storeAccessToken} from "../operations/authentication";
 import { authenticationStatuInjector } from "../state/authentication";
+
+
+
+interface LoginRequestReceive {
+   accessToken:string; msg :string;
+}
 
 const uplinkAuthentication: UpLinkSub<AuthenticationTrigger> = (io, store) => {
   console.log("[uplinkAuthentication] attaching");
@@ -51,9 +57,31 @@ const uplinkAuthentication: UpLinkSub<AuthenticationTrigger> = (io, store) => {
     });
   };
 
+
+  
+
+  const login: UserPassSubmitFn = (username, password) => {
+
+     io.emit("login-request", { username, password }, (authResponse:LoginRequestReceive) => {
+       console.log(
+         `[clientAuth requestLogin] Obtained token ${JSON.stringify(
+           authResponse
+         )}`
+       );
+       const { accessToken , msg } = authResponse;
+       const currentToken = storeAccessToken(accessToken);
+       console.log(`[clientAuth] stored token := ${currentToken}`);
+       presentToken(1);
+     });
+
+
+    return null;
+  };
+
   return {
     updateValidToken,
     presentToken,
+    login
   };
 };
 
