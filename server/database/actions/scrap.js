@@ -720,7 +720,6 @@ const registerUser = async ({ username, password, password2 }) => {
   if (is) {
     return [null, "Username taken :("];
   }
-
   if (password !== password2) {
     return [null, "Confirmation password mismatch."];
   }
