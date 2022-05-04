@@ -2,7 +2,11 @@ import { systemConfig } from "../config/index.js";
 
 import crypto from "crypto";
 
+import jwt from "jsonwebtoken";
+
 const { DB_PASSWORD_HASH } = systemConfig;
+
+const JWT_SECRET = crypto.randomBytes(256).toString("base64");
 
 const hashPassword = (plain) =>
   crypto.createHmac("sha256", DB_PASSWORD_HASH).update(plain).digest("hex");
@@ -32,10 +36,21 @@ const getUserDoor = (algo, key, _) => {
   };
 };
 
-
 const newAccessToken = (payload) => {
-  return payload
-}
+  return jwt.sign(payload, JWT_SECRET);
+};
+
+const verifyToken = (accessToken) => {
+  return new Promise((resolve, reject) => {
+    var decoded = jwt.verify(accessToken, JWT_SECRET, (err, decoded) => {
+      if (err) {
+        resolve([false, null]);
+      } else {
+        resolve([true, decoded.sub]);
+      }
+    });
+  });
+};
 
 const UserDoor = getUserDoor(ALGO_USER_DOOR, KEY_USER_DOOR, IV_USER_DOOR);
-export { hashPassword, newAccessToken };
+export { hashPassword, newAccessToken, verifyToken };

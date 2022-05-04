@@ -27,7 +27,7 @@ const App: React.FC<AppProps> = ({ client }) => {
         {authenticationStatus === AuthenticationStatus.UNCERTAIN ? (
           <div>Uncertain User</div>
         ) : authenticationStatus === AuthenticationStatus.FALSE ? (
-          <NotLoggedIn client={client}/>
+          <NotLoggedIn client={client} />
         ) : authenticationStatus === AuthenticationStatus.TRUE ? (
           <div>Logged In</div>
         ) : (

@@ -1,7 +1,7 @@
 // Authentication
 
-
 import { Database } from "../../database/index.js";
+
 /**
  * @param {any} io ss
  * @param {Database} db
@@ -17,14 +17,14 @@ const bindEvents = (io, db) => {
     // Authentication
     socket.on("is-token-valid", async (token, chanSend) => {
       console.log(`[isTokenValid] ?= ${token}`);
-      chanSend(false);
+      db.auth.isVerifiedToken(token).then(chanSend);
     });
 
     socket.on("login-request", async (credentials, resCb) => {
       const { username, password } = credentials;
       console.log("[socket.on login - request] Getting security token. . . ");
 
-      const {accessToken, msg} = await db.auth.getAccessToken({
+      const { accessToken, msg } = await db.auth.getAccessToken({
         username,
         password,
       });
@@ -36,9 +36,7 @@ const bindEvents = (io, db) => {
       );
       resCb({ accessToken, msg });
     });
-
   });
 };
 
-
-export default bindEvents
+export default bindEvents;

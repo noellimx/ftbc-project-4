@@ -1,41 +1,32 @@
 import * as React from "react";
 
-
 import { TextField } from "@mui/material";
 import Grid from "@mui/material/Grid";
 
 import Button from "@mui/material/Button";
 
-
 import { TrulyImpure, Client } from "../../utils/my-types";
-
-
 
 interface StdButtonProps {
   onClickFn: TrulyImpure;
   text: string;
 }
-const StdButton:React.FC<StdButtonProps> = ({text,onClickFn = () => {}}) => {
+const StdButton: React.FC<StdButtonProps> = ({
+  text,
+  onClickFn = () => {},
+}) => {
   return (
     <Button variant="outlined" disableElevation onClick={onClickFn}>
       {text}
     </Button>
   );
-}
-
-
-
-
-
-
+};
 
 interface NotLoggedInProps {
   client: Client;
 }
 
- const NotLoggedIn:React.FC<NotLoggedInProps> = ({client}) => {
-
-
+const NotLoggedIn: React.FC<NotLoggedInProps> = ({ client }) => {
   const [inputUsername, setInputUsername] = React.useState<string>("");
   const [inputPassword, setInputPassword] = React.useState<string>("");
 
@@ -79,7 +70,6 @@ interface NotLoggedInProps {
       </Grid>
     </>
   );
-
- };
+};
 
 export default NotLoggedIn;

@@ -1,7 +1,6 @@
 import { getUserByUsername, isUserExisting } from "../database/api/user.js";
 import { hashPassword, UserDoor } from "./crypt.js";
 
-
 const decodeUserId = (concealed) => UserDoor.reveal(concealed);
 
 const useIdOfToken = (token) => token;
@@ -31,4 +30,4 @@ const validateToken = async (token) => {
   }
 };
 
-export {validateToken, decodeUserId };
+export { validateToken, decodeUserId };

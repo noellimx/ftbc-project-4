@@ -1,4 +1,3 @@
-
 export default class DbModel {
   _modelUser = () => {
     const userModel = this.sequelize.define(
@@ -47,8 +46,6 @@ export default class DbModel {
     }
     console.log(`[DbModel] _modelUser`);
   };
-
-
 
   constructor(sequelize) {
     this.sequelize = sequelize;

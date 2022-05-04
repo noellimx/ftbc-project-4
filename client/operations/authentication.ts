@@ -11,10 +11,8 @@ export const getAccessToken = () => {
   return accessToken;
 };
 
-
-export const storeAccessToken = (token:string) => {
-
+export const storeAccessToken = (token: string) => {
   window.localStorage.setItem(ACCESS_TOKEN_KEY_NAME, token);
 
   return getAccessToken();
-}
+};

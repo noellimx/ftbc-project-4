@@ -1,5 +1,4 @@
-
-import { hashPassword, newAccessToken } from "../../auth/crypt.js";
+import { hashPassword, newAccessToken, verifyToken } from "../../auth/crypt.js";
 
 const newDbAuthApi = (sequelize) => {
   const { user: User } = sequelize.models;
@@ -63,14 +62,19 @@ const newDbAuthApi = (sequelize) => {
     const userId = isMatch ? user_id : null;
     const msg = isMatch ? "ok" : "Credentials mismatch.";
 
-    const accessToken = newAccessToken({ sub: userId, msg
-});
-    return {accessToken, msg};
+    const accessToken = newAccessToken({ sub: userId, msg });
+    return { accessToken, msg };
+  };
+  const isVerifiedToken = async (accessToken) => {
+    const [is, sub] = await verifyToken(accessToken);
+
+    return is;
   };
 
-
   return {
-    registerUser, getAccessToken
+    registerUser,
+    getAccessToken,
+    isVerifiedToken,
   };
 };
 

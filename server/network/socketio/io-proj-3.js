@@ -23,8 +23,6 @@ const _getDbUserIdOfSocket = (socket) => {
 };
 
 const bindSocketProj3Events = (socket, io) => {
-
-
   socket.on("verify-token", async (securityToken, resCb) => {
     console.log(`[verify-token] Verifying ${JSON.stringify(securityToken)}`);
 
