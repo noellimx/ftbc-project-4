@@ -1,6 +1,6 @@
 import { Sequelize } from "sequelize";
 
-const connectSequelize = (env, configs) => {
+const _connectSequelize = (env, configs) => {
   console.log(`[connectSequelize] ${env}`);
 
   const config = configs[env];
@@ -25,5 +25,10 @@ const connectSequelize = (env, configs) => {
 
   throw new Error(`[getDbCredentials] Environment not recognised`);
 };
+const connectSequelize = (env, configs) => {
+  const sequelize = _connectSequelize(env, configs);
+  console.log(`Connected. Database Name: ${sequelize.getDatabaseName()}`);
 
+  return sequelize;
+};
 export default connectSequelize;

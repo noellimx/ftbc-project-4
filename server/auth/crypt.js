@@ -1,8 +1,11 @@
+import { systemConfig } from "../config/index.js";
+
+import crypto from "crypto";
+
+const { DB_PASSWORD_HASH } = systemConfig;
+
 const hashPassword = (plain) =>
-  crypto
-    .createHmac("sha256", "very-insecure-secret")
-    .update(plain)
-    .digest("hex");
+  crypto.createHmac("sha256", DB_PASSWORD_HASH).update(plain).digest("hex");
 
 const KEY_USER_DOOR = "d6F3Efeq";
 const ALGO_USER_DOOR = "aes-256-cbc";
@@ -30,4 +33,4 @@ const getUserDoor = (algo, key, _) => {
 };
 
 const UserDoor = getUserDoor(ALGO_USER_DOOR, KEY_USER_DOOR, IV_USER_DOOR);
-export { hashPassword, UserDoor };
+export { hashPassword };

@@ -16,6 +16,8 @@ const sequelize = connectSequelize(ENVIRONMENT, dbConfig);
 
 const db = initDatabase(sequelize);
 
+await db.seed();
+
 const SERVER_LISTENING_PORT = process.env.PORT || 3004;
 const app = express(); // framework
 const server = http.createServer(app); // communications

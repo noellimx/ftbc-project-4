@@ -9,14 +9,6 @@ const isUserExisting = async (id) => {
   return user;
 };
 
-const createUser = async (username, password) => {
-  const user = await User.create({
-    username,
-    password: hashPassword(password),
-  });
-
-  return user;
-};
 export {
   getUserByUsername,
   isUserExisting,

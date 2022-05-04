@@ -1,60 +1,45 @@
-import initModels from "./models/init/index.js";
+import { Sequelize } from "sequelize";
+import DbModel from "./models/index.js";
+import newDbApi from "./api/index.js";
 
-const newDbApi = (sequelize) => {
-  const { user: User } = sequelize.models;
 
-  const getUserByUsername = async (username) =>
-    await User.findOne({ where: { username } });
 
-  const isUserExistingByUsername = async (username) =>
-    !!(await getUserByUsername(username));
 
-  const addUser = async ({ username, password, password2 }) => {
-    const is = await isUserExistingByUsername(username);
-    if (is) {
-      return [null, "Username taken :("];
-    }
-    if (password !== password2) {
-      return [null, "Confirmation password mismatch."];
-    }
-    if (!username) {
-      return [null, "Username must have at least 1 character"];
-    }
-    if (!password || !password2) {
-      return [null, "Password must have at least 1 character"];
-    }
+// Enforces Model Initialization via inheritance.
+class InitDatabase extends DbModel {
 
-    const user = await createUser(username, password);
+  _seed = async () => {
+    const username = "1";
+    const password = "1";
+    await this.dbApi.registerUser({username, plainPassword: password, password2: password })
+  }
+  constructor(sequelize) {
+    super(sequelize);
+    // Initialize
+    this.sequelize = sequelize;
+    this.dbApi = newDbApi(this.sequelize);
 
-    const usernameRetrieved = user.getDataValue("username");
-    return [usernameRetrieved, `Registration Success: ${usernameRetrieved} `];
-  };
 
-  return {
-    addUser,
-  };
-};
+    
+  }
 
-export const initDatabase = (sequelize) => {
-  initModels(sequelize);
-
-  const dbApi = newDbApi(sequelize);
-  console.log(`Connected. Database Name: ${sequelize.getDatabaseName()}`);
-
-  const wipe = async () => {
-    for (const models of Object.values(sequelize.models)) {
+  wipe = async () => {
+    for (const models of Object.values(this.sequelize.models)) {
       await models.destroy({ where: {} });
     }
   };
 
-  const close = () => sequelize.close();
+  close = () => this.sequelize.close();
+  seed = this._seed;
+}
 
-  const seed = () => {};
-  return {
-    wipe,
-    close,
-    seed,
-  };
+/**
+ *
+ * @param {Sequelize} sequelize
+ * @returns
+ */
+export const initDatabase = (sequelize) => {
+  return new InitDatabase(sequelize);
 };
 
 export default initDatabase;

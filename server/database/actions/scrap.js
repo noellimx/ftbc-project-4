@@ -3,7 +3,6 @@ import { UserDoor } from "../../auth/crypt.js";
 
 import { getSocketsOfUsers } from "../api/session.js";
 
-import crypto from "crypto";
 
 import {
   getRandomChain,
