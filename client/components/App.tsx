@@ -7,7 +7,8 @@ import { TheState, AuthenticationStatus, Client } from "../utils/my-types";
 interface AppProps {
   client: Client;
 }
-export const App: React.FC<AppProps> = ({ client }) => {
+
+const App: React.FC<AppProps> = ({ client }) => {
   const countOfPing = useSelector((state: TheState) => state.ping);
   const authenticationStatus = useSelector<TheState, AuthenticationStatus>(
     (state) => state.authenticationStatus
@@ -35,3 +36,5 @@ export const App: React.FC<AppProps> = ({ client }) => {
     </>
   );
 };
+
+export default App;

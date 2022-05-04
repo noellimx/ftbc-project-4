@@ -10,7 +10,7 @@ import pipeSink from "./state/pipe-sink";
 import * as React from "react";
 import { createRoot } from "react-dom/client";
 import { ThemeProvider } from "@mui/material/styles";
-import { App } from "./components/App";
+import App from "./components/App";
 import theme from "./components/theme";
 import { Provider } from "react-redux";
 
