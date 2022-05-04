@@ -3,7 +3,7 @@ import { authenticationStatusPipe } from "./authentication";
 
 const pipeSink = {
   ping: pingPipe,
-  authenticationStatus: authenticationStatusPipe
+  authenticationStatus: authenticationStatusPipe,
 };
 
 export default pipeSink;

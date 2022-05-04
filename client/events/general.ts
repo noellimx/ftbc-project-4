@@ -2,8 +2,6 @@ import { pingReceived } from "../state/general";
 
 import { UpLinkSub, ChannelReceive, GeneralTrigger } from "../utils/my-types";
 
-
-
 const uplinkGeneral: UpLinkSub<GeneralTrigger> = (io, store) => {
   console.log("[uplinkGeneral] attaching");
   io.on("copy", (flag) => {

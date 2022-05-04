@@ -2,22 +2,17 @@ import { AnyAction } from "redux";
 import { Socket } from "socket.io-client";
 import { Store } from "redux";
 
-
-
 export type TrulyImpure = () => void;
 
 export interface PayloadAction<P> extends AnyAction {
   payload: P;
 }
 
-
 export const enum AuthenticationStatus {
   UNCERTAIN,
   FALSE,
   TRUE,
 }
-
-
 
 export interface TheState {
   ping: number;
@@ -33,8 +28,6 @@ export interface SioResponse {
   data: any;
 }
 
-
-
 export interface AuthenticationTrigger extends EventTrigger {
   updateValidToken: TrulyImpure;
   presentToken: TrulyImpure;
@@ -45,15 +38,9 @@ export interface GeneralTrigger extends EventTrigger {
   doYouAcknowledge: (_: ChannelReceive<string>) => void;
 }
 
-
-
-
 export type SomeEventTrigger = AuthenticationTrigger | GeneralTrigger;
 export interface Client {
-  general:  GeneralTrigger;
+  general: GeneralTrigger;
   authentication: AuthenticationTrigger;
 }
 export type UpLink = (_: Socket, __: Store) => Client;
-
-
-

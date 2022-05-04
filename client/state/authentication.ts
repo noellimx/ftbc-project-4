@@ -1,6 +1,5 @@
 import { PayloadAction, AuthenticationStatus } from "../utils/my-types";
 
-
 enum AuthenticationCommand {
   UPDATE = "auth:validity:update",
 }
@@ -15,10 +14,9 @@ type AuthenticationPipe = (
   __: AuthenticationInjection
 ) => AuthenticationStatus;
 
-
-
-
-export const authenticationStatuInjector: AuthenticationStatusInjector = (status) => ({
+export const authenticationStatuInjector: AuthenticationStatusInjector = (
+  status
+) => ({
   type: AuthenticationCommand.UPDATE,
   payload: status,
 });

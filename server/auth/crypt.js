@@ -1,12 +1,14 @@
-import crypto from "crypto";
-
 const hashPassword = (plain) =>
-  crypto.createHmac("sha256", "password").update(plain).digest("hex");
+  crypto
+    .createHmac("sha256", "very-insecure-secret")
+    .update(plain)
+    .digest("hex");
 
 const KEY_USER_DOOR = "d6F3Efeq";
 const ALGO_USER_DOOR = "aes-256-cbc";
 const IV_USER_DOOR = "692e44dbbea073fc1a8d1c37ea68dffa";
-const getUserDoor = (algo, key, iv) => {
+
+const getUserDoor = (algo, key, _) => {
   // TODO use IV
   const cipher = () => crypto.createCipher(algo, key);
   const decipher = () => crypto.createDecipher(algo, key);

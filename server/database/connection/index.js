@@ -1,13 +1,11 @@
 import { Sequelize } from "sequelize";
-import CONFIGS from "../config/config.js";
 
-import { ENVIRONMENT } from "../../config.js";
+const connectSequelize = (env, configs) => {
+  console.log(`[connectSequelize] ${env}`);
 
-const newSequelize = (env, configs) => {
   const config = configs[env];
 
   if (env === "production") {
-    // Break apart the Heroku database url and rebuild the configs we need
     console.log(`[Get Db Credentials] production ?=`);
     console.log(config);
 
@@ -28,9 +26,4 @@ const newSequelize = (env, configs) => {
   throw new Error(`[getDbCredentials] Environment not recognised`);
 };
 
-console.log("Creating sequelize");
-const sequelize = newSequelize(ENVIRONMENT, CONFIGS);
-
-console.log(`Connected. Database Name: ${sequelize.getDatabaseName()}`);
-
-export default sequelize;
+export default connectSequelize;

@@ -2,11 +2,11 @@ https://lucid.app/lucidchart/71168ced-34b0-4a48-87f0-1e3e77e8b6be/edit?invitatio
 
 ### Network / Controller
 
-`npm run server-dev` run hot.
+`npm run server-dev` run and watch server.
 
 ### Client
 
-`npm run client-dev-build` build client hot.
+`npm run client-dev-build` build and watch client.
 
 Features/Principles retained:
 
@@ -17,3 +17,5 @@ Recurring Requirements:
 
 [ ] If an invalid (revoked/ expired/ out-of-scope etc) token is presented, the server should notify the sender as such.
 [ ] if a valid token is presented,
+
+`createdb p4` create db

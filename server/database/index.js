@@ -1,7 +1,21 @@
-import sequelize from "./connection/index.js";
-
 import initModels from "./models/init/index.js";
 
-sequelize.truncate({ cascade: true });
-initModels(sequelize);
-export default sequelize;
+export const initDatabase = (sequelize) => {
+  initModels(sequelize);
+  console.log(`Connected. Database Name: ${sequelize.getDatabaseName()}`);
+
+  const wipe = async () => {
+    for (const models of Object.values(sequelize.models)) {
+      await models.destroy({ where: {} });
+    }
+  };
+
+  const close = () => sequelize.close();
+
+  return {
+    wipe,
+    close,
+  };
+};
+
+export default initDatabase;

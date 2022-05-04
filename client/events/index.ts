@@ -1,11 +1,7 @@
 import uplinkGeneral from "./general";
 import uplinkAuthentication from "./authentication";
 
-
-
-
-
-import {  UpLink} from "../utils/my-types";
+import { UpLink } from "../utils/my-types";
 
 const uplink: UpLink = (io, store) => {
   const general = uplinkGeneral(io, store);

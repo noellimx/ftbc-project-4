@@ -14,7 +14,7 @@
         [ ] Server checks credentials
         - If Valid 
           [ ] Server
-            [ ] Form JWT token encoded secret. JWT should have the fields
+            [ ] Form JWT token signed with secret. JWT should have the fields
               [ ] sub - plain user id
               [ ] exp - expiry date
             [ ] Issue to client via the same socket

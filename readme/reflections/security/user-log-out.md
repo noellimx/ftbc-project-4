@@ -22,7 +22,7 @@ IETF RFC 6749 - The OAuth 2.0 Authorization Framework
 
 ## Context - Using JWTs for Client Authorization Purposes
 
-Server issues JWT with credentials and expiry date and JWTs "dies" naturally after expiry date. JWTs may also grant authority to revoke itself, which is applicable in use cases like user logging out or IAM reset. The token and its content is encoded in perpetuity - changing a data value (expiration date, for example) would violate the token's integrity. The primary benefit of JWT is leveraging cryptography to imprint a seal on data, such that correctness of the data can be recognised by the entity issuing the seal (in most cases, the authorization server) without cross-referencing with a database.
+Server issues JWT with credentials and expiry date and JWTs "dies" naturally after expiry date. JWTs may also grant authority to revoke itself, which is applicable in use cases like user logging out or IAM reset. The token and its j is encoded in perpetuity - changing a data value (expiration date, for example) would violate the token's integrity. The primary benefit of JWT is leveraging cryptography to imprint a seal on data, such that correctness of the data can be recognised by the entity issuing the seal (in most cases, the authorization server) without cross-referencing with a database.
 
 ## Problem - Token Immutability and Revocability Status
 

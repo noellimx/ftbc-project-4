@@ -14,8 +14,6 @@ import { App } from "./components/App";
 import theme from "./components/theme";
 import { Provider } from "react-redux";
 
-
-
 /**
  * <----- Main ------>
  *
