@@ -2,7 +2,10 @@ import * as React from "react";
 
 import { MenuItem, Select } from "@mui/material";
 import { FormControl, InputLabel } from "@mui/material";
-import { Coordinate, CoordinateToString } from "../../../utils/my-types";
+import {
+  CoordinateToString,
+  DistrictSelectionOnChangeFn,
+} from "../../../utils/my-types";
 
 
 type Location = {
@@ -17,11 +20,9 @@ interface DistrictLocation extends Location {
 type DistrictLocations = DistrictLocation[];
 
 
-export type LocationSelectionOnChangeFn = (
-  _: React.ChangeEvent<HTMLInputElement>
-) => void;
+
 interface DistrictSelectorProps {
-  onChangeFn: LocationSelectionOnChangeFn;
+  onChangeFn: DistrictSelectionOnChangeFn;
 }
  
 
