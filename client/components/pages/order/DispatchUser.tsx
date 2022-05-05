@@ -47,8 +47,15 @@ type Outlet = {
 };
 
 export type Outlets = Outlet[];
- 
-const outletN_001:Outlet = { lat: 1.3199679250274892, lng: 103.84390692674646, postalCode: "307683", streetName: "Thomson Road" , buildingNumber: 238, name: "Old Chang Kee @ Novena Square" }
+
+const outletN_001: Outlet = {
+  lat: 1.3199679250274892,
+  lng: 103.84390692674646,
+  postalCode: "307683",
+  streetName: "Thomson Road",
+  buildingNumber: 238,
+  name: "Old Chang Kee @ Novena Square",
+};
 
 const outletN_002: Outlet = {
   lat: 1.317401884876873,
@@ -59,7 +66,7 @@ const outletN_002: Outlet = {
   name: "Wee Name Kee",
 };
 
-const outletsNovena:Outlets = []
+const outletsNovena: Outlets = [];
 
 const DispatchUser: React.FC<DispatchUserProps> = ({ client }) => {
   const [state, setState] = React.useState(initState());
@@ -69,7 +76,7 @@ const DispatchUser: React.FC<DispatchUserProps> = ({ client }) => {
   return (
     <>
       {state === DispatchSequence.STORE ? (
-        <LocationSelector></LocationSelector>
+        <LocationSelector client={client}></LocationSelector>
       ) : (
         <></>
       )}
