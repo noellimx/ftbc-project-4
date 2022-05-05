@@ -11,7 +11,9 @@ import {
   TrulyImpure,
   Outlet,
   MenuedOutlets,
-  Menu,Location, Address
+  Menu,
+  Location,
+  Address,
 } from "./utils/my-types";
 import { Store } from "@reduxjs/toolkit";
 import { orderStatusInjector } from "./state/order";
@@ -73,19 +75,16 @@ const getOutletsWithMenus: GetOutletWithMenus = () => {
   return toggle === 0 ? [] : [{ outlet: outletN_001, menu: menu_outletN_001 }];
 };
 
-
 interface OneMapApiResult {
-      ADDRESS: string;
-    BLK_NO: string;
-    BUILDING: string;
-    LATITUDE: string;
-    LONGITUDE: string;
-    POSTAL: string;
-    ROAD_NAME: string;
-SEARCHVAL: string;
-
+  ADDRESS: string;
+  BLK_NO: string;
+  BUILDING: string;
+  LATITUDE: string;
+  LONGITUDE: string;
+  POSTAL: string;
+  ROAD_NAME: string;
+  SEARCHVAL: string;
 }
-
 
 const apiResultToLocation = (result: OneMapApiResult) => {
   const { LATITUDE: _lat, LONGITUDE: _lng } = result;
@@ -128,23 +127,23 @@ const locationEvents = (io: Socket, store: Store) => {
     fn(recvData);
   };
 
-  const searchBySearchVal: (_:string) => Promise<Location[]> =async (searchVal) => {
+  const searchBySearchVal: (_: string) => Promise<Location[]> = async (
+    searchVal
+  ) => {
     const result = await axios.get(
       `https://developers.onemap.sg/commonapi/search?searchVal=${searchVal}&returnGeom=Y&getAddrDetails=Y&pageNum=1`
     );
 
+    const results = result.data.results;
 
-const results = result.data.results;
+    const locations: Location[] = results.map(apiResultToLocation);
+    return locations.filter((location) => {
+      const { address } = location;
+      const { buildingNumber, streetName, postalCode } = address;
 
-const locations: Location[] = results.map(apiResultToLocation);
-    return locations.filter(location => {
-
-           const { address } = location
-      const { buildingNumber, streetName, postalCode } = address
-
-      return buildingNumber && streetName && postalCode
+      return buildingNumber && streetName && postalCode;
     });
-  }
+  };
 
   return { whichOutletsWithMenuNearHere, searchBySearchVal };
 };

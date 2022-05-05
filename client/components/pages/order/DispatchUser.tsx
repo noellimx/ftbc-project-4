@@ -8,28 +8,25 @@ import { Stack } from "@mui/material";
 
 import AsyncSelect from "react-select/async";
 
-
-
 import {
   DistrictSelectionOnChangeFn,
   SelectableMenu,
   SelectableMenuItem,
   TrulyImpure,
-    Client,
+  Client,
   Coordinate,
   MenuedOutlets,
   MenuedOutlet,
-  Outlet, Location
+  Outlet,
+  Location,
 } from "../../../utils/my-types";
 
 import { Switch, Box, ButtonGroup, Button, TextField } from "@mui/material";
-
 
 interface EndLocationProps {
   updateEndLocation: (_: Coordinate) => void;
   client: Client;
 }
-
 
 const EndLocation: React.FC<EndLocationProps> = ({
   updateEndLocation,
@@ -46,7 +43,7 @@ const EndLocation: React.FC<EndLocationProps> = ({
           </Stack>
         );
       }}
-      onChange={(option: { value: Location, label: string }) => {
+      onChange={(option: { value: Location; label: string }) => {
         const { value: location } = option;
         updateEndLocation(location.coordinate);
       }}
@@ -110,7 +107,6 @@ const StackOptions: React.FC<StackOptionsProps> = ({
       }{" "}
       {isWindow ? (
         <>
-          
           <div>
             <ButtonGroup>
               <Button
@@ -133,8 +129,8 @@ const StackOptions: React.FC<StackOptionsProps> = ({
             mins
           </div>
           <EndLocation
-            client
-     ={client}       updateEndLocation={updateEndLocation}
+            client={client}
+            updateEndLocation={updateEndLocation}
           ></EndLocation>
         </>
       ) : (
@@ -221,7 +217,7 @@ const DispatchUser: React.FC<DispatchUserProps> = ({ client }) => {
     const coordinate = stringToCoordinate(event.target.value);
     setSelectableMenuedOutlets(() => resetSltbMOs());
     setSelectedMenuedOutlet(() => resetSltMO());
-    setStackWindow(() => resetWindow())
+    setStackWindow(() => resetWindow());
 
     client.location.whichOutletsWithMenuNearHere(
       coordinate,

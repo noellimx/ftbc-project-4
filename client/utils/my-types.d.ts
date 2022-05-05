@@ -54,12 +54,11 @@ export type Address = {
   streetName: string;
   buildingNumber: number;
   name?: string;
-
 };
 export type Location = {
   coordinate: Coordinate;
   address: Address;
-}
+};
 
 export interface LocationTrigger extends EventTrigger {
   whichOutletsWithMenuNearHere: (
@@ -67,7 +66,7 @@ export interface LocationTrigger extends EventTrigger {
     __: (_: MenuedOutlets) => void
   ) => void;
 
-  searchBySearchVal: (_:string) => Promise<Location[]>
+  searchBySearchVal: (_: string) => Promise<Location[]>;
 }
 export type CoordinateToString = (_: Coordinate) => string;
 export type SomeEventTrigger = AuthenticationTrigger | GeneralTrigger;
