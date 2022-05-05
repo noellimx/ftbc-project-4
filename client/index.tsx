@@ -13,6 +13,7 @@ import { ThemeProvider } from "@mui/material/styles";
 import App from "./components/App";
 import theme from "./components/theme";
 import { Provider } from "react-redux";
+import { TheState } from "./utils/my-types";
 
 /**
  * <----- Main ------>
@@ -24,7 +25,7 @@ import { Provider } from "react-redux";
  */
 
 // State Uplink To Server
-const store: Store = configureStore({
+const store: Store<TheState> = configureStore({
   reducer: pipeSink,
   preloadedState: { ping: 0 },
 });

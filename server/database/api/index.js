@@ -42,28 +42,33 @@ const newDbAuthApi = (sequelize) => {
   const getAccessToken = async ({ username, password: clearPassword }) => {
     if (!username) {
       return {
-        securityToken: null,
+        accessToken: null,
         msg: "User field should not be empty :(",
       };
     }
     const details = await getUserByUsername(username);
     if (!details) {
       return {
-        securityToken: null,
+        accessToken: null,
         msg: "User not found.",
       };
     }
     const passwordReceivedHashed = hashPassword(clearPassword);
     const passwordDatabaseHashed = details.getDataValue("password");
 
-    const user_id = details.getDataValue("id");
+    const userId = details.getDataValue("id");
     const isMatch = passwordReceivedHashed === passwordDatabaseHashed;
 
-    const userId = isMatch ? user_id : null;
-    const msg = isMatch ? "ok" : "Credentials mismatch.";
 
-    const accessToken = newAccessToken({ sub: userId, msg });
-    return { accessToken, msg };
+    if (!isMatch) {
+      return {
+        accessToken: null,
+        msg: "Credentials mismatch.",
+      };
+    }
+
+    const accessToken = newAccessToken({ sub: userId });
+    return { accessToken, msg: "ok" };
   };
   const isVerifiedToken = async (accessToken) => {
     const [is, sub] = await verifyToken(accessToken);

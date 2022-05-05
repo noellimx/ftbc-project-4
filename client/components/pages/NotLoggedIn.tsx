@@ -3,24 +3,10 @@ import * as React from "react";
 import { TextField } from "@mui/material";
 import Grid from "@mui/material/Grid";
 
-import Button from "@mui/material/Button";
+import _StdButton from "../Buttons/_StdButton";
+import { Client } from "../../utils/my-types";
+import { useSelector } from "react-redux";
 
-import { TrulyImpure, Client } from "../../utils/my-types";
-
-interface StdButtonProps {
-  onClickFn: TrulyImpure;
-  text: string;
-}
-const StdButton: React.FC<StdButtonProps> = ({
-  text,
-  onClickFn = () => {},
-}) => {
-  return (
-    <Button variant="outlined" disableElevation onClick={onClickFn}>
-      {text}
-    </Button>
-  );
-};
 
 interface NotLoggedInProps {
   client: Client;
@@ -30,6 +16,7 @@ const NotLoggedIn: React.FC<NotLoggedInProps> = ({ client }) => {
   const [inputUsername, setInputUsername] = React.useState<string>("");
   const [inputPassword, setInputPassword] = React.useState<string>("");
 
+  const authenticationMessage = useSelector(({ authenticationMessage })=> authenticationMessage);
   return (
     <>
       <Grid>
@@ -54,19 +41,18 @@ const NotLoggedIn: React.FC<NotLoggedInProps> = ({ client }) => {
             autoComplete="current-password"
             variant="standard"
             onChange={(event) => {
-              console.log("fired away");
               setInputPassword((_) => {
                 return (event.target as HTMLInputElement).value;
               });
             }}
           />
         </Grid>
-        <StdButton
-          text={"Start"}
+        <_StdButton
+          text={"Login"}
           onClickFn={() => {
             client.authentication.login(inputUsername, inputPassword);
           }}
-        ></StdButton>
+        ></_StdButton>
       </Grid>
     </>
   );

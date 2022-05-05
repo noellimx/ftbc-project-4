@@ -17,6 +17,7 @@ export const enum AuthenticationStatus {
 export interface TheState {
   ping: number;
   authenticationStatus: AuthenticationStatus;
+  authenticationMessage: string;
 }
 
 export type ChannelReceive<T> = (data: T) => void;

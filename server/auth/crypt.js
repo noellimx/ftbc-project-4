@@ -42,7 +42,7 @@ const newAccessToken = (payload) => {
 
 const verifyToken = (accessToken) => {
   return new Promise((resolve, reject) => {
-    var decoded = jwt.verify(accessToken, JWT_SECRET, (err, decoded) => {
+    jwt.verify(accessToken, JWT_SECRET, (err, decoded) => {
       if (err) {
         resolve([false, null]);
       } else {
