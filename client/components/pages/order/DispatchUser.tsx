@@ -1,10 +1,10 @@
 import * as React from "react";
 
 import Grid from "@mui/material/Grid";
-import { Client, OrderFlow } from "../../../utils/my-types";
+import { Client, Coordinate } from "../../../utils/my-types";
 
 import { useSelector } from "react-redux";
-import LocationSelector from "./LocationSelector";
+import DistrictSelector, { LocationSelectionOnChangeFn } from "./DistrictSelector";
 
 interface DispatchUserProps {
   client: Client;
@@ -67,16 +67,24 @@ const outletN_002: Outlet = {
 };
 
 const outletsNovena: Outlets = [];
+type StringToCoordinate = (_: string) => Coordinate;
+const stringToCoordinate: StringToCoordinate = (latlng) => JSON.parse(latlng);
 
 const DispatchUser: React.FC<DispatchUserProps> = ({ client }) => {
   const [state, setState] = React.useState(initState());
   const [outlet, useOutlet] = React.useState(initOutlet());
   const [menu, useMenu] = React.useState(initMenu());
 
+
+  const districtOnChangeFn:LocationSelectionOnChangeFn = (event) => {
+    const coordinate = stringToCoordinate(event.target.value);
+
+    client.location.whatOutletsNearHere(coordinate);
+  };
   return (
     <>
       {state === DispatchSequence.STORE ? (
-        <LocationSelector client={client}></LocationSelector>
+        <DistrictSelector onChangeFn={districtOnChangeFn}></DistrictSelector>
       ) : (
         <></>
       )}

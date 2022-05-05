@@ -3,7 +3,7 @@
 import { configureStore, Store } from "@reduxjs/toolkit";
 
 import io from "./connection/connection";
-import newClient from "./events";
+import newClient from "./orda";
 import pipeSink from "./state/pipe-sink";
 
 /** Imports [UI] */

@@ -47,11 +47,18 @@ export interface GeneralTrigger extends EventTrigger {
   doYouAcknowledge: (_: ChannelReceive<string>) => void;
 }
 
+export type Coordinate = [_: number, __: number];
+
+export interface LocationTrigger extends EventTrigger {
+  whatOutletsNearHere: (_:Coordinate) => void;
+}
+export type CoordinateToString = (_: Coordinate) => string;
 export type SomeEventTrigger = AuthenticationTrigger | GeneralTrigger;
 export interface Client {
   general: GeneralTrigger;
   authentication: AuthenticationTrigger;
   order: OrderTrigger;
+  location: LocationTrigger;
 }
 export type UpLink = (_: Socket, __: Store) => Client;
 
