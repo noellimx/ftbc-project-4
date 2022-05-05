@@ -4,19 +4,145 @@ import DistrictSelector from "./DistrictSelector";
 import SelectableMenuedOutlets from "./SelectableMenuedOutlets";
 import MenuSelection from "./MenuSelection";
 
+import { Stack } from "@mui/material";
+
+import AsyncSelect from "react-select/async";
+
+
+
 import {
   DistrictSelectionOnChangeFn,
   SelectableMenu,
   SelectableMenuItem,
-} from "../../../utils/my-types";
-
-import {
-  Client,
+  TrulyImpure,
+    Client,
   Coordinate,
   MenuedOutlets,
   MenuedOutlet,
-  Outlet,
+  Outlet, Location
 } from "../../../utils/my-types";
+
+import { Switch, Box, ButtonGroup, Button, TextField } from "@mui/material";
+
+
+interface EndLocationProps {
+  updateEndLocation: (_: Coordinate) => void;
+  client: Client;
+}
+
+
+const EndLocation: React.FC<EndLocationProps> = ({
+  updateEndLocation,
+  client,
+}) => {
+  return (
+    <AsyncSelect
+      cacheOptions
+      formatOptionLabel={({ label, value }) => {
+        return (
+          <Stack>
+            <Box>{value?.address?.name}</Box>
+            <Box>{label}</Box>
+          </Stack>
+        );
+      }}
+      onChange={(option: { value: Location, label: string }) => {
+        const { value: location } = option;
+        updateEndLocation(location.coordinate);
+      }}
+      loadOptions={async (searchVal) => {
+        const locations = await client.location.searchBySearchVal(searchVal);
+
+        const options = locations.map((location) => {
+          const { address } = location;
+          const { buildingNumber, streetName, postalCode } = address;
+
+          return {
+            value: location,
+            label: `${buildingNumber} ${streetName} ${postalCode}`,
+          };
+        });
+        return options;
+      }}
+    />
+  );
+};
+
+interface StackOptionsProps {
+  stackWindow: number;
+  stackEndLocation: Coordinate;
+  stackRadius: number;
+  onSwitchUp: TrulyImpure;
+  onSwitchDown: TrulyImpure;
+  incWindow: TrulyImpure;
+  decWindow: TrulyImpure;
+  updateEndLocation: (_: Coordinate) => void;
+  client: Client;
+}
+const StackOptions: React.FC<StackOptionsProps> = ({
+  stackWindow,
+  stackEndLocation,
+  stackRadius,
+  onSwitchUp = () => {},
+  onSwitchDown = () => {},
+  decWindow = () => {},
+  incWindow = () => {},
+  updateEndLocation,
+  client,
+}) => {
+  const isWindow = stackWindow > 0;
+  return (
+    <>
+      {/* <Box sx={{ color: isWindow ? "text.primary" : "black" }}>
+        Stack Options
+      </Box> */}
+      {
+        <Switch
+          checked={isWindow}
+          onClick={() => {
+            if (isWindow) {
+              onSwitchDown();
+            } else {
+              onSwitchUp();
+            }
+          }}
+        />
+      }{" "}
+      {isWindow ? (
+        <>
+          
+          <div>
+            <ButtonGroup>
+              <Button
+                onClick={() => {
+                  decWindow();
+                }}
+                disabled={stackWindow <= 1}
+              >
+                -
+              </Button>{" "}
+              <Button>{stackWindow}</Button>{" "}
+              <Button
+                onClick={() => {
+                  incWindow();
+                }}
+              >
+                +
+              </Button>
+            </ButtonGroup>{" "}
+            mins
+          </div>
+          <EndLocation
+            client
+     ={client}       updateEndLocation={updateEndLocation}
+          ></EndLocation>
+        </>
+      ) : (
+        <></>
+      )}
+    </>
+  );
+};
 
 interface SelectOutletDescriptionProps {
   outlet: Outlet;
@@ -47,10 +173,12 @@ const initState = () => DispatchSequence.STORE;
 type StringToCoordinate = (_: string) => Coordinate;
 const stringToCoordinate: StringToCoordinate = (latlng) => JSON.parse(latlng);
 
-
 const resetSltbMOs: () => MenuedOutlets = () => [];
 const resetSltMO: () => MenuedOutlet = () => null;
 const resetSltbMenu: () => SelectableMenu = () => [];
+const resetWindow: () => number = () => 0;
+const resetEndLocation: () => Coordinate = () => null;
+const resetRadius: () => number = () => 0;
 
 type BinaryOperation = (_: number, __: number) => number;
 
@@ -64,11 +192,36 @@ const DispatchUser: React.FC<DispatchUserProps> = ({ client }) => {
   const [selectableMenu, setSelectableMenu] = React.useState<SelectableMenu>(
     resetSltbMenu()
   );
+  const [stackWindow, setStackWindow] = React.useState<number>(resetWindow());
+  const [stackEndLocation, setEndLocation] = React.useState<Coordinate>(
+    resetEndLocation()
+  );
+  const [stackRadius, setStackRadius] = React.useState<number>(resetRadius());
+
+  React.useEffect(() => {
+    console.log(`[effect] selectable menu is dependent on received menu`);
+    const _selectableMenu = selectedMenuedOutlet
+      ? selectedMenuedOutlet.menu.map((mi) => ({
+          ...mi,
+          qty: 0,
+        }))
+      : resetSltbMenu();
+    setSelectableMenu(() => _selectableMenu);
+  }, [selectedMenuedOutlet]);
+
+  React.useEffect(() => {
+    console.log(`[effect] selectable menu is dependent on received menu`);
+    if (stackWindow === 0) {
+      setEndLocation(() => resetEndLocation());
+      setStackRadius(() => resetRadius());
+    }
+  }, [stackWindow]);
 
   const districtOnChangeFn: DistrictSelectionOnChangeFn = (event) => {
     const coordinate = stringToCoordinate(event.target.value);
     setSelectableMenuedOutlets(() => resetSltbMOs());
     setSelectedMenuedOutlet(() => resetSltMO());
+    setStackWindow(() => resetWindow())
 
     client.location.whichOutletsWithMenuNearHere(
       coordinate,
@@ -81,15 +234,6 @@ const DispatchUser: React.FC<DispatchUserProps> = ({ client }) => {
   const selectedOutletOnChangeFn = (mo: MenuedOutlet) => {
     setSelectedMenuedOutlet(() => mo);
   };
-
-  React.useEffect(() => {
-    console.log(`[effect] selectable menu is dependent on received menu`);
-    const _selectableMenu = selectedMenuedOutlet?.menu.map((mi) => ({
-      ...mi,
-      qty: 0,
-    }));
-    setSelectableMenu(() => _selectableMenu);
-  }, [selectedMenuedOutlet]);
 
   const add: BinaryOperation = (a: number, diff: number) => a + diff;
   const minus: BinaryOperation = (a: number, diff: number) => a - diff;
@@ -141,6 +285,17 @@ const DispatchUser: React.FC<DispatchUserProps> = ({ client }) => {
                 onClickDec={itemQtyDecFn}
                 selectableMenu={selectableMenu}
               />
+              <StackOptions
+                stackWindow={stackWindow}
+                stackEndLocation={stackEndLocation}
+                stackRadius={stackRadius}
+                onSwitchUp={() => setStackWindow(() => 1)}
+                onSwitchDown={() => setStackWindow(() => 0)}
+                incWindow={() => setStackWindow((prev) => prev + 1)}
+                decWindow={() => setStackWindow((prev) => prev - 1)}
+                updateEndLocation={(newC) => setEndLocation(() => newC)}
+                client={client}
+              ></StackOptions>
             </>
           )}
           <></>

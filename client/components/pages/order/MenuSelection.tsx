@@ -3,11 +3,7 @@ import * as React from "react";
 
 import {} from "../../../utils/my-types";
 
-import {
-  MenuItem,
-  SelectableMenu,
-  SelectableMenuItem,
-} from "../../../utils/my-types";
+import { SelectableMenu, SelectableMenuItem } from "../../../utils/my-types";
 
 interface SelectableMenuItemProps {
   mi: SelectableMenuItem;

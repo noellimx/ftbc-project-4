@@ -11,11 +11,12 @@ import {
   TrulyImpure,
   Outlet,
   MenuedOutlets,
-  Menu,
+  Menu,Location, Address
 } from "./utils/my-types";
 import { Store } from "@reduxjs/toolkit";
 import { orderStatusInjector } from "./state/order";
 import { Socket } from "socket.io-client";
+import axios from "axios";
 
 const orderEvents = (store: Store) => {
   const transit = (_: OrderSequence) => {
@@ -72,6 +73,46 @@ const getOutletsWithMenus: GetOutletWithMenus = () => {
   return toggle === 0 ? [] : [{ outlet: outletN_001, menu: menu_outletN_001 }];
 };
 
+
+interface OneMapApiResult {
+      ADDRESS: string;
+    BLK_NO: string;
+    BUILDING: string;
+    LATITUDE: string;
+    LONGITUDE: string;
+    POSTAL: string;
+    ROAD_NAME: string;
+SEARCHVAL: string;
+
+}
+
+
+const apiResultToLocation = (result: OneMapApiResult) => {
+  const { LATITUDE: _lat, LONGITUDE: _lng } = result;
+  const [lat, lng] = [Number(_lat), Number(_lng)];
+  const {
+    BLK_NO: _buildingNumber,
+    POSTAL: postalCode,
+    ROAD_NAME: streetName,
+  } = result;
+
+  const buildingNumber = Number(_buildingNumber);
+  const name = result.SEARCHVAL || result.ADDRESS || "";
+
+  const coordinates: Coordinate = [lat, lng];
+  const address: Address = {
+    buildingNumber,
+    streetName,
+    postalCode,
+    name,
+  };
+
+  return {
+    coordinates,
+    address,
+  };
+};
+
 const locationEvents = (io: Socket, store: Store) => {
   const whichOutletsWithMenuNearHere = (
     coordinate: Coordinate,
@@ -87,7 +128,25 @@ const locationEvents = (io: Socket, store: Store) => {
     fn(recvData);
   };
 
-  return { whichOutletsWithMenuNearHere };
+  const searchBySearchVal: (_:string) => Promise<Location[]> =async (searchVal) => {
+    const result = await axios.get(
+      `https://developers.onemap.sg/commonapi/search?searchVal=${searchVal}&returnGeom=Y&getAddrDetails=Y&pageNum=1`
+    );
+
+
+const results = result.data.results;
+
+const locations: Location[] = results.map(apiResultToLocation);
+    return locations.filter(location => {
+
+           const { address } = location
+      const { buildingNumber, streetName, postalCode } = address
+
+      return buildingNumber && streetName && postalCode
+    });
+  }
+
+  return { whichOutletsWithMenuNearHere, searchBySearchVal };
 };
 
 const newClient: UpLink = (io, store) => {
