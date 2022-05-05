@@ -52,13 +52,15 @@ const stringToCoordinate: StringToCoordinate = (latlng) => JSON.parse(latlng);
 
 
 
+const resetSMOs: () => MenuedOutlets = () => [];
+
 const DispatchUser: React.FC<DispatchUserProps> = ({ client }) => {
   const [state, setState] = React.useState(initState());
   const [outlet, useOutlet] = React.useState(initOutlet());
   const [selectableMenus, useSelectableMenus] = React.useState<Menus>(initSelectableMenus());
 
 
-  const [selectableMenuedOutlets,setSelectableMenuedOutlets] = React.useState<MenuedOutlets>([]);
+  const [selectableMenuedOutlets,setSelectableMenuedOutlets] = React.useState<MenuedOutlets>(resetSMOs());
   const [selectedMenuedOutlet, setSelectedMenuedOutlet] = React.useState<MenuedOutlet>(null);
   const [selectableMenuItems, useSelectableMenuItems] = React.useState(
     initSelectableMenu()
@@ -67,9 +69,10 @@ const DispatchUser: React.FC<DispatchUserProps> = ({ client }) => {
 
   const districtOnChangeFn:DistrictSelectionOnChangeFn = (event) => {
     const coordinate = stringToCoordinate(event.target.value);
+    setSelectableMenuedOutlets([]);
     client.location.whichOutletsWithMenuNearHere(coordinate, (outletsWithMenu:MenuedOutlets) => {
 
-      
+      setSelectableMenuedOutlets(() => outletsWithMenu);
     });
   };
   return (
@@ -77,9 +80,10 @@ const DispatchUser: React.FC<DispatchUserProps> = ({ client }) => {
       {state === DispatchSequence.STORE ? (
         <>
           <DistrictSelector onChangeFn={districtOnChangeFn}></DistrictSelector>
-          <SelectableMenuedOutlets
+          {!!selectableMenuedOutlets && selectableMenuedOutlets.length > 0 ?<SelectableMenuedOutlets
             selectableMenuedOutlets={selectableMenuedOutlets}
-          />
+          />: <></> }
+          
           <></>
         </>
       ) : (
