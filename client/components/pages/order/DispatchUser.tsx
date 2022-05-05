@@ -1,7 +1,5 @@
 import * as React from "react";
 
-import Grid from "@mui/material/Grid";
-
 import DistrictSelector from "./DistrictSelector";
 import SelectableMenuedOutlets from "./SelectableMenuedOutlets";
 import MenuSelection from "./MenuSelection";
@@ -15,12 +13,9 @@ import {
 import {
   Client,
   Coordinate,
-  Menu,
-  Menus,
   MenuedOutlets,
   MenuedOutlet,
   Outlet,
-  Outlets,
 } from "../../../utils/my-types";
 
 interface SelectOutletDescriptionProps {
@@ -48,24 +43,14 @@ enum DispatchSequence {
 }
 
 const initState = () => DispatchSequence.STORE;
-const initOutlet = () => "";
 
-const outletsNovena: Outlets = [];
 type StringToCoordinate = (_: string) => Coordinate;
 const stringToCoordinate: StringToCoordinate = (latlng) => JSON.parse(latlng);
 
-type InitMenus = () => Menus;
-const initSelectableMenus: InitMenus = () => {
-  return [];
-};
 
 const resetSltbMOs: () => MenuedOutlets = () => [];
-
 const resetSltMO: () => MenuedOutlet = () => null;
-
-const resetSltbMenu: () => SelectableMenu = () => {
-  return [];
-};
+const resetSltbMenu: () => SelectableMenu = () => [];
 
 type BinaryOperation = (_: number, __: number) => number;
 
@@ -158,7 +143,6 @@ const DispatchUser: React.FC<DispatchUserProps> = ({ client }) => {
               />
             </>
           )}
-
           <></>
         </>
       ) : (
