@@ -1,18 +1,19 @@
 /** Imports [Data] */
 
-import { configureStore } from "@reduxjs/toolkit";
+import { configureStore, Store } from "@reduxjs/toolkit";
 
 import io from "./connection/connection";
-import uplinkGeneral from "./events/general";
+import newClient from "./events";
 import pipeSink from "./state/pipe-sink";
 
 /** Imports [UI] */
 import * as React from "react";
 import { createRoot } from "react-dom/client";
 import { ThemeProvider } from "@mui/material/styles";
-import { App } from "./components/App";
+import App from "./components/App";
 import theme from "./components/theme";
 import { Provider } from "react-redux";
+import { TheState } from "./utils/my-types";
 
 /**
  * <----- Main ------>
@@ -24,12 +25,14 @@ import { Provider } from "react-redux";
  */
 
 // State Uplink To Server
-const store = configureStore({
+const store: Store<TheState> = configureStore({
   reducer: pipeSink,
   preloadedState: { ping: 0 },
 });
 
-uplinkGeneral(io, store);
+const client = newClient(io, store);
+
+client.general.doYouAcknowledge(console.log);
 
 // UI Injection
 const rootHTMLElement: HTMLElement = document.createElement("div");
@@ -39,7 +42,7 @@ const rootReactComponent = (
   <>
     <Provider store={store}>
       <ThemeProvider theme={theme}>
-        <App />
+        <App client={client} />
       </ThemeProvider>
     </Provider>
   </>

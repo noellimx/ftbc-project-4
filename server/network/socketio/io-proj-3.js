@@ -23,23 +23,6 @@ const _getDbUserIdOfSocket = (socket) => {
 };
 
 const bindSocketProj3Events = (socket, io) => {
-  socket.on("login-request", async (credentials, resCb) => {
-    const { username, password } = credentials;
-    console.log("[socket.on login - request] Getting security token. . . ");
-
-    const { securityToken, msg } = await getSecurityToken({
-      username,
-      password,
-    });
-
-    console.log(
-      `[socket.on login - request] securityToken ${JSON.stringify(
-        securityToken
-      )} msg ${msg}`
-    );
-    resCb({ securityToken, msg });
-  });
-
   socket.on("verify-token", async (securityToken, resCb) => {
     console.log(`[verify-token] Verifying ${JSON.stringify(securityToken)}`);
 

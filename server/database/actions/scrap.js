@@ -3,8 +3,6 @@ import { UserDoor } from "../../auth/crypt.js";
 
 import { getSocketsOfUsers } from "../api/session.js";
 
-import crypto from "crypto";
-
 import {
   getRandomChain,
   chainToString,
@@ -720,7 +718,6 @@ const registerUser = async ({ username, password, password2 }) => {
   if (is) {
     return [null, "Username taken :("];
   }
-
   if (password !== password2) {
     return [null, "Confirmation password mismatch."];
   }
