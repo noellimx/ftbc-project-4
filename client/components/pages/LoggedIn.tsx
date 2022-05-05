@@ -4,14 +4,15 @@ import { TextField } from "@mui/material";
 import Grid from "@mui/material/Grid";
 
 import _StdButton from "../Buttons/_StdButton";
-import { Client, OrderFlow, OrderSequence } from "../../utils/my-types";
+import { Client, OrderFlow } from "../../utils/my-types";
 import { useSelector } from "react-redux";
+import DispatchUser from "./order/DispatchUser";
 
 interface OrderOptionsProps {
   client: Client;
 }
 
-const OrderOptions: React.FC<OrderOptionsProps> = ({ client }) => {
+const Order: React.FC<OrderOptionsProps> = ({ client }) => {
   const sequence = useSelector(({ orderSequence }) => orderSequence);
   return sequence.flow === OrderFlow.NIL ? (
     <Grid>
@@ -29,14 +30,12 @@ const OrderOptions: React.FC<OrderOptionsProps> = ({ client }) => {
       ></_StdButton>
     </Grid>
   ) : sequence.flow === OrderFlow.ORDER ? (
-    <>Order</>
+    <DispatchUser client={client} />
   ) : sequence.flow === OrderFlow.FIND_STACK ? (
     <>Stack</>
-  )  : (
+  ) : (
     <></>
   );
 };
 
-
-
-export default OrderOptions;
+export default Order;

@@ -22,7 +22,7 @@ const bindEvents = (io, db) => {
 
     socket.on("login-request", async (credentials, resCb) => {
       const { username, password } = credentials;
-      console.log("[socket.on login - request] Getting security token. . . ");
+      console.log("[socket.on login - request] Getting access token. . . ");
 
       const { accessToken, msg } = await db.auth.getAccessToken({
         username,
@@ -30,7 +30,7 @@ const bindEvents = (io, db) => {
       });
 
       console.log(
-        `[socket.on login - request] securityToken ${JSON.stringify(
+        `[socket.on login - request] access ${JSON.stringify(
           accessToken
         )} msg ${msg}`
       );
