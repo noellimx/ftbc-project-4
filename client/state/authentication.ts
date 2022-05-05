@@ -16,9 +16,7 @@ export const authenticationStatusInjector: AuthenticationStatusInjector = (
   payload: status,
 });
 
-
 const initAuthStatus = () => AuthenticationStatus.UNCERTAIN;
-
 
 type AuthenticationPipe = (
   _: AuthenticationStatus,
@@ -36,10 +34,6 @@ export const authenticationStatusPipe: AuthenticationPipe = (
   }
 };
 
-
-
-
-
 enum AuthenticationMessageCommand {
   UPDATE = "auth:validity:msg:update",
 }
@@ -55,7 +49,6 @@ export const authenticationMessageInjector: AuthenticationMessageInjector = (
   type: AuthenticationMessageCommand.UPDATE,
   payload: message,
 });
-
 
 const initAuthMsg = () => "";
 
@@ -74,9 +67,3 @@ export const authenticationMessagePipe: AuthenticationMessagePipe = (
     return status;
   }
 };
-
-
-
-
-
-

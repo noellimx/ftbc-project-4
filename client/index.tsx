@@ -3,7 +3,7 @@
 import { configureStore, Store } from "@reduxjs/toolkit";
 
 import io from "./connection/connection";
-import uplink from "./events";
+import newClient from "./events";
 import pipeSink from "./state/pipe-sink";
 
 /** Imports [UI] */
@@ -30,7 +30,7 @@ const store: Store<TheState> = configureStore({
   preloadedState: { ping: 0 },
 });
 
-const client = uplink(io, store);
+const client = newClient(io, store);
 
 client.general.doYouAcknowledge(console.log);
 

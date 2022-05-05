@@ -19,5 +19,4 @@ const _StdButton: React.FC<StdButtonProps> = ({
   );
 };
 
-
 export default _StdButton;

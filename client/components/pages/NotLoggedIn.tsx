@@ -7,7 +7,6 @@ import _StdButton from "../Buttons/_StdButton";
 import { Client } from "../../utils/my-types";
 import { useSelector } from "react-redux";
 
-
 interface NotLoggedInProps {
   client: Client;
 }
@@ -16,7 +15,9 @@ const NotLoggedIn: React.FC<NotLoggedInProps> = ({ client }) => {
   const [inputUsername, setInputUsername] = React.useState<string>("");
   const [inputPassword, setInputPassword] = React.useState<string>("");
 
-  const authenticationMessage = useSelector(({ authenticationMessage })=> authenticationMessage);
+  const authenticationMessage = useSelector(
+    ({ authenticationMessage }) => authenticationMessage
+  );
   return (
     <>
       <Grid>

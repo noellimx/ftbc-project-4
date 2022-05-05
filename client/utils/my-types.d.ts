@@ -37,6 +37,11 @@ export interface AuthenticationTrigger extends EventTrigger {
   login: UserPassSubmitFn;
 }
 
+export interface OrderTrigger extends EventTrigger {
+  transitToOrder: TrulyImpure;
+  transitToStack: TrulyImpure;
+}
+
 export interface GeneralTrigger extends EventTrigger {
   acknowledge: TrulyImpure;
   doYouAcknowledge: (_: ChannelReceive<string>) => void;
@@ -46,5 +51,25 @@ export type SomeEventTrigger = AuthenticationTrigger | GeneralTrigger;
 export interface Client {
   general: GeneralTrigger;
   authentication: AuthenticationTrigger;
+  order: OrderTrigger;
 }
 export type UpLink = (_: Socket, __: Store) => Client;
+
+export const enum OrderFlow {
+  NIL,
+  ORDER,
+  FIND_STACK,
+}
+
+export const enum Flow_Order {
+  ORDERING,
+  PENDING_STACK,
+  ORDERED,
+}
+
+export const enum Flow_FindStack {}
+
+export interface OrderSequence {
+  flow: OrderFlow;
+  transition?: Flow_Order | Flow_FindStack;
+}

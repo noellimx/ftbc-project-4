@@ -59,7 +59,6 @@ const newDbAuthApi = (sequelize) => {
     const userId = details.getDataValue("id");
     const isMatch = passwordReceivedHashed === passwordDatabaseHashed;
 
-
     if (!isMatch) {
       return {
         accessToken: null,

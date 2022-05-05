@@ -3,6 +3,7 @@ import * as React from "react";
 import { useSelector } from "react-redux";
 
 import { TheState, AuthenticationStatus, Client } from "../utils/my-types";
+import LoggedIn from "./pages/LoggedIn";
 import NotLoggedIn from "./pages/NotLoggedIn";
 
 interface AppProps {
@@ -29,7 +30,7 @@ const App: React.FC<AppProps> = ({ client }) => {
         ) : authenticationStatus === AuthenticationStatus.FALSE ? (
           <NotLoggedIn client={client} />
         ) : authenticationStatus === AuthenticationStatus.TRUE ? (
-          <div>Logged In</div>
+          <LoggedIn client={client} />
         ) : (
           <></>
         )}

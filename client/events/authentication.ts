@@ -6,7 +6,10 @@ import {
   AuthenticationStatus,
 } from "../utils/my-types";
 import { getAccessToken, storeAccessToken } from "../operations/authentication";
-import { authenticationStatusInjector , authenticationMessageInjector} from "../state/authentication";
+import {
+  authenticationStatusInjector,
+  authenticationMessageInjector,
+} from "../state/authentication";
 
 interface LoginRequestReceive {
   accessToken: string;
@@ -40,7 +43,9 @@ const uplinkAuthentication: UpLinkSub<AuthenticationTrigger> = (io, store) => {
       if (is === true) {
         store.dispatch(authenticationStatusInjector(AuthenticationStatus.TRUE));
       } else if (is === false) {
-        store.dispatch(authenticationStatusInjector(AuthenticationStatus.FALSE));
+        store.dispatch(
+          authenticationStatusInjector(AuthenticationStatus.FALSE)
+        );
       } else {
         setTimeout(
           () => {
@@ -69,10 +74,7 @@ const uplinkAuthentication: UpLinkSub<AuthenticationTrigger> = (io, store) => {
         const { accessToken, msg } = authResponse;
         const currentToken = storeAccessToken(accessToken);
         console.log(`[clientAuth] stored token := ${currentToken}`);
-         store.dispatch(
-           authenticationMessageInjector(msg)
-         );
-
+        store.dispatch(authenticationMessageInjector(msg));
 
         presentToken(1);
       }
