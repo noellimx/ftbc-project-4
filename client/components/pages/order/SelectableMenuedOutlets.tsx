@@ -1,37 +1,28 @@
 import * as React from "react";
 
-
-
-import {  } from "../../../utils/my-types";
-
+import {} from "../../../utils/my-types";
 
 import Select from "react-select";
 
-import { Card, CardContent , Typography} from "@mui/material";
+import { Card, CardContent, Typography } from "@mui/material";
 
-import {
-  MenuedOutlets,MenuedOutlet
-} from "../../../utils/my-types";
+import { MenuedOutlets, MenuedOutlet } from "../../../utils/my-types";
 
 interface SelectableMenusProps {
   selectableMenuedOutlets: MenuedOutlets;
-  
+  onClick: (_: MenuedOutlet) => void;
 }
-
-
 
 interface SelectableMenuProps {
   mo: MenuedOutlet;
+  onClick: (_: MenuedOutlet) => void;
 }
 
-const SelectableMenu:React.FC<SelectableMenuProps> = ({mo}) => {
-
-
+const SelectableMenu: React.FC<SelectableMenuProps> = ({ mo, onClick }) => {
   const { outlet, menu } = mo;
 
-  
   return (
-    <Card>
+    <Card onClick={() => onClick(mo)}>
       <CardContent>
         <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
           {outlet.name}
@@ -42,20 +33,22 @@ const SelectableMenu:React.FC<SelectableMenuProps> = ({mo}) => {
       </CardContent>
     </Card>
   );
-
 };
 
 const SelectableMenuedOutlets: React.FC<SelectableMenusProps> = ({
   selectableMenuedOutlets,
+  onClick,
 }) => {
-
   return (
     <>
       {selectableMenuedOutlets.map((mo) => (
-        <SelectableMenu mo={mo} />
+        <SelectableMenu
+          key={`${mo.outlet.name}-${mo.outlet.postalCode}`}
+          mo={mo}
+          onClick={onClick}
+        />
       ))}
     </>
   );
-
 };
 export default SelectableMenuedOutlets;

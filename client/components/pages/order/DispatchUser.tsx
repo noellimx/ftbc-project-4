@@ -4,11 +4,33 @@ import Grid from "@mui/material/Grid";
 
 import DistrictSelector from "./DistrictSelector";
 import SelectableMenuedOutlets from "./SelectableMenuedOutlets";
+import MenuSelection from "./MenuSelection";
 
-import { DistrictSelectionOnChangeFn } from "../../../utils/my-types";
+import {
+  DistrictSelectionOnChangeFn,
+  SelectableMenu,
+  SelectableMenuItem,
+} from "../../../utils/my-types";
 
+import {
+  Client,
+  Coordinate,
+  Menu,
+  Menus,
+  MenuedOutlets,
+  MenuedOutlet,
+  Outlet,
+  Outlets,
+} from "../../../utils/my-types";
 
-import { Client, Coordinate, Menu, Menus, MenuedOutlets,MenuedOutlet, Outlet,Outlets } from "../../../utils/my-types";
+interface SelectOutletDescriptionProps {
+  outlet: Outlet;
+}
+const SelectOutletDescription: React.FC<SelectOutletDescriptionProps> = ({
+  outlet,
+}) => {
+  return <>{outlet.name}</>;
+};
 
 interface DispatchUserProps {
   client: Client;
@@ -28,62 +50,115 @@ enum DispatchSequence {
 const initState = () => DispatchSequence.STORE;
 const initOutlet = () => "";
 
-
-
-
-type InitMenus = () => Menus;
-type InitMenu = () => Menu;
-const initSelectableMenus: InitMenus = () => {
-  return [];
-};
-
-
-const initSelectableMenu: InitMenu = () => {
-  return [];
-};
-
-
-
-
 const outletsNovena: Outlets = [];
 type StringToCoordinate = (_: string) => Coordinate;
 const stringToCoordinate: StringToCoordinate = (latlng) => JSON.parse(latlng);
 
+type InitMenus = () => Menus;
+const initSelectableMenus: InitMenus = () => {
+  return [];
+};
 
+const resetSltbMOs: () => MenuedOutlets = () => [];
 
+const resetSltMO: () => MenuedOutlet = () => null;
 
-const resetSMOs: () => MenuedOutlets = () => [];
+const resetSltbMenu: () => SelectableMenu = () => {
+  return [];
+};
+
+type BinaryOperation = (_: number, __: number) => number;
 
 const DispatchUser: React.FC<DispatchUserProps> = ({ client }) => {
   const [state, setState] = React.useState(initState());
-  const [outlet, useOutlet] = React.useState(initOutlet());
-  const [selectableMenus, useSelectableMenus] = React.useState<Menus>(initSelectableMenus());
 
-
-  const [selectableMenuedOutlets,setSelectableMenuedOutlets] = React.useState<MenuedOutlets>(resetSMOs());
-  const [selectedMenuedOutlet, setSelectedMenuedOutlet] = React.useState<MenuedOutlet>(null);
-  const [selectableMenuItems, useSelectableMenuItems] = React.useState(
-    initSelectableMenu()
+  const [selectableMenuedOutlets, setSelectableMenuedOutlets] =
+    React.useState<MenuedOutlets>(resetSltbMOs());
+  const [selectedMenuedOutlet, setSelectedMenuedOutlet] =
+    React.useState<MenuedOutlet>(resetSltMO());
+  const [selectableMenu, setSelectableMenu] = React.useState<SelectableMenu>(
+    resetSltbMenu()
   );
 
-
-  const districtOnChangeFn:DistrictSelectionOnChangeFn = (event) => {
+  const districtOnChangeFn: DistrictSelectionOnChangeFn = (event) => {
     const coordinate = stringToCoordinate(event.target.value);
-    setSelectableMenuedOutlets([]);
-    client.location.whichOutletsWithMenuNearHere(coordinate, (outletsWithMenu:MenuedOutlets) => {
+    setSelectableMenuedOutlets(() => resetSltbMOs());
+    setSelectedMenuedOutlet(() => resetSltMO());
 
-      setSelectableMenuedOutlets(() => outletsWithMenu);
+    client.location.whichOutletsWithMenuNearHere(
+      coordinate,
+      (outletsWithMenu: MenuedOutlets) => {
+        setSelectableMenuedOutlets(() => outletsWithMenu);
+      }
+    );
+  };
+
+  const selectedOutletOnChangeFn = (mo: MenuedOutlet) => {
+    setSelectedMenuedOutlet(() => mo);
+  };
+
+  React.useEffect(() => {
+    console.log(`[effect] selectable menu is dependent on received menu`);
+    const _selectableMenu = selectedMenuedOutlet?.menu.map((mi) => ({
+      ...mi,
+      qty: 0,
+    }));
+    setSelectableMenu(() => _selectableMenu);
+  }, [selectedMenuedOutlet]);
+
+  const add: BinaryOperation = (a: number, diff: number) => a + diff;
+  const minus: BinaryOperation = (a: number, diff: number) => a - diff;
+
+  const itemQtyChange = (
+    qty: number,
+    mi: SelectableMenuItem,
+    opFn: BinaryOperation
+  ) => {
+    setSelectableMenu((list) => {
+      return list.map((item) => {
+        if (mi.description === item.description) {
+          return {
+            ...item,
+            qty: opFn(item.qty, qty),
+          };
+        } else {
+          return { ...item };
+        }
+      });
     });
   };
+  const itemQtyIncFn = (qty: number, mi: SelectableMenuItem) => {
+    itemQtyChange(qty, mi, add);
+  };
+  const itemQtyDecFn = (qty: number, mi: SelectableMenuItem) => {
+    itemQtyChange(qty, mi, minus);
+  };
+
   return (
     <>
       {state === DispatchSequence.STORE ? (
         <>
           <DistrictSelector onChangeFn={districtOnChangeFn}></DistrictSelector>
-          {!!selectableMenuedOutlets && selectableMenuedOutlets.length > 0 ?<SelectableMenuedOutlets
-            selectableMenuedOutlets={selectableMenuedOutlets}
-          />: <></> }
-          
+          {selectedMenuedOutlet === null ? (
+            selectableMenuedOutlets ? (
+              <SelectableMenuedOutlets
+                selectableMenuedOutlets={selectableMenuedOutlets}
+                onClick={selectedOutletOnChangeFn}
+              />
+            ) : (
+              <>Choose a district! Neary outlets will be shown. </>
+            )
+          ) : (
+            <>
+              <SelectOutletDescription outlet={selectedMenuedOutlet.outlet} />
+              <MenuSelection
+                onClickInc={itemQtyIncFn}
+                onClickDec={itemQtyDecFn}
+                selectableMenu={selectableMenu}
+              />
+            </>
+          )}
+
           <></>
         </>
       ) : (

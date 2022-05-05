@@ -50,7 +50,10 @@ export interface GeneralTrigger extends EventTrigger {
 export type Coordinate = [_: number, __: number];
 
 export interface LocationTrigger extends EventTrigger {
-  whichOutletsWithMenuNearHere: (_:Coordinate,__:(_:MenuedOutlets) => void) => void;
+  whichOutletsWithMenuNearHere: (
+    _: Coordinate,
+    __: (_: MenuedOutlets) => void
+  ) => void;
 }
 export type CoordinateToString = (_: Coordinate) => string;
 export type SomeEventTrigger = AuthenticationTrigger | GeneralTrigger;
@@ -81,16 +84,12 @@ export interface OrderSequence {
   transition?: Flow_Order | Flow_FindStack;
 }
 
-
-
 export type MenuItem = {
   description: string;
   price: number;
-  qty: 0;
 };
 export type Menu = MenuItem[];
 export type Menus = Menu[];
-
 
 export type Outlet = {
   lat: number;
@@ -103,15 +102,19 @@ export type Outlet = {
 
 export type Outlets = Outlet[];
 
-
 export type MenuedOutlet = {
   outlet: Outlet;
   menu: Menu;
-}
+};
 
-export type MenuedOutlets = MenuedOutlet[]
-
+export type MenuedOutlets = MenuedOutlet[];
 
 export type DistrictSelectionOnChangeFn = (
   _: React.ChangeEvent<HTMLInputElement>
 ) => void;
+
+export interface SelectableMenuItem extends MenuItem {
+  qty: number;
+}
+
+export type SelectableMenu = SelectableMenuItem[];

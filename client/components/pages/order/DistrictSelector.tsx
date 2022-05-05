@@ -7,7 +7,6 @@ import {
   DistrictSelectionOnChangeFn,
 } from "../../../utils/my-types";
 
-
 type Location = {
   lat: number;
   lng: number;
@@ -19,26 +18,25 @@ interface DistrictLocation extends Location {
 
 type DistrictLocations = DistrictLocation[];
 
-
-
 interface DistrictSelectorProps {
   onChangeFn: DistrictSelectionOnChangeFn;
 }
- 
 
-const dl1 = { lat: 1.29027 , lng: 103.851959, alias: "Center of Singapore" };
+const dl1 = { lat: 1.29027, lng: 103.851959, alias: "Center of Singapore" };
 const dl2 = {
   lat: 1.3204021738781062,
   lng: 103.84353385476177,
   alias: "Novena",
 };
 
-const districtLocations = [dl1,dl2];
+const districtLocations = [dl1, dl2];
 
+const coordinateToString: CoordinateToString = ([lat, lng]) =>
+  JSON.stringify([lat, lng]);
 
-const coordinateToString: CoordinateToString = ([lat, lng]) => JSON.stringify([lat, lng]);
-
-const DistrictSelector: React.FC<DistrictSelectorProps> = ({onChangeFn = ()=> {}}) => {
+const DistrictSelector: React.FC<DistrictSelectorProps> = ({
+  onChangeFn = () => {},
+}) => {
   return (
     <FormControl>
       <InputLabel id="demo-simple-select-label">Location</InputLabel>
