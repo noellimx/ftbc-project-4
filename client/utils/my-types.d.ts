@@ -56,7 +56,7 @@ export type Address = {
   name?: string;
 };
 export type Location = {
-  coordinate: Coordinate;
+  coordinates: Coordinate;
   address: Address;
 };
 

@@ -3,10 +3,24 @@ import * as React from "react";
 import DistrictSelector from "./DistrictSelector";
 import SelectableMenuedOutlets from "./SelectableMenuedOutlets";
 import MenuSelection from "./MenuSelection";
+import { MapContainer, TileLayer, Popup, Marker } from "react-leaflet";
+import "leaflet/dist/leaflet.css";
 
 import { Stack } from "@mui/material";
-
 import AsyncSelect from "react-select/async";
+
+import * as L from "leaflet";
+
+import SVGhomeFlag from "../../../static/icons/house-flag-solid.svg";
+
+const myIcon = L.icon({
+  iconUrl: SVGhomeFlag,
+  iconSize: [38, 95],
+  iconAnchor: [22, 94],
+  popupAnchor: [-3, -76],
+  shadowSize: [68, 95],
+  shadowAnchor: [22, 94],
+});
 
 import {
   DistrictSelectionOnChangeFn,
@@ -21,7 +35,14 @@ import {
   Location,
 } from "../../../utils/my-types";
 
-import { Switch, Box, ButtonGroup, Button, TextField } from "@mui/material";
+import {
+  Switch,
+  Box,
+  ButtonGroup,
+  Button,
+  TextField,
+  Container,
+} from "@mui/material";
 
 interface EndLocationProps {
   updateEndLocation: (_: Coordinate) => void;
@@ -44,8 +65,9 @@ const EndLocation: React.FC<EndLocationProps> = ({
         );
       }}
       onChange={(option: { value: Location; label: string }) => {
+        console.log(option);
         const { value: location } = option;
-        updateEndLocation(location.coordinate);
+        updateEndLocation(location.coordinates);
       }}
       loadOptions={async (searchVal) => {
         const locations = await client.location.searchBySearchVal(searchVal);
@@ -75,7 +97,9 @@ interface StackOptionsProps {
   decWindow: TrulyImpure;
   updateEndLocation: (_: Coordinate) => void;
   client: Client;
+  selectedMenuedOutlet: MenuedOutlet;
 }
+
 const StackOptions: React.FC<StackOptionsProps> = ({
   stackWindow,
   stackEndLocation,
@@ -86,6 +110,7 @@ const StackOptions: React.FC<StackOptionsProps> = ({
   incWindow = () => {},
   updateEndLocation,
   client,
+  selectedMenuedOutlet,
 }) => {
   const isWindow = stackWindow > 0;
   return (
@@ -132,6 +157,31 @@ const StackOptions: React.FC<StackOptionsProps> = ({
             client={client}
             updateEndLocation={updateEndLocation}
           ></EndLocation>
+          {stackEndLocation && (
+            <Container sx={{ border: 1, display: "flex", height: "width" }}>
+              <MapContainer
+                style={{ width: "90%", height: "100px" }}
+                center={[
+                  selectedMenuedOutlet.outlet.lat,
+                  selectedMenuedOutlet.outlet.lng,
+                ]}
+                zoom={13}
+                scrollWheelZoom={false}
+              >
+                <TileLayer
+                  attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                  url="http://maps-c.onemap.sg/v3/Grey/{z}/{x}/{y}.png"
+                />
+                <Marker
+                  position={[
+                    selectedMenuedOutlet.outlet.lat,
+                    selectedMenuedOutlet.outlet.lng,
+                  ]}
+                  icon={myIcon}
+                ></Marker>
+              </MapContainer>
+            </Container>
+          )}
         </>
       ) : (
         <></>
@@ -289,8 +339,12 @@ const DispatchUser: React.FC<DispatchUserProps> = ({ client }) => {
                 onSwitchDown={() => setStackWindow(() => 0)}
                 incWindow={() => setStackWindow((prev) => prev + 1)}
                 decWindow={() => setStackWindow((prev) => prev - 1)}
-                updateEndLocation={(newC) => setEndLocation(() => newC)}
+                updateEndLocation={(newC) => {
+                  console.log(`new end location ${JSON.stringify(newC)}`);
+                  setEndLocation(() => newC);
+                }}
                 client={client}
+                selectedMenuedOutlet={selectedMenuedOutlet}
               ></StackOptions>
             </>
           )}
