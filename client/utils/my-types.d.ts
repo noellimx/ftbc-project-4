@@ -18,6 +18,7 @@ export interface TheState {
   ping: number;
   authenticationStatus: AuthenticationStatus;
   authenticationMessage: string;
+  orderSequence: OrderSequence;
 }
 
 export type ChannelReceive<T> = (data: T) => void;

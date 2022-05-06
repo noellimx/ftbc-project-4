@@ -11,15 +11,12 @@ import AsyncSelect from "react-select/async";
 
 import * as L from "leaflet";
 
-import SVGhomeFlag from "../../../static/icons/house-flag-solid.svg";
+import SVGhomeFlag from "../../../static/icons/house-flag-solid-green.svg";
 
 const myIcon = L.icon({
   iconUrl: SVGhomeFlag,
-  iconSize: [38, 95],
-  iconAnchor: [22, 94],
-  popupAnchor: [-3, -76],
-  shadowSize: [68, 95],
-  shadowAnchor: [22, 94],
+  iconSize: [20, 20],
+  iconAnchor: [10, 10],
 });
 
 import {
@@ -55,10 +52,11 @@ const EndLocation: React.FC<EndLocationProps> = ({
 }) => {
   return (
     <AsyncSelect
+      styles={{  menuPortal: (base) => ({ ...base, zIndex: 9999 }) }}
       cacheOptions
       formatOptionLabel={({ label, value }) => {
         return (
-          <Stack>
+          <Stack sx={{zIndex: "tooltip"}}>
             <Box>{value?.address?.name}</Box>
             <Box>{label}</Box>
           </Stack>
@@ -158,29 +156,28 @@ const StackOptions: React.FC<StackOptionsProps> = ({
             updateEndLocation={updateEndLocation}
           ></EndLocation>
           {stackEndLocation && (
-            <Container sx={{ border: 1, display: "flex", height: "width" }}>
-              <MapContainer
-                style={{ width: "90%", height: "100px" }}
-                center={[
+            <MapContainer
+              style={{ zIndex: 0 ,width: "100%", height: "200px" }}
+              center={[
+                selectedMenuedOutlet.outlet.lat,
+                selectedMenuedOutlet.outlet.lng,
+              ]}
+              zoom={13}
+              scrollWheelZoom={true}
+            >
+              <TileLayer
+                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                url="http://maps-c.onemap.sg/v3/Grey/{z}/{x}/{y}.png"
+              />
+              <Marker
+                position={[
                   selectedMenuedOutlet.outlet.lat,
                   selectedMenuedOutlet.outlet.lng,
                 ]}
-                zoom={13}
-                scrollWheelZoom={false}
-              >
-                <TileLayer
-                  attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                  url="http://maps-c.onemap.sg/v3/Grey/{z}/{x}/{y}.png"
-                />
-                <Marker
-                  position={[
-                    selectedMenuedOutlet.outlet.lat,
-                    selectedMenuedOutlet.outlet.lng,
-                  ]}
-                  icon={myIcon}
-                ></Marker>
-              </MapContainer>
-            </Container>
+                icon={myIcon}
+              ></Marker>
+              <Marker position={stackEndLocation} icon={myIcon}></Marker>
+            </MapContainer>
           )}
         </>
       ) : (

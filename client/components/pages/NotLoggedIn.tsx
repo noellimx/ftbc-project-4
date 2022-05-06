@@ -4,7 +4,7 @@ import { TextField } from "@mui/material";
 import Grid from "@mui/material/Grid";
 
 import _StdButton from "../Buttons/_StdButton";
-import { Client } from "../../utils/my-types";
+import { Client, TheState } from "../../utils/my-types";
 import { useSelector } from "react-redux";
 
 interface NotLoggedInProps {
@@ -16,7 +16,7 @@ const NotLoggedIn: React.FC<NotLoggedInProps> = ({ client }) => {
   const [inputPassword, setInputPassword] = React.useState<string>("");
 
   const authenticationMessage = useSelector(
-    ({ authenticationMessage }) => authenticationMessage
+    (state:TheState) => state.authenticationMessage
   );
   return (
     <>
