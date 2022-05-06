@@ -18,7 +18,7 @@ interface OrderOptionsProps {
 }
 
 const Order: React.FC<OrderOptionsProps> = ({ client }) => {
-  const sequence = useSelector((state:TheState) => state.orderSequence);
+  const sequence = useSelector((state: TheState) => state.orderSequence);
   return sequence.flow === OrderFlow.NIL ? (
     <Grid>
       <_StdButton

@@ -16,7 +16,7 @@ const NotLoggedIn: React.FC<NotLoggedInProps> = ({ client }) => {
   const [inputPassword, setInputPassword] = React.useState<string>("");
 
   const authenticationMessage = useSelector(
-    (state:TheState) => state.authenticationMessage
+    (state: TheState) => state.authenticationMessage
   );
   return (
     <>

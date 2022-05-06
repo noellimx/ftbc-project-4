@@ -52,11 +52,11 @@ const EndLocation: React.FC<EndLocationProps> = ({
 }) => {
   return (
     <AsyncSelect
-      styles={{  menuPortal: (base) => ({ ...base, zIndex: 9999 }) }}
+      styles={{ menuPortal: (base) => ({ ...base, zIndex: 9999 }) }}
       cacheOptions
       formatOptionLabel={({ label, value }) => {
         return (
-          <Stack sx={{zIndex: "tooltip"}}>
+          <Stack sx={{ zIndex: "tooltip" }}>
             <Box>{value?.address?.name}</Box>
             <Box>{label}</Box>
           </Stack>
@@ -157,7 +157,7 @@ const StackOptions: React.FC<StackOptionsProps> = ({
           ></EndLocation>
           {stackEndLocation && (
             <MapContainer
-              style={{ zIndex: 0 ,width: "100%", height: "200px" }}
+              style={{ zIndex: 0, width: "100%", height: "200px" }}
               center={[
                 selectedMenuedOutlet.outlet.lat,
                 selectedMenuedOutlet.outlet.lng,
