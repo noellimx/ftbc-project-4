@@ -3,7 +3,7 @@ import * as React from "react";
 import DistrictSelector from "./DistrictSelector";
 import SelectableMenuedOutlets from "./SelectableMenuedOutlets";
 import MenuSelection from "./MenuSelection";
-import { MapContainer, TileLayer, Popup, Marker } from "react-leaflet";
+import { MapContainer, TileLayer, Popup, Marker, useMap } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 
 import { Stack } from "@mui/material";
@@ -12,9 +12,16 @@ import AsyncSelect from "react-select/async";
 import * as L from "leaflet";
 
 import SVGhomeFlag from "../../../static/icons/house-flag-solid-green.svg";
+import SVGhomeFlagBlue from "../../../static/icons/house-flag-solid-blue.svg";
 
-const myIcon = L.icon({
+const outletIcon = L.icon({
   iconUrl: SVGhomeFlag,
+  iconSize: [20, 20],
+  iconAnchor: [10, 10],
+});
+
+const endLocationIcon = L.icon({
+  iconUrl: SVGhomeFlagBlue,
   iconSize: [20, 20],
   iconAnchor: [10, 10],
 });
@@ -85,6 +92,35 @@ const EndLocation: React.FC<EndLocationProps> = ({
   );
 };
 
+
+interface BoundSetterProps {
+  currentLocation: Coordinate;
+  stackEndLocation: Coordinate;
+  outletLocation: Coordinate;
+}
+const BoundSetter:React.FC<BoundSetterProps> = ({ outletLocation, currentLocation, stackEndLocation }) => {
+  const map = useMap();
+
+  const coords = [currentLocation, stackEndLocation, outletLocation]
+    .filter((c) => !!c)
+    .map((c) => L.marker(c));
+
+
+  if (coords.length > 1){
+map.fitBounds(L.featureGroup(coords).getBounds())
+console.log(`zoom level ${map.getZoom()}`);
+map.zoomOut(1)
+console.log(`zoom level ${map.getZoom()}`);
+
+  }else{
+map.setView(coords[0].getLatLng(), 15);
+
+  } 
+  
+  
+  return <></>;
+};
+
 interface StackOptionsProps {
   stackWindow: number;
   stackEndLocation: Coordinate;
@@ -96,7 +132,11 @@ interface StackOptionsProps {
   updateEndLocation: (_: Coordinate) => void;
   client: Client;
   selectedMenuedOutlet: MenuedOutlet;
+  currentLocation: Coordinate;
+  outletLocation: Coordinate;
 }
+
+
 
 const StackOptions: React.FC<StackOptionsProps> = ({
   stackWindow,
@@ -109,8 +149,11 @@ const StackOptions: React.FC<StackOptionsProps> = ({
   updateEndLocation,
   client,
   selectedMenuedOutlet,
+  currentLocation,
+  outletLocation,
 }) => {
   const isWindow = stackWindow > 0;
+
   return (
     <>
       {/* <Box sx={{ color: isWindow ? "text.primary" : "black" }}>
@@ -166,7 +209,7 @@ const StackOptions: React.FC<StackOptionsProps> = ({
               scrollWheelZoom={true}
             >
               <TileLayer
-                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                attribution='<img src="https://www.onemap.gov.sg/docs/maps/images/oneMap64-01.png" style="height:20px;width:20px;"/> OneMap | Map data &copy; contributors, <a href="http://SLA.gov.sg">Singapore Land Authority</a>'
                 url="http://maps-c.onemap.sg/v3/Grey/{z}/{x}/{y}.png"
               />
               <Marker
@@ -174,9 +217,18 @@ const StackOptions: React.FC<StackOptionsProps> = ({
                   selectedMenuedOutlet.outlet.lat,
                   selectedMenuedOutlet.outlet.lng,
                 ]}
-                icon={myIcon}
+                icon={outletIcon}
               ></Marker>
-              <Marker position={stackEndLocation} icon={myIcon}></Marker>
+              <Marker
+                position={stackEndLocation}
+                icon={endLocationIcon}
+              ></Marker>
+
+              <BoundSetter
+                stackEndLocation={stackEndLocation}
+                currentLocation={currentLocation}
+                outletLocation={outletLocation}
+              />
             </MapContainer>
           )}
         </>
@@ -342,6 +394,14 @@ const DispatchUser: React.FC<DispatchUserProps> = ({ client }) => {
                 }}
                 client={client}
                 selectedMenuedOutlet={selectedMenuedOutlet}
+                currentLocation={[
+                  selectedMenuedOutlet.outlet.lat,
+                  selectedMenuedOutlet.outlet.lng,
+                ]}
+                outletLocation={[
+                  selectedMenuedOutlet.outlet.lat,
+                  selectedMenuedOutlet.outlet.lng,
+                ]}
               ></StackOptions>
             </>
           )}
