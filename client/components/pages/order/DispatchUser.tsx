@@ -261,7 +261,7 @@ const StackOptions: React.FC<StackOptionsProps> = ({
 
                 {stackRadius > 0 && (
                   <Pane name="cyan-rectangle">
-                    <Circle center={currentLocation} radius={stackRadius} />
+                    <Circle center={stackEndLocation} radius={stackRadius} />
                   </Pane>
                 )}
               </MapContainer>
