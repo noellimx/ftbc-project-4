@@ -3,27 +3,41 @@ import * as React from "react";
 import DistrictSelector from "./DistrictSelector";
 import SelectableMenuedOutlets from "./SelectableMenuedOutlets";
 import MenuSelection from "./MenuSelection";
-import { MapContainer, TileLayer, Popup, Marker, useMap } from "react-leaflet";
+import {
+  MapContainer,
+  TileLayer,
+  Popup,
+  Marker,
+  useMap,
+  Circle,
+  Pane,
+} from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 
-import { Stack } from "@mui/material";
+import { Stack, Slider } from "@mui/material";
 import AsyncSelect from "react-select/async";
 
 import * as L from "leaflet";
 
 import SVGhomeFlag from "../../../static/icons/house-flag-solid-green.svg";
 import SVGhomeFlagBlue from "../../../static/icons/house-flag-solid-blue.svg";
+import SVGUserSolid from "../../../static/icons/user-solid.svg";
+
+import haversineOffset from "haversine-offset";
 
 const outletIcon = L.icon({
   iconUrl: SVGhomeFlag,
-  iconSize: [20, 20],
-  iconAnchor: [10, 10],
+  iconSize: [10, 10],
 });
 
 const endLocationIcon = L.icon({
   iconUrl: SVGhomeFlagBlue,
-  iconSize: [20, 20],
-  iconAnchor: [10, 10],
+  iconSize: [10, 10],
+});
+
+const currentLocationIcon = L.icon({
+  iconUrl: SVGUserSolid,
+  iconSize: [10, 10],
 });
 
 import {
@@ -92,32 +106,39 @@ const EndLocation: React.FC<EndLocationProps> = ({
   );
 };
 
-
 interface BoundSetterProps {
   currentLocation: Coordinate;
   stackEndLocation: Coordinate;
   outletLocation: Coordinate;
 }
-const BoundSetter:React.FC<BoundSetterProps> = ({ outletLocation, currentLocation, stackEndLocation }) => {
+const BoundSetter: React.FC<BoundSetterProps> = ({
+  outletLocation,
+  currentLocation,
+  stackEndLocation,
+}) => {
   const map = useMap();
 
-  const coords = [currentLocation, stackEndLocation, outletLocation]
-    .filter((c) => !!c)
-    .map((c) => L.marker(c));
+  React.useEffect(() => {
+    console.log(`[Boundsetter useeffect`);
+    const coords = [currentLocation, stackEndLocation, outletLocation]
+      .filter((c) => !!c)
+      .map((c) => L.marker(c));
 
+    if (coords.length > 1) {
+      map.fitBounds(L.featureGroup(coords).getBounds());
+      console.log(`zoom level ${map.getZoom()}`);
+    } else {
+      map.setView(coords[0].getLatLng(), 15);
+    }
+  }, [
+    currentLocation[0],
+    currentLocation[1],
+    stackEndLocation[0],
+    stackEndLocation[1],
+    outletLocation[0],
+    outletLocation[1],
+  ]);
 
-  if (coords.length > 1){
-map.fitBounds(L.featureGroup(coords).getBounds())
-console.log(`zoom level ${map.getZoom()}`);
-map.zoomOut(1)
-console.log(`zoom level ${map.getZoom()}`);
-
-  }else{
-map.setView(coords[0].getLatLng(), 15);
-
-  } 
-  
-  
   return <></>;
 };
 
@@ -134,9 +155,8 @@ interface StackOptionsProps {
   selectedMenuedOutlet: MenuedOutlet;
   currentLocation: Coordinate;
   outletLocation: Coordinate;
+  radiusChange: (_: number) => void;
 }
-
-
 
 const StackOptions: React.FC<StackOptionsProps> = ({
   stackWindow,
@@ -151,7 +171,9 @@ const StackOptions: React.FC<StackOptionsProps> = ({
   selectedMenuedOutlet,
   currentLocation,
   outletLocation,
+  radiusChange = (_) => {},
 }) => {
+  console.log(`[FC StackOptions] `);
   const isWindow = stackWindow > 0;
 
   return (
@@ -199,37 +221,70 @@ const StackOptions: React.FC<StackOptionsProps> = ({
             updateEndLocation={updateEndLocation}
           ></EndLocation>
           {stackEndLocation && (
-            <MapContainer
-              style={{ zIndex: 0, width: "100%", height: "200px" }}
-              center={[
-                selectedMenuedOutlet.outlet.lat,
-                selectedMenuedOutlet.outlet.lng,
-              ]}
-              zoom={13}
-              scrollWheelZoom={true}
-            >
-              <TileLayer
-                attribution='<img src="https://www.onemap.gov.sg/docs/maps/images/oneMap64-01.png" style="height:20px;width:20px;"/> OneMap | Map data &copy; contributors, <a href="http://SLA.gov.sg">Singapore Land Authority</a>'
-                url="http://maps-c.onemap.sg/v3/Grey/{z}/{x}/{y}.png"
-              />
-              <Marker
-                position={[
+            <>
+              <MapContainer
+                style={{ zIndex: 0, width: "100%", height: "200px" }}
+                center={[
                   selectedMenuedOutlet.outlet.lat,
                   selectedMenuedOutlet.outlet.lng,
                 ]}
-                icon={outletIcon}
-              ></Marker>
-              <Marker
-                position={stackEndLocation}
-                icon={endLocationIcon}
-              ></Marker>
+                zoom={13}
+                scrollWheelZoom={true}
+              >
+                <TileLayer
+                  attribution='<img src="https://www.onemap.gov.sg/docs/maps/images/oneMap64-01.png" style="height:20px;width:20px;"/> OneMap | Map data &copy; contributors, <a href="http://SLA.gov.sg">Singapore Land Authority</a>'
+                  url="http://maps-c.onemap.sg/v3/Grey/{z}/{x}/{y}.png"
+                />
+                <Marker
+                  position={[
+                    selectedMenuedOutlet.outlet.lat,
+                    selectedMenuedOutlet.outlet.lng,
+                  ]}
+                  icon={outletIcon}
+                ></Marker>
+                <Marker
+                  position={stackEndLocation}
+                  icon={endLocationIcon}
+                ></Marker>
+                {currentLocation && (
+                  <Marker
+                    position={currentLocation}
+                    icon={currentLocationIcon}
+                  ></Marker>
+                )}
 
-              <BoundSetter
-                stackEndLocation={stackEndLocation}
-                currentLocation={currentLocation}
-                outletLocation={outletLocation}
-              />
-            </MapContainer>
+                <BoundSetter
+                  stackEndLocation={stackEndLocation}
+                  currentLocation={currentLocation}
+                  outletLocation={outletLocation}
+                />
+
+                {stackRadius > 0 && (
+                  <Pane name="cyan-rectangle">
+                    <Circle center={currentLocation} radius={stackRadius} />
+                  </Pane>
+                )}
+              </MapContainer>
+              {stackRadius > 0 && (
+                <>
+                  <Slider
+                    id="slider-radius-end-location"
+                    value={stackRadius}
+                    onChange={(evt, newValue) => {
+                      evt.stopPropagation();
+                      if (typeof newValue === "number") {
+                        radiusChange(newValue);
+                      }
+                    }}
+                    min={20}
+                    max={200}
+                    aria-label="Default"
+                    valueLabelDisplay="auto"
+                  />
+                  <div>{stackRadius}</div>
+                </>
+              )}
+            </>
           )}
         </>
       ) : (
@@ -274,10 +329,15 @@ const resetSltbMenu: () => SelectableMenu = () => [];
 const resetWindow: () => number = () => 0;
 const resetEndLocation: () => Coordinate = () => null;
 const resetRadius: () => number = () => 0;
+const resetCurrentLocation: () => Coordinate = () => {
+  console.log(`[resetCurrentLocation]`);
+  return null;
+};
 
 type BinaryOperation = (_: number, __: number) => number;
 
 const DispatchUser: React.FC<DispatchUserProps> = ({ client }) => {
+  console.log(`[FC DispatchUser]`);
   const [state, setState] = React.useState(initState());
 
   const [selectableMenuedOutlets, setSelectableMenuedOutlets] =
@@ -293,15 +353,38 @@ const DispatchUser: React.FC<DispatchUserProps> = ({ client }) => {
   );
   const [stackRadius, setStackRadius] = React.useState<number>(resetRadius());
 
+  const [currentLocation, setCurrentLocation] = React.useState<Coordinate>(
+    resetCurrentLocation()
+  );
+
   React.useEffect(() => {
     console.log(`[effect] selectable menu is dependent on received menu`);
-    const _selectableMenu = selectedMenuedOutlet
-      ? selectedMenuedOutlet.menu.map((mi) => ({
-          ...mi,
-          qty: 0,
-        }))
-      : resetSltbMenu();
-    setSelectableMenu(() => _selectableMenu);
+
+    if (!!selectedMenuedOutlet) {
+      const _selectableMenu = selectedMenuedOutlet.menu.map((mi) => ({
+        ...mi,
+        qty: 0,
+      }));
+
+      setSelectableMenu(() => _selectableMenu);
+
+      const { lat, lng } = haversineOffset(
+        {
+          latitude: selectedMenuedOutlet.outlet.lat,
+          longitude: selectedMenuedOutlet.outlet.lng,
+        },
+        { x: -150, y: -150 }
+      );
+
+      setCurrentLocation(() => {
+        console.log(`[Dispatch useEffect setCurrentLocation]`);
+
+        return [lat, lng];
+      });
+    } else {
+      setSelectableMenu(() => resetSltbMenu());
+      setCurrentLocation(() => resetCurrentLocation());
+    }
   }, [selectedMenuedOutlet]);
 
   React.useEffect(() => {
@@ -309,10 +392,13 @@ const DispatchUser: React.FC<DispatchUserProps> = ({ client }) => {
     if (stackWindow === 0) {
       setEndLocation(() => resetEndLocation());
       setStackRadius(() => resetRadius());
+    } else {
+      setStackRadius(() => 50);
     }
   }, [stackWindow]);
 
   const districtOnChangeFn: DistrictSelectionOnChangeFn = (event) => {
+    console.log(`[districtOnChangeFn]`);
     const coordinate = stringToCoordinate(event.target.value);
     setSelectableMenuedOutlets(() => resetSltbMOs());
     setSelectedMenuedOutlet(() => resetSltMO());
@@ -357,6 +443,7 @@ const DispatchUser: React.FC<DispatchUserProps> = ({ client }) => {
   const itemQtyDecFn = (qty: number, mi: SelectableMenuItem) => {
     itemQtyChange(qty, mi, minus);
   };
+  console.log(`[FC DispatchUser] before returning`);
 
   return (
     <>
@@ -394,14 +481,12 @@ const DispatchUser: React.FC<DispatchUserProps> = ({ client }) => {
                 }}
                 client={client}
                 selectedMenuedOutlet={selectedMenuedOutlet}
-                currentLocation={[
-                  selectedMenuedOutlet.outlet.lat,
-                  selectedMenuedOutlet.outlet.lng,
-                ]}
+                currentLocation={currentLocation}
                 outletLocation={[
                   selectedMenuedOutlet.outlet.lat,
                   selectedMenuedOutlet.outlet.lng,
                 ]}
+                radiusChange={(n) => setStackRadius((_) => n)}
               ></StackOptions>
             </>
           )}
