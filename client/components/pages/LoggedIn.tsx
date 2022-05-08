@@ -12,7 +12,7 @@ import {
   Transition_DispatchUserOrder,
 } from "../../utils/my-types";
 import { useSelector } from "react-redux";
-import DispatchUserOrdering from "./order/dispatchUser/DispatchUser";
+import DispatchUserOrdering from "./order/dispatchUser/DispatchUserOrdering";
 import DispatchUserStacking from "./order/dispatchUser/DispatchUserStacking";
 
 interface OrderOptionsProps {
