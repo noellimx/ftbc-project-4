@@ -146,7 +146,7 @@ export class Database extends DbModel {
     console.log(pivotCoordinate);
     nnn.forEach((e) => console.log(e));
 
-    const allDist = await this.location.getDistancesOfOutlets({
+    const allDist = await this.location.getDistanceOfOutletsFrom({
       center: pivotCoordinate2,
     });
 
@@ -185,6 +185,7 @@ export class Database extends DbModel {
     this.location = newDbLocationApi(
       this.Outlet,
       this.District,
+      this.Collection,
       this.Sequelize
     );
 
@@ -201,6 +202,7 @@ export class Database extends DbModel {
       this.District,
       this.Outlet,
       this.User,
+      this.Collection
     ]) {
       await model.destroy({ where: {} });
     }

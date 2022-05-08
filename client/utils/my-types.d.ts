@@ -96,6 +96,7 @@ export type Location = {
 };
 
 export interface LocationTrigger extends EventTrigger {
+  whichCandidateCollection(_newloc: Coordinate, arg1: (collections: Collection[]) => void);
   whichOutletsWithMenuNearHere: (
     _: Coordinate,
     __: (_: MenuedOutlets) => void

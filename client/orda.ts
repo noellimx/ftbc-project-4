@@ -8,7 +8,7 @@ import {
   MenuedOutlets,
   Menu,
   Location,
-  Address,
+  Address,Collection,
 } from "./utils/my-types";
 import { Store } from "@reduxjs/toolkit";
 import { Socket } from "socket.io-client";
@@ -120,7 +120,17 @@ const locationEvents = (io: Socket, store: Store) => {
     });
   };
 
-  return { whichOutletsWithMenuNearHere, searchBySearchVal };
+
+  const whichCandidateCollection: (_:Coordinate,__:(_:Collection[])=>void) => void = (loc,fn) => {
+
+    io.emit("which-candidate-collection",loc, (cs:Collection[]) => {
+      console.log(`[which-candidate-collection] :=`)
+      console.log(cs)
+      fn(cs)
+    })
+  }
+
+  return { whichOutletsWithMenuNearHere, searchBySearchVal, whichCandidateCollection };
 };
 
 const newClient: UpLink = (io, store) => {

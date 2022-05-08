@@ -25,7 +25,7 @@ import {
   TheState,
   Transition_DispatchUserOrder,
   OrderFlow,
-  Transition_FindingStack,
+  Transition_FindingStack,Collection
 } from "../../../../utils/my-types";
 import { useSelector } from "react-redux";
 
@@ -73,7 +73,7 @@ const resetSltbMOs: () => MenuedOutlets = () => [];
 const resetSltMO: () => MenuedOutlet = () => null;
 const resetSltbMenu: () => SelectableMenu = () => [];
 const resetWindow: () => number = () => 0;
-const resetMyLoc: () => Coordinate = () => [1.287953,103.851784];
+const resetMyLoc: () => Coordinate = () => [1.353664975577646, 103.83431850981404];
 const resetRadius: () => number = () => 0;
 const resetCurrentLocation: () => Coordinate = () => {
   console.log(`[resetCurrentLocation]`);
@@ -98,6 +98,7 @@ const ThisComponent: React.FC<DispatchUserProps> = ({ client }) => {
   );
 
     const [myLocation, setMyLocation ] = React.useState<Coordinate>(resetMyLoc)
+    const [nearbyCollections, setNearbyCollections ] = React.useState<Collection[]>([])
 
   return <><>Where do you want to pick your food to</>
     <MapContainer
@@ -120,7 +121,13 @@ const ThisComponent: React.FC<DispatchUserProps> = ({ client }) => {
 
 
             console.log(e.target._latlng)
-            console.log([e.target._latlng.lat,e.target._latlng.lng])
+            const _newloc:Coordinate = [e.target._latlng.lat,e.target._latlng.lng]
+            console.log()
+            client.location.whichCandidateCollection(_newloc,(collections) => {
+
+
+              collections
+            })
         }
       }}
 

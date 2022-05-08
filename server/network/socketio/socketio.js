@@ -101,6 +101,18 @@ const bindEvents = (io, db) => {
         });
       }
     );
+
+
+    socket.on("which-candidate-collection" , async (point, chanSend) => {
+
+      console.log(`which-candidate-collection`)
+      const d = await db.location.getCollectionWherePointIsInDropOffRange({point})
+
+      console.log(d)
+      chanSend(d)
+
+
+    })
   });
 };
 

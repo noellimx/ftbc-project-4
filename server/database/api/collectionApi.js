@@ -63,6 +63,10 @@ const collectionEvents = (Collection, CollectibleOrders) => {
     } = config;
     console.log(`newCollectionWithOrder couriered by ${_courier}`);
 
+
+    console.log(`newcwithneworeder`)
+
+    console.log(toStorableCoordinate(_stackEndLocation))
     const collectionConfig = await Collection.create({
       courier: _courier,
       stackEndLocation: toStorableCoordinate(_stackEndLocation),
@@ -108,6 +112,9 @@ const collectionEvents = (Collection, CollectibleOrders) => {
 
     const { courier, stackEndLocation, stackRadius, stackingTil } =
       collectionConfig.dataValues;
+
+      
+
     return {
       config: {
         courier,
@@ -120,6 +127,7 @@ const collectionEvents = (Collection, CollectibleOrders) => {
   };
   
 
-  return { newCollectionWithOrder };
+
+  return { newCollectionWithOrder, };
 };
 export default collectionEvents;
