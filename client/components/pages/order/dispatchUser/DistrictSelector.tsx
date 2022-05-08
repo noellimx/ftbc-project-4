@@ -37,7 +37,7 @@ interface DistrictSelectorProps {
 }
 
 const DistrictSelector: React.FC<DistrictSelectorProps> = ({
-  onChangeFn = (_,__) => {},
+  onChangeFn = (_, __) => {},
   value,
 }) => {
   return (

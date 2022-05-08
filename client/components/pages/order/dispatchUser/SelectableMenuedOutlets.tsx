@@ -2,7 +2,6 @@ import * as React from "react";
 
 import {} from "../../../../utils/my-types";
 
-
 import { Card, CardContent, Typography } from "@mui/material";
 
 import { MenuedOutlets, MenuedOutlet } from "../../../../utils/my-types";
