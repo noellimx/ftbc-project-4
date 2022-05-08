@@ -1,8 +1,7 @@
 import schedule from "node-schedule";
 
-const run = () => {
+const demo = (seconds) => {
   console.log("hi");
-  const date = DateTime.now().plus({ seconds: 5 });
   const some = 1;
   let t = new Date();
   t.setSeconds(t.getSeconds() + 10);
@@ -17,4 +16,19 @@ const run = () => {
   }
 };
 
-run();
+
+
+
+const invokeDeferredCallback = (date, cb = () => {}) => {
+  try {
+    console.log(`trying`);
+    schedule.scheduleJob(date, () => {
+      cb()
+    });
+  } catch (err) {
+    console.log("error");
+  }
+}
+
+
+export {invokeDeferredCallback};

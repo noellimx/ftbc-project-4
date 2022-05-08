@@ -57,6 +57,8 @@ export type CollectionConfig = {
 export interface CollectibleOrder {
   order: SelectableMenu;
   dropOffPoint: Coordinate;
+  isCollected: boolean;
+  username: string;
 }
 
 export interface Collection {

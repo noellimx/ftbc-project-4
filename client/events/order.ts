@@ -7,6 +7,8 @@ import {
   Transition_FindingStack,
   Collection,
 } from "../utils/my-types";
+
+import { getAccessToken } from "../operations/authentication";
 import { Store } from "@reduxjs/toolkit";
 import { orderStatusInjector,newCollectionInjector  } from "../state/order";
 import { Socket } from "socket.io-client";
@@ -50,7 +52,7 @@ const uplinkOrder: (_: Socket, __: Store) => OrderTrigger = (io, store) => {
       setTimeout(() => {
         io.emit(
           "request-add-order-to-new-stack",
-          { order, stackOptions },
+          { order, stackOptions },getAccessToken(),
           (collection: Collection) => {
             const { config, orders } = collection;
             console.log(`request-add-order-to-new-stack `);

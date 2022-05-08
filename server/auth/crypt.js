@@ -40,6 +40,10 @@ const newAccessToken = (payload) => {
   return jwt.sign(payload, JWT_SECRET);
 };
 
+/**
+ * 
+ * @returns {[boolean,string]} return verification status and subject if verified
+ */
 const verifyToken = (accessToken) => {
   return new Promise((resolve, reject) => {
     jwt.verify(accessToken, JWT_SECRET, (err, decoded) => {

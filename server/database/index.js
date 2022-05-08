@@ -6,13 +6,14 @@ import newDbLocationApi from "./api/location.js";
 // Enforces Model Initialization via inheritance.
 export class Database extends DbModel {
   _seed = async () => {
-    const username = "1";
-    const password = "1";
-    await this.auth.registerUser({
+    console.log(`[_Seeding]`)
+    const username = "u";
+    const password = "u";
+    console.log(await this.auth.registerUser({
       username,
       plainPassword: password,
       password2: password,
-    });
+    }))
 
     const coordinates = {
       type: "Point",

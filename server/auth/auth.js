@@ -1,5 +1,5 @@
-import { getUserByUsername, isUserExisting } from "../database/api/user.js";
-import { hashPassword, UserDoor } from "./crypt.js";
+import {  isUserExisting } from "../database/api/user.js";
+import {  UserDoor } from "./crypt.js";
 
 const decodeUserId = (concealed) => UserDoor.reveal(concealed);
 

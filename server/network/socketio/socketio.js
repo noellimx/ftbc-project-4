@@ -2,6 +2,13 @@
 
 import { Database } from "../../database/index.js";
 
+import { invokeDeferredCallback } from "../../app/scheduler.js";
+import { verifyToken } from "../../auth/crypt.js";
+
+
+
+const timesUp = () => () => console.log("times up")
+const deflateMinsToSeconds = (min) => min * 30;
 /**
  * @param {any} io ss
  * @param {Database} db
@@ -37,23 +44,34 @@ const bindEvents = (io, db) => {
       resCb({ accessToken, msg });
     });
 
+
+    // Order
     socket.on(
       "request-add-order-to-new-stack",
-      ({ order, stackOptions }, chanSend) => {
+      async ({ order, stackOptions }, token, chanSend) => {
+
+        const [is,sub] = await verifyToken(token) ; 
+        const requestorName = await db.auth.getUsernameOfUserId(sub);
+
+        if(!is) {
+          return chanSend(null)
+        }
         const { stackEndLocation, stackRadius, stackWindow } = stackOptions;
 
-        const now = new Date();
-        now.setSeconds(now.getSeconds() + stackWindow * 20);
+        const later = new Date();
+        later.setSeconds(later.getSeconds() + deflateMinsToSeconds(stackWindow));
 
-        console.log(`[request-add-order-to-new-stack]`);
+        invokeDeferredCallback(later , timesUp() );
+        
         chanSend({
-          orders: [{ order, dropOffPoint: stackEndLocation }],
+          orders: [{ order, dropOffPoint: stackEndLocation, isCollected: false, username: requestorName }],
           config: {
             stackEndLocation,
             stackRadius,
-            stackingTil: now.getTime(),
+            stackingTil: later.getTime(),
           },
         });
+        
       }
     );
   });
