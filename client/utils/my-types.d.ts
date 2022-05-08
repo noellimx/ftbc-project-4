@@ -52,6 +52,7 @@ export type CollectionConfig = {
   stackingTil: MsSinceEpoch;
   stackEndLocation: Coordinate;
   stackRadius: number;
+  courier: string;
 };
 
 export interface CollectibleOrder {

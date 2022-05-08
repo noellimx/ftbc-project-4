@@ -71,6 +71,7 @@ const bindEvents = (io, db) => {
             },
           ],
           config: {
+            courier: requestorName,
             stackEndLocation,
             stackRadius,
             stackingTil: later.getTime(),
