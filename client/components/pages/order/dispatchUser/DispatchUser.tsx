@@ -173,12 +173,14 @@ const DispatchUser: React.FC<DispatchUserProps> = ({ client }) => {
     );
   };
 
-  const selectedOutletOnChangeFn = (mo: MenuedOutlet) => {
+  const changeSelectedOutlet = (mo: MenuedOutlet) => {
     setSelectedMenuedOutlet(() => mo);
   };
 
-  const saveOrderAndSubmitStack = () => {
-    const order = selectableMenu?.filter((item) => item.qty > 0);
+  const saveOrderAndCreateStackAndAddOrderToStack = async () => {
+    setAwaiting(() => true);
+
+    const order = selectableMenu ? selectableMenu?.filter((item) => item.qty > 0) : [];
 
     const stackOptions = {
       stackWindow,
@@ -186,14 +188,13 @@ const DispatchUser: React.FC<DispatchUserProps> = ({ client }) => {
       stackRadius,
     };
 
-    setAwaiting(() => true);
 
     console.log(
       `[stubbing send] ${JSON.stringify(order)} ${JSON.stringify(stackOptions)}`
     );
-    setTimeout(() => {
-      setAwaiting(() => false);
-    }, 1000);
+
+    client.order.saveOrderAndCreateStackAndAddOrderToStack({stackOptions, order})
+
   };
 
   const add: BinaryOperation = (a: number, diff: number) => a + diff;
@@ -241,7 +242,7 @@ const DispatchUser: React.FC<DispatchUserProps> = ({ client }) => {
             {!selectedMenuedOutlet ? (
               <SelectableMenuedOutlets
                 selectableMenuedOutlets={selectableMenuedOutlets}
-                onClick={selectedOutletOnChangeFn}
+                onClick={changeSelectedOutlet}
               />
             ) : (
               <>
@@ -274,7 +275,7 @@ const DispatchUser: React.FC<DispatchUserProps> = ({ client }) => {
                   ]}
                   radiusChange={(n) => setStackRadius((_) => n)}
                   awaiting={awaiting}
-                  saveOrderAndSubmitStackFn={saveOrderAndSubmitStack}
+                  saveOrderAndCreateStackAndAddOrderToStackFn={saveOrderAndCreateStackAndAddOrderToStack}
                 ></StackOptions>
               </>
             )}

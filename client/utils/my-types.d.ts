@@ -40,9 +40,45 @@ export interface AuthenticationTrigger extends EventTrigger {
   login: UserPassSubmitFn;
 }
 
+
+export type StackOptionInterface = {
+  stackWindow : number;
+  stackEndLocation: Coordinate;
+  stackRadius: number;
+}
+
+
+
+export type MsSinceEpoch  = number;
+export type CollectionConfig = {
+  stackingTil : MsSinceEpoch;
+  stackEndLocation: Coordinate;
+  stackRadius: number;
+}
+
+export interface CollectibleOrder {
+  order: SelectableMenu,
+  dropOffPoint: Coordinate
+}
+
+
+export interface Collection {
+
+  config : CollectionConfig;
+  orders: CollectibleOrder[];
+
+}
+
+
+
+export type SaveOrderAndCreateStackAndAddOrderToStack =  (_:{
+  order:SelectableMenuItem[],stackOptions:StackOptionInterface
+
+}) => Promise<void>;
 export interface OrderTrigger extends EventTrigger {
-  transitToOrder: TrulyImpure;
-  transitToStackFinding: TrulyImpure;
+  transitToOrder_Ordering: TrulyImpure;
+  transitToStackFinding_: TrulyImpure;
+  saveOrderAndCreateStackAndAddOrderToStack: SaveOrderAndCreateStackAndAddOrderToStack
 }
 
 export interface GeneralTrigger extends EventTrigger {
@@ -154,3 +190,5 @@ export interface SelectableMenuItem extends MenuItem {
 }
 
 export type SelectableMenu = SelectableMenuItem[];
+
+export type SelectableMenus = SelectableMenu[];

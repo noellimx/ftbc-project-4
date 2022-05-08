@@ -25,6 +25,8 @@ import { TheState } from "./utils/my-types";
  */
 
 // State Uplink To Server
+
+// TODO: Complete type definition
 const store: Store<TheState> = configureStore({
   reducer: pipeSink,
   preloadedState: { ping: 0 },

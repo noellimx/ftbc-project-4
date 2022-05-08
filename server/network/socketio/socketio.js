@@ -36,6 +36,24 @@ const bindEvents = (io, db) => {
       );
       resCb({ accessToken, msg });
     });
+
+
+    socket.on("request-add-order-to-new-stack", ({order,stackOptions}, chanSend) => {
+      const {stackEndLocation, stackRadius, stackWindow } = stackOptions;
+
+
+      const now = new Date()
+  now.setSeconds(now.getSeconds() + stackWindow * 20);
+
+      
+      console.log(`[request-add-order-to-new-stack]`)
+      chanSend({orders: [{order, dropOffPoint: stackEndLocation }], config: {
+
+        stackEndLocation,stackRadius, stackingTil: now.getTime()
+      } })
+
+
+    })
   });
 };
 

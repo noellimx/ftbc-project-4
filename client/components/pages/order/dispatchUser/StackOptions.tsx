@@ -99,7 +99,7 @@ interface StackOptionsProps {
   outletLocation: Coordinate;
   radiusChange: (_: number) => void;
   awaiting: boolean;
-  saveOrderAndSubmitStackFn: TrulyImpure;
+  saveOrderAndCreateStackAndAddOrderToStackFn: TrulyImpure;
 }
 
 const StackOptions: React.FC<StackOptionsProps> = ({
@@ -117,7 +117,7 @@ const StackOptions: React.FC<StackOptionsProps> = ({
   outletLocation,
   radiusChange = (_) => {},
   awaiting,
-  saveOrderAndSubmitStackFn,
+  saveOrderAndCreateStackAndAddOrderToStackFn,
 }) => {
   console.log(`[FC StackOptions] `);
   console.log(`[awaiting] ${awaiting}`);
@@ -229,7 +229,7 @@ const StackOptions: React.FC<StackOptionsProps> = ({
 
               {/* Stack Submission */}
               <_StdButton
-                onClickFn={saveOrderAndSubmitStackFn}
+                onClickFn={saveOrderAndCreateStackAndAddOrderToStackFn}
                 text={"Save Order and Create Stack"}
               />
             </>
