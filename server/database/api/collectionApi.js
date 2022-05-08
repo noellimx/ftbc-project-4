@@ -118,39 +118,7 @@ const collectionEvents = (Collection, CollectibleOrders) => {
       orders,
     };
   };
-  // const removeSession = (socketId) =>
-  //   LastKnownSessionUser.destroy({ where: { id: socketId } });
-
-  // const getSocketsOfUsers = async (userIds) => {
-  //   return await LastKnownSessionUser.findAll({
-  //     where: {
-  //       userId: userIds,
-  //     },
-  //   }).then(async (sockets) => {
-  //     const result = Promise.all(
-  //       sockets.map(async ({ dataValues }) => {
-  //         const { id, userId } = dataValues;
-  //         return { id, userId };
-  //       })
-  //     );
-
-  //     return result;
-  //   });
-  // };
-  // const getSocketsOfUser = async (userId) => {
-  //   return await LastKnownSessionUser.findAll({ where: { userId } }).then(
-  //     async (sockets) => {
-  //       const result = Promise.all(
-  //         sockets.map(async ({ dataValues }) => {
-  //           const { id, userId } = dataValues;
-  //           return { id, userId };
-  //         })
-  //       );
-
-  //       return result;
-  //     }
-  //   );
-  // };
+  
 
   return { newCollectionWithOrder };
 };
