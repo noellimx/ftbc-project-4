@@ -11,7 +11,7 @@ import {
   OrderSequence,
 } from "../../utils/my-types";
 import { useSelector } from "react-redux";
-import DispatchUser from "./order/DispatchUser";
+import DispatchUser from "./order/dispatchUser/DispatchUser";
 
 interface OrderOptionsProps {
   client: Client;

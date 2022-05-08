@@ -1,6 +1,8 @@
 import { AnyAction } from "redux";
 import { Socket } from "socket.io-client";
 import { Store } from "redux";
+import { ReactNode } from "react";
+import { SelectChangeEvent } from "@mui/material";
 
 export type TrulyImpure = () => void;
 
@@ -124,7 +126,8 @@ export type MenuedOutlet = {
 export type MenuedOutlets = MenuedOutlet[];
 
 export type DistrictSelectionOnChangeFn = (
-  _: React.ChangeEvent<HTMLInputElement>
+  _: SelectChangeEvent<string>,
+  __: ReactNode
 ) => void;
 
 export interface SelectableMenuItem extends MenuItem {

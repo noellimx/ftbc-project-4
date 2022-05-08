@@ -6,7 +6,7 @@ import {
   CoordinateToString,
   DistrictSelectionOnChangeFn,
   Coordinate,
-} from "../../../utils/my-types";
+} from "../../../../utils/my-types";
 
 type Location = {
   lat: number;
@@ -37,7 +37,7 @@ interface DistrictSelectorProps {
 }
 
 const DistrictSelector: React.FC<DistrictSelectorProps> = ({
-  onChangeFn = () => {},
+  onChangeFn = (_,__) => {},
   value,
 }) => {
   return (

@@ -1,11 +1,11 @@
-/// <reference path="../../types/svg.d.ts" />
+/// <reference path="../../../types/svg.d.ts" />
 
 import * as React from "react";
 
-import _StdButton from "../../Buttons/_StdButton";
+import _StdButton from "../../../Buttons/_StdButton";
 import DistrictSelector from "./DistrictSelector";
-import SelectableMenuedOutlets from "./SelectableMenuedOutlets";
-import MenuSelection from "./MenuSelection";
+import SelectableMenuedOutlets from "../SelectableMenuedOutlets";
+import MenuSelection from "../MenuSelection";
 import {
   MapContainer,
   TileLayer,
@@ -22,9 +22,9 @@ import AsyncSelect from "react-select/async";
 
 import * as L from "leaflet";
 
-import SVGhomeFlag from "../../../static/icons/house-flag-solid-green.svg";
-import SVGhomeFlagBlue from "../../../static/icons/house-flag-solid-blue.svg";
-import SVGUserSolid from "../../../static/icons/user-solid.svg";
+import SVGhomeFlag from "../../../../static/icons/house-flag-solid-green.svg";
+import SVGhomeFlagBlue from "../../../../static/icons/house-flag-solid-blue.svg";
+import SVGUserSolid from "../../../../static/icons/user-solid.svg";
 
 import haversineOffset from "haversine-offset";
 
@@ -54,7 +54,7 @@ import {
   MenuedOutlet,
   Outlet,
   Location,
-} from "../../../utils/my-types";
+} from "../../../../utils/my-types";
 
 import { Switch, Box, ButtonGroup, Button } from "@mui/material";
 
