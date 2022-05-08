@@ -1,4 +1,53 @@
 export default class DbModel {
+
+  _modelDistrict = () => {
+    const _model = this.sequelize.define(
+      "district",
+      {
+        id: {
+          allowNull: false,
+          autoIncrement: true,
+          primaryKey: true,
+          type: this.DataTypes.INTEGER,
+          field: "id",
+        },
+        createdAt: {
+          allowNull: false,
+          type: this.DataTypes.DATE,
+          field: "created_at",
+        },
+        updatedAt: {
+          allowNull: false,
+          type: this.DataTypes.DATE,
+          field: "updated_at",
+        },
+        name: {
+          type: this.DataTypes.STRING,
+          allowNull: false,
+          field: "name",
+        },
+        nearbyOutletId: {
+          type: this.DataTypes.INTEGER,
+          references: {
+            model: this.User,
+            key: "id",
+          },
+          allowNull: false,
+          field: "nearby_outlet_id",
+        },
+      },
+      {
+        underscored: true,
+      }
+    );
+    if (_model !== this.sequelize.models.district) {
+      throw new Error("model reference mismatch");
+    }
+    console.log(`[DbModel] _modelOutlet`);
+  };
+
+
+
   _modelOutlet = () => {
     const _model = this.sequelize.define(
       "outlet",
@@ -15,6 +64,11 @@ export default class DbModel {
           type: this.DataTypes.DATE,
           field: "created_at",
         },
+        updatedAt: {
+          allowNull: false,
+          type: this.DataTypes.DATE,
+          field: "updated_at",
+        },
         coordinates: {
           type: this.DataTypes.GEOMETRY("POINT"),
           allowNull: false,
@@ -26,7 +80,7 @@ export default class DbModel {
           allowNull: false,
         },
         buildingNo: {
-          type: this.DataTypes.INTEGER,
+          type: this.DataTypes.STRING,
           field: "building_no",
           allowNull: false,
         },
@@ -97,12 +151,15 @@ export default class DbModel {
       throw new Error("model reference mismatch");
     }
     console.log(`[DbModel] _modelUser`);
+
+    return this.sequelize.models.user
   };
 
   constructor(sequelize) {
     this.sequelize = sequelize;
     this.DataTypes = this.sequelize.Sequelize.DataTypes;
-    this._modelUser();
+    this.User = this._modelUser();
     this._modelOutlet();
+    this.District = this._modelDistrict()
   }
 }
