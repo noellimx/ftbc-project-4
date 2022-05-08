@@ -1,12 +1,11 @@
 import * as React from "react";
 
-import {} from "../../../utils/my-types";
+import {} from "../../../../utils/my-types";
 
-import Select from "react-select";
 
 import { Card, CardContent, Typography } from "@mui/material";
 
-import { MenuedOutlets, MenuedOutlet } from "../../../utils/my-types";
+import { MenuedOutlets, MenuedOutlet } from "../../../../utils/my-types";
 
 interface SelectableMenusProps {
   selectableMenuedOutlets: MenuedOutlets;

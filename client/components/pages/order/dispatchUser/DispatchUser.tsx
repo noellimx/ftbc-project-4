@@ -4,8 +4,8 @@ import * as React from "react";
 
 import _StdButton from "../../../Buttons/_StdButton";
 import DistrictSelector from "./DistrictSelector";
-import SelectableMenuedOutlets from "../SelectableMenuedOutlets";
-import MenuSelection from "../MenuSelection";
+import SelectableMenuedOutlets from "./SelectableMenuedOutlets";
+import MenuSelection from "./MenuSelection";
 import {
   MapContainer,
   TileLayer,

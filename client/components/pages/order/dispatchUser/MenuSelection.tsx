@@ -1,9 +1,9 @@
 import { ButtonGroup, Button } from "@mui/material";
 import * as React from "react";
 
-import {} from "../../../utils/my-types";
+import {} from "../../../../utils/my-types";
 
-import { SelectableMenu, SelectableMenuItem } from "../../../utils/my-types";
+import { SelectableMenu, SelectableMenuItem } from "../../../../utils/my-types";
 
 interface SelectableMenuItemProps {
   mi: SelectableMenuItem;
