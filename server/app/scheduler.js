@@ -6,7 +6,6 @@ const demo = (seconds) => {
   let t = new Date();
   t.setSeconds(t.getSeconds() + 10);
   try {
-    console.log(`trying`);
     const job = schedule.scheduleJob(t, () => {
       console.log("The world is going to end today.");
       console.log(some);
@@ -18,7 +17,6 @@ const demo = (seconds) => {
 
 const invokeDeferredCallback = (date, cb = () => {}) => {
   try {
-    console.log(`trying`);
     schedule.scheduleJob(date, () => {
       cb();
     });

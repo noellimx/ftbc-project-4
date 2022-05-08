@@ -1,7 +1,8 @@
 import { Sequelize } from "sequelize";
 import DbModel from "./models/index.js";
-import newDbAuthApi from "./api/auth.js";
-import newDbLocationApi from "./api/location.js";
+import newDbAuthApi from "./api/authApi.js";
+import newDbLocationApi from "./api/locationApi.js";
+import sessionEvents from "./api/sessionApi.js";
 
 // Enforces Model Initialization via inheritance.
 
@@ -148,6 +149,8 @@ export class Database extends DbModel {
     console.log();
     console.log();
   };
+
+
   constructor(sequelize) {
     super(sequelize);
     // Initialize
@@ -158,22 +161,25 @@ export class Database extends DbModel {
     const {
       outlet: Outlet,
       district: District,
-      user: User,
+      user: User, lastKnownSessionUser: LastKnownSessionUser
     } = this.sequelize.models;
-
+    console.log(this.sequelize.models)
     this.Outlet = Outlet;
     this.District = District;
     this.User = User;
+    this.LastKnownSessionUser = LastKnownSessionUser
     this.location = newDbLocationApi(
       this.Outlet,
       this.District,
       this.Sequelize
     );
     this.auth = newDbAuthApi(this.sequelize);
+
+    this.session = sessionEvents(this.LastKnownSessionUser)
   }
 
   wipe = async () => {
-    for await (const model of [this.District, this.Outlet, this.User]) {
+    for await (const model of [this.LastKnownSessionUser,this.District, this.Outlet, this.User]) {
       await model.destroy({ where: {} });
     }
   };

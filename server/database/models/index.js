@@ -1,4 +1,47 @@
 export default class DbModel {
+
+  _modelSession = () => {
+    const MODEL_NAME = "lastKnownSessionUser"
+    const model = this.sequelize.define(
+      MODEL_NAME,
+      {
+        createdAt: {
+          allowNull: false,
+          type: this.DataTypes.DATE,
+          field: "created_at",
+        },
+        updatedAt: {
+          allowNull: false,
+          type: this.DataTypes.DATE,
+          field: "updated_at",
+        },
+  
+        // ADD ATTRIBUTES HERE
+        id: {
+          type: this.DataTypes.STRING,
+          primaryKey: true,
+          allowNull: false,
+          field: "id",
+        },
+        userId: {
+          type: this.DataTypes.INTEGER,
+          allowNull: false,
+          references: {
+            model: this.User,
+            key: "id",
+          },
+          field: "user_id",
+        },
+      },
+      {
+        underscored: true,
+      }
+    );
+    if (model !== this.sequelize.models[[MODEL_NAME]]) {
+      throw new Error("model reference mismatch");
+    }
+    return model;
+  }
   _modelDistrict = () => {
     const _model = this.sequelize.define(
       "district",
@@ -42,7 +85,9 @@ export default class DbModel {
     if (_model !== this.sequelize.models.district) {
       throw new Error("model reference mismatch");
     }
-    console.log(`[DbModel] _modelOutlet`);
+    console.log(`[DbModel] _modelDistrict`);
+
+    return _model
   };
 
   _modelOutlet = () => {
@@ -161,5 +206,15 @@ export default class DbModel {
     this.User = this._modelUser();
     this.Outlet = this._modelOutlet();
     this.District = this._modelDistrict();
+    this.LastKnownSessionUser = this._modelSession();
+
+    [this.User,this.District,this.Outlet,this.LastKnownSessionUser].forEach((k,i) => {
+
+      if(!k ){
+         throw new Error(`k ${i}`)
+
+
+      }
+    })
   }
 }
