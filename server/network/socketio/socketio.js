@@ -12,7 +12,6 @@ const deflateMinsToSeconds = (min) => min * 4;
  */
 const bindEvents = (io, db) => {
   io.on("connection", (socket) => {
-
     const socketId = socket.id;
     console.log(`[io] socket connected ${socketId}`);
 
@@ -49,48 +48,55 @@ const bindEvents = (io, db) => {
       async ({ order, stackOptions }, token, chanSend) => {
         const [is, sub] = await verifyToken(token);
 
-        await db.session.updateSession(socketId,sub);
+        await db.session.updateSession(socketId, sub);
         const requestorName = await db.auth.getUsernameOfUserId(sub);
 
         if (!is) {
           return chanSend(null);
         }
-        const { stackEndLocation, stackRadius, stackWindow } = stackOptions;
-
-
+        const {
+          stackEndLocation: stackEndLocationRaw,
+          stackRadius,
+          stackWindow,
+        } = stackOptions;
 
         const later = new Date();
         later.setSeconds(
           later.getSeconds() + deflateMinsToSeconds(stackWindow)
         );
-        
 
+        const userOrder = {
+          order,
+          dropOffPoint: stackEndLocationRaw,
+          isCollected: false,
+          username: requestorName,
+        };
 
-        const config =  {
+        const orders = [userOrder];
+        const config = {
           courier: requestorName,
-          stackEndLocation,
+          stackEndLocation: stackEndLocationRaw,
           stackRadius,
           stackingTil: later.getTime(),
-        }
+        };
 
+        const c = await db.collection.newCollectionWithOrder({
+          orders,
+          config,
+        });
+        console.log(`collection exposed`);
+        console.log(c.orders);
+        console.log(c.config);
 
         invokeDeferredCallback(later, () => {
-          db.session.getSocketsOfUser(sub).then(sios => {
-            console.log(sios)
-            sios.forEach(sio =>  io.to(sio.id).emit("times-up"))
-
-          })
+          db.session.getSocketsOfUser(sub).then((sios) => {
+            console.log(sios);
+            sios.forEach((sio) => io.to(sio.id).emit("times-up"));
+          });
         });
 
         chanSend({
-          orders: [
-            {
-              order,
-              dropOffPoint: stackEndLocation,
-              isCollected: false,
-              username: requestorName,
-            },
-          ],
+          orders,
           config,
         });
       }

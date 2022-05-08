@@ -3,7 +3,7 @@ import DbModel from "./models/index.js";
 import newDbAuthApi from "./api/authApi.js";
 import newDbLocationApi from "./api/locationApi.js";
 import sessionEvents from "./api/sessionApi.js";
-
+import collectionEvents from "./api/collectionApi.js";
 // Enforces Model Initialization via inheritance.
 
 const dummyOutlet = ({ coordinates, address, name }) => ({
@@ -150,7 +150,6 @@ export class Database extends DbModel {
     console.log();
   };
 
-
   constructor(sequelize) {
     super(sequelize);
     // Initialize
@@ -161,25 +160,38 @@ export class Database extends DbModel {
     const {
       outlet: Outlet,
       district: District,
-      user: User, lastKnownSessionUser: LastKnownSessionUser
+      user: User,
+      lastKnownSessionUser: LastKnownSessionUser,
+      collection: Collection,
+      collectibleOrder: CollectibleOrder,
     } = this.sequelize.models;
-    console.log(this.sequelize.models)
+    console.log(this.sequelize.models);
     this.Outlet = Outlet;
     this.District = District;
     this.User = User;
-    this.LastKnownSessionUser = LastKnownSessionUser
+    this.LastKnownSessionUser = LastKnownSessionUser;
+    this.Collection = Collection;
+    this.CollectibleOrder = CollectibleOrder;
     this.location = newDbLocationApi(
       this.Outlet,
       this.District,
       this.Sequelize
     );
+
     this.auth = newDbAuthApi(this.sequelize);
 
-    this.session = sessionEvents(this.LastKnownSessionUser)
+    this.session = sessionEvents(this.LastKnownSessionUser);
+
+    this.collection = collectionEvents(this.Collection, this.CollectibleOrder);
   }
 
   wipe = async () => {
-    for await (const model of [this.LastKnownSessionUser,this.District, this.Outlet, this.User]) {
+    for await (const model of [
+      this.LastKnownSessionUser,
+      this.District,
+      this.Outlet,
+      this.User,
+    ]) {
       await model.destroy({ where: {} });
     }
   };

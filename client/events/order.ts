@@ -14,11 +14,9 @@ import { orderStatusInjector, newCollectionInjector } from "../state/order";
 import { Socket } from "socket.io-client";
 
 const uplinkOrder: (_: Socket, __: Store) => OrderTrigger = (io, store) => {
-
   io.on("times-up", () => {
-
-    console.log("TIMES UP, TIME TO SEND COLLECTION")
-  })
+    console.log("TIMES UP, TIME TO SEND COLLECTION");
+  });
   const _transit = (_: OrderSequence) => {
     const injection = orderStatusInjector(_);
     store.dispatch(injection);

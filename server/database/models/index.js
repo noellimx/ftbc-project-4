@@ -1,7 +1,6 @@
 export default class DbModel {
-
-  _modelSession = () => {
-    const MODEL_NAME = "lastKnownSessionUser"
+  _modelCollectibleOrder = () => {
+    const MODEL_NAME = "collectibleOrder";
     const model = this.sequelize.define(
       MODEL_NAME,
       {
@@ -15,7 +14,118 @@ export default class DbModel {
           type: this.DataTypes.DATE,
           field: "updated_at",
         },
-  
+        id: {
+          autoIncrement: true,
+          type: this.DataTypes.INTEGER,
+          primaryKey: true,
+          allowNull: false,
+          field: "id",
+        },
+        collectionId: {
+          type: this.DataTypes.INTEGER,
+          allowNull: false,
+          field: "collection_id",
+        },
+        dropOffPoint: {
+          type: this.DataTypes.GEOMETRY("POINT", 4326),
+          allowNull: false,
+          field: "drop_off_point",
+        },
+        isCollected: {
+          type: this.DataTypes.BOOLEAN,
+          allowNull: false,
+          field: "is_collected",
+        },
+        username: {
+          type: this.DataTypes.STRING,
+          allowNull: false,
+          field: "username",
+        },
+      },
+      {
+        underscored: true,
+        tableName: "collectible_orders",
+      }
+    );
+    if (model !== this.sequelize.models[[MODEL_NAME]]) {
+      throw new Error("model reference mismatch");
+    }
+    return model;
+  };
+
+  _modelCollection = () => {
+    const MODEL_NAME = "collection";
+    const model = this.sequelize.define(
+      MODEL_NAME,
+      {
+        createdAt: {
+          allowNull: false,
+          type: this.DataTypes.DATE,
+          field: "created_at",
+        },
+        updatedAt: {
+          allowNull: false,
+          type: this.DataTypes.DATE,
+          field: "updated_at",
+        },
+        id: {
+          autoIncrement: true,
+
+          type: this.DataTypes.INTEGER,
+          primaryKey: true,
+          allowNull: false,
+          field: "id",
+        },
+        // ADD ATTRIBUTES HERE
+
+        stackEndLocation: {
+          type: this.DataTypes.GEOMETRY("POINT", 4326),
+          allowNull: false,
+          field: "stack_end_location",
+        },
+        courier: {
+          type: this.DataTypes.STRING,
+          allowNull: false,
+
+          field: "courier",
+        },
+        stackRadius: {
+          type: this.DataTypes.INTEGER,
+          allowNull: false,
+          field: "stack_radius",
+        },
+        stackingTil: {
+          type: this.DataTypes.BIGINT,
+          allowNull: false,
+          field: "stacking_til",
+        },
+      },
+      {
+        underscored: true,
+        tableName: "collections",
+      }
+    );
+    if (model !== this.sequelize.models[[MODEL_NAME]]) {
+      throw new Error("model reference mismatch");
+    }
+    return model;
+  };
+  _modelSession = () => {
+    const MODEL_NAME = "lastKnownSessionUser";
+    const model = this.sequelize.define(
+      MODEL_NAME,
+      {
+        createdAt: {
+          allowNull: false,
+          type: this.DataTypes.DATE,
+          field: "created_at",
+        },
+        updatedAt: {
+          allowNull: false,
+          type: this.DataTypes.DATE,
+          field: "updated_at",
+        },
+
         // ADD ATTRIBUTES HERE
         id: {
           type: this.DataTypes.STRING,
@@ -41,7 +151,7 @@ export default class DbModel {
       throw new Error("model reference mismatch");
     }
     return model;
-  }
+  };
   _modelDistrict = () => {
     const _model = this.sequelize.define(
       "district",
@@ -87,7 +197,7 @@ export default class DbModel {
     }
     console.log(`[DbModel] _modelDistrict`);
 
-    return _model
+    return _model;
   };
 
   _modelOutlet = () => {
@@ -207,14 +317,20 @@ export default class DbModel {
     this.Outlet = this._modelOutlet();
     this.District = this._modelDistrict();
     this.LastKnownSessionUser = this._modelSession();
+    this.Collection = this._modelCollection();
+    this.CollectibleOrder = this._modelCollectibleOrder();
 
-    [this.User,this.District,this.Outlet,this.LastKnownSessionUser].forEach((k,i) => {
-
-      if(!k ){
-         throw new Error(`k ${i}`)
-
-
+    [
+      this.User,
+      this.District,
+      this.Outlet,
+      this.LastKnownSessionUser,
+      this.Collection,
+      this.CollectibleOrder,
+    ].forEach((k, i) => {
+      if (!k) {
+        throw new Error(`k ${i}`);
       }
-    })
+    });
   }
 }

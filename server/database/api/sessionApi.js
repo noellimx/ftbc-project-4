@@ -1,12 +1,10 @@
 const sessionEvents = (LastKnownSessionUser) => {
-
-  if(!LastKnownSessionUser) {
-
-    throw new Error(`[sessionEvents fail to initialize]`)
+  if (!LastKnownSessionUser) {
+    throw new Error(`[sessionEvents fail to initialize]`);
   }
-  const updateSession = (socketId, userId) => {
+  const updateSession = async (socketId, userId) => {
     console.log(`updateSession io ${socketId} u ${userId}`);
-    return LastKnownSessionUser.findOne({ where: { id: socketId } }).then(
+    return await LastKnownSessionUser.findOne({ where: { id: socketId } }).then(
       (obj) => {
         // update
         if (obj) return obj.update({ userId });
@@ -17,7 +15,7 @@ const sessionEvents = (LastKnownSessionUser) => {
   };
   const removeSession = (socketId) =>
     LastKnownSessionUser.destroy({ where: { id: socketId } });
-  
+
   const getSocketsOfUsers = async (userIds) => {
     return await LastKnownSessionUser.findAll({
       where: {
@@ -30,7 +28,7 @@ const sessionEvents = (LastKnownSessionUser) => {
           return { id, userId };
         })
       );
-  
+
       return result;
     });
   };
@@ -43,12 +41,12 @@ const sessionEvents = (LastKnownSessionUser) => {
             return { id, userId };
           })
         );
-  
+
         return result;
       }
     );
   };
 
-  return { updateSession, getSocketsOfUser, getSocketsOfUsers, removeSession }
-}
+  return { updateSession, getSocketsOfUser, getSocketsOfUsers, removeSession };
+};
 export default sessionEvents;
