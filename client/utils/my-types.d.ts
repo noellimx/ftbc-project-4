@@ -42,7 +42,7 @@ export interface AuthenticationTrigger extends EventTrigger {
 
 export interface OrderTrigger extends EventTrigger {
   transitToOrder: TrulyImpure;
-  transitToStack: TrulyImpure;
+  transitToStackFinding: TrulyImpure;
 }
 
 export interface GeneralTrigger extends EventTrigger {
@@ -82,23 +82,42 @@ export interface Client {
 export type UpLink = (_: Socket, __: Store) => Client;
 
 export const enum OrderFlow {
-  NIL,
-  ORDER,
-  FIND_STACK,
+  NIL = "1",
+  DISPATCH_USER_ORDER = "2",
+  FIND_STACK = "3",
 }
 
-export const enum Flow_Order {
+export interface OrderFlow_NIL {
+  kind: OrderFlow.NIL;
+  transition: Transition_Nil;
+}
+
+export interface OrderFlow_DispatchUserOrder {
+  kind: OrderFlow.DISPATCH_USER_ORDER;
+  transition: Transition_DispatchUserOrder;
+}
+export interface OrderFlow_FindStack {
+  kind: OrderFlow.FIND_STACK;
+  transition: Transition_FindingStack;
+}
+
+export const enum Transition_DispatchUserOrder {
   ORDERING,
-  PENDING_STACK,
+  STACKING,
   ORDERED,
 }
 
-export const enum Flow_FindStack {}
-
-export interface OrderSequence {
-  flow: OrderFlow;
-  transition?: Flow_Order | Flow_FindStack;
+export const enum Transition_Nil {
+  NOT_IMPLEMENTED = "transition-nil-not=implemented",
 }
+export const enum Transition_FindingStack {
+  NOT_IMPLEMENTED = "transition-dispatch-finding-stack",
+}
+
+export type OrderSequence =
+  | OrderFlow_NIL
+  | OrderFlow_DispatchUserOrder
+  | OrderFlow_FindStack;
 
 export type MenuItem = {
   description: string;

@@ -21,7 +21,11 @@ import {
   MenuedOutlets,
   MenuedOutlet,
   Outlet,
+  TheState,
+  Transition_DispatchUserOrder,
+  OrderFlow,
 } from "../../../../utils/my-types";
+import { useSelector } from "react-redux";
 
 interface SelectOutletDescriptionProps {
   outlet: Outlet;
@@ -36,18 +40,18 @@ interface DispatchUserProps {
   client: Client;
 }
 
+// local/serverless state
 enum DispatchSequence {
-  // local/serverless state
-  STORE,
-  ORDER,
+  ORDERING,
   // server state
   STACKING,
-  COLLECT,
+  AWAITING_PRODUCTION,
+  AWAITING_COLLECTION,
   DISPATCHING,
   COMPLETED,
 }
 
-const initState = () => DispatchSequence.STORE;
+const initState = () => DispatchSequence.ORDERING;
 
 type StringToCoordinate = (_: string) => Coordinate;
 const stringToCoordinate: StringToCoordinate = (latlng) => JSON.parse(latlng);
@@ -68,7 +72,15 @@ type BinaryOperation = (_: number, __: number) => number;
 const resetReadOnly: () => boolean = () => false;
 const DispatchUser: React.FC<DispatchUserProps> = ({ client }) => {
   console.log(`[FC DispatchUser]`);
-  const [state, setState] = React.useState(initState());
+  const state = useSelector<TheState, Transition_DispatchUserOrder>(
+    (_state) => {
+      const orderSequence = _state.orderSequence;
+      if (orderSequence.kind === OrderFlow.DISPATCH_USER_ORDER) {
+        return orderSequence.transition;
+      }
+      throw new Error("[FC DispatchUser] Should not mount here.");
+    }
+  );
 
   const [awaiting, setAwaiting] =
     React.useState(
@@ -215,7 +227,7 @@ const DispatchUser: React.FC<DispatchUserProps> = ({ client }) => {
 
   return (
     <>
-      {state === DispatchSequence.STORE ? (
+      {state === Transition_DispatchUserOrder.ORDERING ? (
         !awaiting && (
           <>
             <DistrictSelector

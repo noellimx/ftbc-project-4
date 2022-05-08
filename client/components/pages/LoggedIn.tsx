@@ -18,8 +18,10 @@ interface OrderOptionsProps {
 }
 
 const Order: React.FC<OrderOptionsProps> = ({ client }) => {
-  const sequence = useSelector((state: TheState) => state.orderSequence);
-  return sequence.flow === OrderFlow.NIL ? (
+  const sequence: OrderSequence = useSelector(
+    (state: TheState) => state.orderSequence
+  );
+  return sequence.kind === OrderFlow.NIL ? (
     <Grid>
       <_StdButton
         text={"Order"}
@@ -30,13 +32,13 @@ const Order: React.FC<OrderOptionsProps> = ({ client }) => {
       <_StdButton
         text={"Find Stack"}
         onClickFn={() => {
-          client.order.transitToStack();
+          client.order.transitToStackFinding();
         }}
       ></_StdButton>
     </Grid>
-  ) : sequence.flow === OrderFlow.ORDER ? (
+  ) : sequence.kind === OrderFlow.DISPATCH_USER_ORDER ? (
     <DispatchUser client={client} />
-  ) : sequence.flow === OrderFlow.FIND_STACK ? (
+  ) : sequence.kind === OrderFlow.FIND_STACK ? (
     <>Stack</>
   ) : (
     <></>

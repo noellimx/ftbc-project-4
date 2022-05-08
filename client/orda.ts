@@ -2,8 +2,7 @@ import uplinkGeneral from "./events/general";
 import uplinkAuthentication from "./events/authentication";
 
 import {
-  Flow_FindStack,
-  Flow_Order,
+  Transition_DispatchUserOrder,
   OrderFlow,
   OrderSequence,
   UpLink,
@@ -14,6 +13,7 @@ import {
   Menu,
   Location,
   Address,
+  Transition_FindingStack,
 } from "./utils/my-types";
 import { Store } from "@reduxjs/toolkit";
 import { orderStatusInjector } from "./state/order";
@@ -27,15 +27,23 @@ const orderEvents = (store: Store) => {
   };
 
   const transitToOrder = () => {
-    transit({ flow: OrderFlow.ORDER, transition: Flow_Order.ORDERING });
+    transit({
+      kind: OrderFlow.DISPATCH_USER_ORDER,
+      transition: Transition_DispatchUserOrder.ORDERING,
+    });
   };
 
-  const transitToStack = () => {
-    transit({ flow: OrderFlow.FIND_STACK });
+  const transitToStackFinding = () => {
+    transit({
+      kind: OrderFlow.FIND_STACK,
+      transition: Transition_FindingStack.NOT_IMPLEMENTED,
+    });
   };
+
+  const transitToStackHosting = () => {};
   return {
     transitToOrder,
-    transitToStack,
+    transitToStackFinding,
   };
 };
 

@@ -2,7 +2,8 @@ import {
   PayloadAction,
   OrderSequence,
   OrderFlow,
-  Flow_Order,
+  Transition_DispatchUserOrder,
+  Transition_Nil,
 } from "../utils/my-types";
 
 enum OrderSequenceCommand {
@@ -17,7 +18,10 @@ export const orderStatusInjector: OrderSequenceInjector = (status) => ({
   payload: status,
 });
 
-const initSequenceStatus = () => ({ flow: OrderFlow.NIL });
+const initSequenceStatus: () => OrderSequence = () => ({
+  kind: OrderFlow.NIL,
+  transition: Transition_Nil.NOT_IMPLEMENTED,
+});
 
 type OrderSequencePipe = (
   _: OrderSequence,
