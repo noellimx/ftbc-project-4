@@ -1,10 +1,6 @@
-
 /// <reference path="../../types/svg.d.ts" />
 
-
 import * as L from "leaflet";
-
-
 
 import SVGhomeFlag from "../../../static/icons/house-flag-solid-green.svg";
 import SVGhomeFlagBlue from "../../../static/icons/house-flag-solid-blue.svg";
@@ -24,6 +20,3 @@ export const currentLocationIcon = L.icon({
   iconUrl: SVGUserSolid,
   iconSize: [10, 10],
 });
-
-
-

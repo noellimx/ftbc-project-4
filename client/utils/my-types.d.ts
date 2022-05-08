@@ -67,6 +67,13 @@ export interface Collection {
   orders: CollectibleOrder[];
 }
 
+export interface CandidateCollection {
+  outletName: string;
+  stackEndLocation: Coordinate;
+  courier: string;
+  stackRadius: number;
+  stackingTil: number;
+}
 export type SaveOrderAndCreateStackAndAddOrderToStack = (_: {
   order: SelectableMenuItem[];
   stackOptions: StackOptionInterface;
@@ -96,7 +103,10 @@ export type Location = {
 };
 
 export interface LocationTrigger extends EventTrigger {
-  whichCandidateCollection(_newloc: Coordinate, arg1: (collections: Collection[]) => void);
+  whichCandidateCollection(
+    _newloc: Coordinate,
+    arg1: (collections: CandidateCollection[]) => void
+  );
   whichOutletsWithMenuNearHere: (
     _: Coordinate,
     __: (_: MenuedOutlets) => void

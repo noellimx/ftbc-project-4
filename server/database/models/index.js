@@ -78,6 +78,12 @@ export default class DbModel {
         },
         // ADD ATTRIBUTES HERE
 
+        outletName: {
+          type: this.DataTypes.STRING,
+          allowNull: false,
+          field: "outlet_name",
+        },
+
         stackEndLocation: {
           type: this.DataTypes.GEOMETRY("POINT", 4326),
           allowNull: false,

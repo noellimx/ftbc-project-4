@@ -7,13 +7,17 @@ import Button from "@mui/material/Button";
 interface StdButtonProps {
   onClickFn: TrulyImpure;
   text: string;
+
+  sx? :any;
 }
 const _StdButton: React.FC<StdButtonProps> = ({
   text,
   onClickFn = () => {},
+  sx
+
 }) => {
   return (
-    <Button variant="outlined" disableElevation onClick={onClickFn}>
+    <Button sx={sx} variant="outlined" disableElevation onClick={onClickFn}>
       {text}
     </Button>
   );

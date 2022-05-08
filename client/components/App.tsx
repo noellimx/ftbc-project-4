@@ -5,6 +5,7 @@ import { useSelector } from "react-redux";
 import { TheState, AuthenticationStatus, Client } from "../utils/my-types";
 import LoggedIn from "./pages/LoggedIn";
 import NotLoggedIn from "./pages/NotLoggedIn";
+import { Grid } from "@mui/material";
 
 interface AppProps {
   client: Client;
@@ -22,19 +23,21 @@ const App: React.FC<AppProps> = ({ client }) => {
 
   return (
     <>
-      <>The Server Pinged {countOfPing} Times</>
-
-      <>
+      <Grid direction="column" alignItems="center" justifyContent="center">
         {authenticationStatus === AuthenticationStatus.UNCERTAIN ? (
           <div>Uncertain User</div>
         ) : authenticationStatus === AuthenticationStatus.FALSE ? (
-          <NotLoggedIn client={client} />
+          <Grid>
+            <NotLoggedIn client={client} />
+          </Grid>
         ) : authenticationStatus === AuthenticationStatus.TRUE ? (
-          <LoggedIn client={client} />
+          <Grid>
+            <LoggedIn client={client} />
+          </Grid>
         ) : (
           <></>
         )}
-      </>
+      </Grid>
     </>
   );
 };

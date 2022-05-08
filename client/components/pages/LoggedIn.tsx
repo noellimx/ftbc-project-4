@@ -25,7 +25,14 @@ const Order: React.FC<OrderOptionsProps> = ({ client }) => {
     (state: TheState) => state.orderSequence
   );
   return sequence.kind === OrderFlow.NIL ? (
-    <Grid>
+    <Grid direction="column"
+    display="flex"
+    alignItems="center"
+    justifyContent="center"
+    sx={{
+      height: "100vh",
+
+    } }>
       <_StdButton
         text={"Order"}
         onClickFn={() => {
@@ -33,6 +40,11 @@ const Order: React.FC<OrderOptionsProps> = ({ client }) => {
         }}
       ></_StdButton>
       <_StdButton
+      sx={{
+        mt: 1,
+  
+      } }
+
         text={"Find Stack"}
         onClickFn={() => {
           client.order.transitToStackFinding_();
@@ -48,7 +60,9 @@ const Order: React.FC<OrderOptionsProps> = ({ client }) => {
       <>Unimplemented</>
     )
   ) : sequence.kind === OrderFlow.FIND_STACK ? (
-    <><FindStackUserSetup client={client}></FindStackUserSetup></>
+    <>
+      <FindStackUserSetup client={client}></FindStackUserSetup>
+    </>
   ) : (
     <></>
   );

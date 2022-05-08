@@ -188,6 +188,7 @@ const DispatchUser: React.FC<DispatchUserProps> = ({ client }) => {
       stackWindow,
       stackEndLocation,
       stackRadius,
+      selectedMenuedOutlet,
     };
 
     console.log(
@@ -235,6 +236,8 @@ const DispatchUser: React.FC<DispatchUserProps> = ({ client }) => {
         !awaiting && (
           <>
             <DistrictSelector
+
+            
               value={districtCoordinate}
               onChangeFn={districtOnChangeFn}
             ></DistrictSelector>

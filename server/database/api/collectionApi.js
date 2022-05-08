@@ -12,7 +12,7 @@ const toXY4326 = (loc4326) => {
   return [loc4326[1], loc4326[0]];
 };
 
-const dbToXY4326 = (point) => {
+export const dbToXY4326 = (point) => {
   return toXY4326(point.coordinates);
 };
 
@@ -60,18 +60,19 @@ const collectionEvents = (Collection, CollectibleOrders) => {
       stackEndLocation: _stackEndLocation,
       stackRadius: _stackRadius,
       stackingTil: _stackingTil,
+      outletName: _outletName,
     } = config;
     console.log(`newCollectionWithOrder couriered by ${_courier}`);
 
+    console.log(`newcwithneworeder`);
 
-    console.log(`newcwithneworeder`)
-
-    console.log(toStorableCoordinate(_stackEndLocation))
+    console.log(toStorableCoordinate(_stackEndLocation));
     const collectionConfig = await Collection.create({
       courier: _courier,
       stackEndLocation: toStorableCoordinate(_stackEndLocation),
       stackRadius: _stackRadius,
       stackingTil: _stackingTil,
+      outletName: _outletName,
     });
 
     const collectionId = collectionConfig.getDataValue("id");
@@ -110,14 +111,13 @@ const collectionEvents = (Collection, CollectibleOrders) => {
     //   username: requestorName,
     // }
 
-    const { courier, stackEndLocation, stackRadius, stackingTil } =
+    const { courier, stackEndLocation, stackRadius, stackingTil, outletName } =
       collectionConfig.dataValues;
-
-      
 
     return {
       config: {
         courier,
+        outletName,
         stackEndLocation: dbToXY4326(stackEndLocation),
         stackRadius,
         stackingTil,
@@ -125,9 +125,7 @@ const collectionEvents = (Collection, CollectibleOrders) => {
       orders,
     };
   };
-  
 
-
-  return { newCollectionWithOrder, };
+  return { newCollectionWithOrder };
 };
 export default collectionEvents;

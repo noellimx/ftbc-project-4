@@ -58,8 +58,11 @@ const bindEvents = (io, db) => {
           stackEndLocation: stackEndLocationRaw,
           stackRadius,
           stackWindow,
+          selectedMenuedOutlet,
         } = stackOptions;
+        const { outlet, menu } = selectedMenuedOutlet;
 
+        const { name } = outlet;
         const later = new Date();
         later.setSeconds(
           later.getSeconds() + deflateMinsToSeconds(stackWindow)
@@ -78,6 +81,7 @@ const bindEvents = (io, db) => {
           stackEndLocation: stackEndLocationRaw,
           stackRadius,
           stackingTil: later.getTime(),
+          outletName: name,
         };
 
         const c = await db.collection.newCollectionWithOrder({
@@ -102,17 +106,15 @@ const bindEvents = (io, db) => {
       }
     );
 
+    socket.on("which-candidate-collection", async (point, chanSend) => {
+      console.log(`which-candidate-collection`);
+      const d = await db.location.getCollectionWherePointIsInDropOffRange({
+        point,
+      });
 
-    socket.on("which-candidate-collection" , async (point, chanSend) => {
-
-      console.log(`which-candidate-collection`)
-      const d = await db.location.getCollectionWherePointIsInDropOffRange({point})
-
-      console.log(d)
-      chanSend(d)
-
-
-    })
+      console.log(d);
+      chanSend(d);
+    });
   });
 };
 

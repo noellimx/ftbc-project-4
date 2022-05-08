@@ -32,15 +32,13 @@ export class Database extends DbModel {
       })
     );
 
-
     console.log(
       await this.auth.registerUser({
-        username:  "v",
+        username: "v",
         plainPassword: "v",
-        password2:  "v",
+        password2: "v",
       })
     );
-
 
     /** Outlets */
 
@@ -202,7 +200,7 @@ export class Database extends DbModel {
       this.District,
       this.Outlet,
       this.User,
-      this.Collection
+      this.Collection,
     ]) {
       await model.destroy({ where: {} });
     }

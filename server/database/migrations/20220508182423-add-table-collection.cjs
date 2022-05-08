@@ -24,6 +24,10 @@ module.exports = {
       },
       // ADD ATTRIBUTES HERE
 
+      outlet_name: {
+        allowNull: false,
+        type: DataTypes.STRING,
+      },
       stack_end_location: {
         type: DataTypes.GEOMETRY("POINT", 4326),
         allowNull: false,

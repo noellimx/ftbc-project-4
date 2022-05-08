@@ -10,17 +10,12 @@ import { Client, TheState, Collection } from "../../../../utils/my-types";
 import { useSelector } from "react-redux";
 import Countdown from "react-countdown";
 
-import {
-  MapContainer,
-  TileLayer,
-  Marker,
-  Circle,
-} from "react-leaflet";
+import { MapContainer, TileLayer, Marker, Circle } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 
-import {outletIcon,endLocationIcon,currentLocationIcon} from "../Iconz"
+import { outletIcon, endLocationIcon, currentLocationIcon } from "../Iconz";
 
-import BoundSetter from "./BoundSetter"
+import BoundSetter from "./BoundSetter";
 interface ThisComponentProps {
   client: Client;
 }
@@ -36,7 +31,7 @@ const ThisComponent: React.FC<ThisComponentProps> = () => {
         <>
           <>You have some orders in the collection</>
           <Countdown
-            date={((new Date(collection.config.stackingTil)))}
+            date={new Date(collection.config.stackingTil)}
             renderer={({ hours, minutes, seconds, completed }) => {
               if (completed) {
                 // Render a completed state
@@ -52,49 +47,52 @@ const ThisComponent: React.FC<ThisComponentProps> = () => {
             }}
           />
 
-
           <>
-          <MapContainer
-                style={{ zIndex: 0, width: "100%", height: "200px" }}
+            <MapContainer
+              style={{ zIndex: 0, width: "100%", height: "200px" }}
+              center={collection.config.stackEndLocation}
+              zoom={13}
+              scrollWheelZoom={true}
+            >
+              <TileLayer
+                attribution='<img src="https://www.onemap.gov.sg/docs/maps/images/oneMap64-01.png" style="height:20px;width:20px;"/> OneMap | Map data &copy; contributors, <a href="http://SLA.gov.sg">Singapore Land Authority</a>'
+                url="http://maps-c.onemap.sg/v3/Grey/{z}/{x}/{y}.png"
+              />
+              <Marker
+                position={collection.config.stackEndLocation}
+                icon={outletIcon}
+              ></Marker>
+              <Marker
+                position={collection.config.stackEndLocation}
+                icon={endLocationIcon}
+              ></Marker>
+              {collection.config.stackEndLocation && (
+                <Marker
+                  position={collection.config.stackEndLocation}
+                  icon={currentLocationIcon}
+                ></Marker>
+              )}
+
+              <BoundSetter
+                stackEndLocation={collection.config.stackEndLocation}
+                currentLocation={collection.config.stackEndLocation}
+                outletLocation={collection.config.stackEndLocation}
+              />
+
+              <Circle
                 center={collection.config.stackEndLocation}
-                zoom={13}
-                scrollWheelZoom={true}
-              >
-                <TileLayer
-                  attribution='<img src="https://www.onemap.gov.sg/docs/maps/images/oneMap64-01.png" style="height:20px;width:20px;"/> OneMap | Map data &copy; contributors, <a href="http://SLA.gov.sg">Singapore Land Authority</a>'
-                  url="http://maps-c.onemap.sg/v3/Grey/{z}/{x}/{y}.png"
-                />
-                <Marker
-                  position={collection.config.stackEndLocation}
-                  icon={outletIcon}
-                ></Marker>
-                <Marker
-                  position={collection.config.stackEndLocation}
-                  icon={endLocationIcon}
-                ></Marker>
-                {collection.config.stackEndLocation && (
-                  <Marker
-                    position={collection.config.stackEndLocation}
-                    icon={currentLocationIcon}
-                  ></Marker>
-                )}
+                radius={collection.config.stackRadius}
+              />
+            </MapContainer>
 
-                <BoundSetter
-                  stackEndLocation={collection.config.stackEndLocation}
-                  currentLocation={collection.config.stackEndLocation}
-                  outletLocation={collection.config.stackEndLocation}
-                />
-
-
-
-                <Circle center={collection.config.stackEndLocation} radius={collection.config.stackRadius} />
-
-              </MapContainer>
-          
-          
-                  {collection.orders.map((order) => {
-                    return <>{order.username}| {order.isCollected} | {order.order} | {order.dropOffPoint}</>
-                  })}
+            {collection.orders.map((order) => {
+              return (
+                <>
+                  {order.username}| {order.isCollected} | {order.order} |{" "}
+                  {order.dropOffPoint}
+                </>
+              );
+            })}
           </>
         </>
       ) : (

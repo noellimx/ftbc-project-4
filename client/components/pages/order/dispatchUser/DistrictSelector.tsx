@@ -1,7 +1,6 @@
 import * as React from "react";
 
-import { MenuItem, Select } from "@mui/material";
-import { FormControl, InputLabel } from "@mui/material";
+import { FormControl, InputLabel , MenuItem, Select , Box } from "@mui/material";
 import {
   CoordinateToString,
   DistrictSelectionOnChangeFn,
@@ -41,7 +40,9 @@ const DistrictSelector: React.FC<DistrictSelectorProps> = ({
   value,
 }) => {
   return (
-    <FormControl>
+
+    <><Box display={"flex"} width={"100%"} >
+    <FormControl sx={{width : "90%"}}>
       <InputLabel id="demo-simple-select-label">Location</InputLabel>
 
       <Select
@@ -58,6 +59,8 @@ const DistrictSelector: React.FC<DistrictSelectorProps> = ({
         })}
       </Select>
     </FormControl>
+
+    </Box></>
   );
 };
 export default DistrictSelector;
