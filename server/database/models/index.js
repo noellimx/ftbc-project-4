@@ -1,5 +1,4 @@
 export default class DbModel {
-
   _modelDistrict = () => {
     const _model = this.sequelize.define(
       "district",
@@ -46,8 +45,6 @@ export default class DbModel {
     console.log(`[DbModel] _modelOutlet`);
   };
 
-
-
   _modelOutlet = () => {
     const _model = this.sequelize.define(
       "outlet",
@@ -70,7 +67,7 @@ export default class DbModel {
           field: "updated_at",
         },
         coordinates: {
-          type: this.DataTypes.GEOMETRY("POINT"),
+          type: this.DataTypes.GEOMETRY("POINT", 4326),
           allowNull: false,
           field: "coordinates",
         },
@@ -103,6 +100,8 @@ export default class DbModel {
       throw new Error("model reference mismatch");
     }
     console.log(`[DbModel] _modelOutlet`);
+
+    return _model;
   };
 
   _modelUser = () => {
@@ -152,14 +151,15 @@ export default class DbModel {
     }
     console.log(`[DbModel] _modelUser`);
 
-    return this.sequelize.models.user
+    return userModel;
   };
 
   constructor(sequelize) {
     this.sequelize = sequelize;
-    this.DataTypes = this.sequelize.Sequelize.DataTypes;
+    this.Sequelize = this.sequelize.Sequelize;
+    this.DataTypes = this.Sequelize.DataTypes;
     this.User = this._modelUser();
-    this._modelOutlet();
-    this.District = this._modelDistrict()
+    this.Outlet = this._modelOutlet();
+    this.District = this._modelDistrict();
   }
 }

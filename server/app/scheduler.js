@@ -16,19 +16,15 @@ const demo = (seconds) => {
   }
 };
 
-
-
-
 const invokeDeferredCallback = (date, cb = () => {}) => {
   try {
     console.log(`trying`);
     schedule.scheduleJob(date, () => {
-      cb()
+      cb();
     });
   } catch (err) {
     console.log("error");
   }
-}
+};
 
-
-export {invokeDeferredCallback};
+export { invokeDeferredCallback };

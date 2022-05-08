@@ -41,7 +41,7 @@ const newAccessToken = (payload) => {
 };
 
 /**
- * 
+ *
  * @returns {[boolean,string]} return verification status and subject if verified
  */
 const verifyToken = (accessToken) => {

@@ -6,11 +6,7 @@ import _StdButton from "../../../Buttons/_StdButton";
 
 import "leaflet/dist/leaflet.css";
 
-
-import {
-  Client,
-  TheState,Collection,
-} from "../../../../utils/my-types";
+import { Client, TheState, Collection } from "../../../../utils/my-types";
 import { useSelector } from "react-redux";
 
 interface ThisComponentProps {
@@ -18,9 +14,21 @@ interface ThisComponentProps {
 }
 
 const ThisComponent: React.FC<ThisComponentProps> = () => {
-
-  const collection = useSelector<TheState, Collection>(state => state.collection)
-  return collection ? <> {collection.orders && collection.orders.length > 0 ? <>You have some orders in the collection</> : <>Collection found but is empty.</> }</>:<>Yikes. No collection found</> ;
+  const collection = useSelector<TheState, Collection>(
+    (state) => state.collection
+  );
+  return collection ? (
+    <>
+      {" "}
+      {collection.orders && collection.orders.length > 0 ? (
+        <>You have some orders in the collection</>
+      ) : (
+        <>Collection found but is empty.</>
+      )}
+    </>
+  ) : (
+    <>Yikes. No collection found</>
+  );
 };
 
 export default ThisComponent;

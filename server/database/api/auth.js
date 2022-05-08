@@ -15,14 +15,11 @@ const newDbAuthApi = (sequelize) => {
   const getUserByUsername = async (username) =>
     await User.findOne({ where: { username } });
 
-    const getUsernameOfUserId = async  (id) => {
+  const getUsernameOfUserId = async (id) => {
+    const user = await User.findOne({ where: { id } });
 
-
-   const user =  await User.findOne({ where: { id } });
-
-   return user.getDataValue("username")
-
-    }
+    return user.getDataValue("username");
+  };
 
   const isUserExistingByUsername = async (username) =>
     !!(await getUserByUsername(username));
@@ -33,7 +30,7 @@ const newDbAuthApi = (sequelize) => {
     if (is) {
       return [null, "Username taken :("];
     }
-    console.log('username taken')
+    console.log("username taken");
 
     if (plainPassword !== password2) {
       return [null, "Confirmation password mismatch."];
@@ -46,9 +43,8 @@ const newDbAuthApi = (sequelize) => {
     }
 
     const user = await createUser(username, plainPassword);
-    console.log(`[registerUser] user created`)
-    console.log(user)
-
+    console.log(`[registerUser] user created`);
+    console.log(user);
 
     const usernameRetrieved = user.getDataValue("username");
     const id = user.getDataValue("id");
@@ -94,7 +90,8 @@ const newDbAuthApi = (sequelize) => {
   return {
     registerUser,
     getAccessToken,
-    isVerifiedToken,getUsernameOfUserId
+    isVerifiedToken,
+    getUsernameOfUserId,
   };
 };
 

@@ -10,7 +10,7 @@ import {
 
 import { getAccessToken } from "../operations/authentication";
 import { Store } from "@reduxjs/toolkit";
-import { orderStatusInjector,newCollectionInjector  } from "../state/order";
+import { orderStatusInjector, newCollectionInjector } from "../state/order";
 import { Socket } from "socket.io-client";
 
 const uplinkOrder: (_: Socket, __: Store) => OrderTrigger = (io, store) => {
@@ -19,10 +19,10 @@ const uplinkOrder: (_: Socket, __: Store) => OrderTrigger = (io, store) => {
     store.dispatch(injection);
   };
 
-  const _newCollection = ( collection:Collection ) => {
-    const injection = newCollectionInjector(collection)
+  const _newCollection = (collection: Collection) => {
+    const injection = newCollectionInjector(collection);
     store.dispatch(injection);
-  }
+  };
 
   const transitToOrder_Ordering = () => {
     _transit({
@@ -52,7 +52,8 @@ const uplinkOrder: (_: Socket, __: Store) => OrderTrigger = (io, store) => {
       setTimeout(() => {
         io.emit(
           "request-add-order-to-new-stack",
-          { order, stackOptions },getAccessToken(),
+          { order, stackOptions },
+          getAccessToken(),
           (collection: Collection) => {
             const { config, orders } = collection;
             console.log(`request-add-order-to-new-stack `);

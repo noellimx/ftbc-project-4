@@ -7,9 +7,6 @@ import {
   Collection,
 } from "../utils/my-types";
 
-
-
-
 /** Order Sequence */
 enum OrderSequenceCommand {
   UPDATE = "order:sequence:update",
@@ -51,28 +48,19 @@ enum CollectionCommand {
 
 export type CollectionInjection = PayloadAction<Collection>;
 
-
 type NewCollectionInjector = (_: Collection) => CollectionInjection;
 export const newCollectionInjector: NewCollectionInjector = (collection) => ({
   type: CollectionCommand.NEW,
   payload: collection,
 });
 
+type CollectionPipe = (_: Collection, __: CollectionInjection) => Collection;
 
-type CollectionPipe = (
-  _: Collection,
-  __: CollectionInjection
-) => Collection;
-
-
-export const collectionPipe: CollectionPipe = (
-  status = null,
-  injection
-) => {
+export const collectionPipe: CollectionPipe = (status = null, injection) => {
   const { type, payload } = injection;
   if (type === CollectionCommand.NEW) {
-    if(status !== null){
-      throw new Error("The client has loaded an inital collection already.")
+    if (status !== null) {
+      throw new Error("The client has loaded an inital collection already.");
     }
     return payload;
   } else {

@@ -22,12 +22,12 @@ module.exports = {
         primaryKey: true,
         type: DataTypes.INTEGER,
       },
-     
-      name : {
+
+      name: {
         type: DataTypes.STRING,
         allowNull: false,
       },
-      nearby_outlet_id : {
+      nearby_outlet_id: {
         allowNull: false,
 
         type: DataTypes.INTEGER,
@@ -37,7 +37,7 @@ module.exports = {
           },
           key: "id",
         },
-      }
+      },
     });
   },
 
