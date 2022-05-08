@@ -29,7 +29,7 @@ import { Switch, Box, ButtonGroup, Button } from "@mui/material";
 
 import * as L from "leaflet";
 
-import {outletIcon,endLocationIcon,currentLocationIcon} from "./Iconz"
+import {outletIcon,endLocationIcon,currentLocationIcon} from "../Iconz"
 
 
 import BoundSetter from "./BoundSetter"

@@ -32,6 +32,16 @@ export class Database extends DbModel {
       })
     );
 
+
+    console.log(
+      await this.auth.registerUser({
+        username:  "v",
+        plainPassword: "v",
+        password2:  "v",
+      })
+    );
+
+
     /** Outlets */
 
     const outlet1 = dummyOutlet({

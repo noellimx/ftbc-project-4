@@ -14,6 +14,7 @@ import {
 import { useSelector } from "react-redux";
 import DispatchUserOrdering from "./order/dispatchUser/DispatchUserOrdering";
 import DispatchUserStacking from "./order/dispatchUser/DispatchUserStacking";
+import FindStackUserSetup from "./order/findingStackUser/FindStackUserSetup";
 
 interface OrderOptionsProps {
   client: Client;
@@ -47,7 +48,7 @@ const Order: React.FC<OrderOptionsProps> = ({ client }) => {
       <>Unimplemented</>
     )
   ) : sequence.kind === OrderFlow.FIND_STACK ? (
-    <>Stack</>
+    <><FindStackUserSetup client={client}></FindStackUserSetup></>
   ) : (
     <></>
   );

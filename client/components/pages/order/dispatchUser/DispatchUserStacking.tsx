@@ -13,15 +13,12 @@ import Countdown from "react-countdown";
 import {
   MapContainer,
   TileLayer,
-  Popup,
   Marker,
-  useMap,
   Circle,
-  Pane,
 } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 
-import {outletIcon,endLocationIcon,currentLocationIcon} from "./Iconz"
+import {outletIcon,endLocationIcon,currentLocationIcon} from "../Iconz"
 
 import BoundSetter from "./BoundSetter"
 interface ThisComponentProps {
