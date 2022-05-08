@@ -3,27 +3,13 @@
 import * as React from "react";
 
 import _StdButton from "../../../Buttons/_StdButton";
-import DistrictSelector from "./DistrictSelector";
-import StackOptions from "./StackOptions";
-import SelectableMenuedOutlets from "./SelectableMenuedOutlets";
-import MenuSelection from "./MenuSelection";
 
 import "leaflet/dist/leaflet.css";
 
-import haversineOffset from "haversine-offset";
 
 import {
-  DistrictSelectionOnChangeFn,
-  SelectableMenu,
-  SelectableMenuItem,
   Client,
-  Coordinate,
-  MenuedOutlets,
-  MenuedOutlet,
-  Outlet,
-  TheState,
-  Transition_DispatchUserOrder,
-  OrderFlow,
+  TheState,Collection,
 } from "../../../../utils/my-types";
 import { useSelector } from "react-redux";
 
@@ -32,7 +18,9 @@ interface ThisComponentProps {
 }
 
 const ThisComponent: React.FC<ThisComponentProps> = () => {
-  return <>Stacking</>;
+
+  const collection = useSelector<TheState, Collection>(state => state.collection)
+  return collection ? <> {collection.orders && collection.orders.length > 0 ? <>You have some orders in the collection</> : <>Collection found but is empty.</> }</>:<>Yikes. No collection found</> ;
 };
 
 export default ThisComponent;

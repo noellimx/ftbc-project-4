@@ -21,6 +21,7 @@ export interface TheState {
   authenticationStatus: AuthenticationStatus;
   authenticationMessage: string;
   orderSequence: OrderSequence;
+  collection: Collection;
 }
 
 export type ChannelReceive<T> = (data: T) => void;

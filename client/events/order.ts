@@ -8,17 +8,22 @@ import {
   Collection,
 } from "../utils/my-types";
 import { Store } from "@reduxjs/toolkit";
-import { orderStatusInjector } from "../state/order";
+import { orderStatusInjector,newCollectionInjector  } from "../state/order";
 import { Socket } from "socket.io-client";
 
 const uplinkOrder: (_: Socket, __: Store) => OrderTrigger = (io, store) => {
-  const transit = (_: OrderSequence) => {
+  const _transit = (_: OrderSequence) => {
     const injection = orderStatusInjector(_);
     store.dispatch(injection);
   };
 
+  const _newCollection = ( collection:Collection ) => {
+    const injection = newCollectionInjector(collection)
+    store.dispatch(injection);
+  }
+
   const transitToOrder_Ordering = () => {
-    transit({
+    _transit({
       kind: OrderFlow.DISPATCH_USER_ORDER,
       transition: Transition_DispatchUserOrder.ORDERING,
     });
@@ -26,14 +31,14 @@ const uplinkOrder: (_: Socket, __: Store) => OrderTrigger = (io, store) => {
 
   const transitToOrder_Stacking = () => {
     console.log(`[transitToOrder_Stacking]`);
-    transit({
+    _transit({
       kind: OrderFlow.DISPATCH_USER_ORDER,
       transition: Transition_DispatchUserOrder.STACKING,
     });
   };
 
   const transitToStackFinding_ = () => {
-    transit({
+    _transit({
       kind: OrderFlow.FIND_STACK,
       transition: Transition_FindingStack.NOT_IMPLEMENTED,
     });
@@ -46,12 +51,14 @@ const uplinkOrder: (_: Socket, __: Store) => OrderTrigger = (io, store) => {
         io.emit(
           "request-add-order-to-new-stack",
           { order, stackOptions },
-          ({ config, orders }: Collection) => {
+          (collection: Collection) => {
+            const { config, orders } = collection;
             console.log(`request-add-order-to-new-stack `);
             console.log(config);
             console.log(orders);
             const diff = config.stackingTil - new Date().getTime();
             console.log(diff);
+            _newCollection(collection);
             transitToOrder_Stacking();
           }
         );
