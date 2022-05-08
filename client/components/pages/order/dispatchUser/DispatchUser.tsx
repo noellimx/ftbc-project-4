@@ -65,6 +65,7 @@ const resetCurrentLocation: () => Coordinate = () => {
 
 type BinaryOperation = (_: number, __: number) => number;
 
+const resetReadOnly: () => boolean = () => false;
 const DispatchUser: React.FC<DispatchUserProps> = ({ client }) => {
   console.log(`[FC DispatchUser]`);
   const [state, setState] = React.useState(initState());
@@ -94,6 +95,12 @@ const DispatchUser: React.FC<DispatchUserProps> = ({ client }) => {
   const [districtCoordinate, setDistrictCoordinate] =
     React.useState<Coordinate>(null);
 
+  const [isReadOnlyOrder, setIsReadOnlyOrder] = React.useState<boolean>(
+    resetReadOnly()
+  );
+
+  const toggleReadOnlyOrder = () => setIsReadOnlyOrder((prev) => !prev);
+
   React.useEffect(() => {
     console.log(`[effect] selectable menu is dependent on received menu`);
 
@@ -119,8 +126,10 @@ const DispatchUser: React.FC<DispatchUserProps> = ({ client }) => {
         return [lat, lng];
       });
     } else {
+      console.log(`[selectedMenuedOutlet] changed to null`);
       setSelectableMenu(() => resetSltbMenu());
       setCurrentLocation(() => resetCurrentLocation());
+      setIsReadOnlyOrder(() => resetReadOnly());
     }
   }, [selectedMenuedOutlet]);
 
@@ -226,6 +235,8 @@ const DispatchUser: React.FC<DispatchUserProps> = ({ client }) => {
               <>
                 <SelectOutletDescription outlet={selectedMenuedOutlet.outlet} />
                 <MenuSelection
+                  isReadOnlyOrder={isReadOnlyOrder}
+                  toggleReadOnly={toggleReadOnlyOrder}
                   onClickInc={itemQtyIncFn}
                   onClickDec={itemQtyDecFn}
                   selectableMenu={selectableMenu}

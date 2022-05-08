@@ -131,13 +131,7 @@ const StackOptions: React.FC<StackOptionsProps> = ({
       {
         <Switch
           checked={isWindow}
-          onClick={() => {
-            if (isWindow) {
-              onSwitchDown();
-            } else {
-              onSwitchUp();
-            }
-          }}
+          onClick={isWindow ? onSwitchDown : onSwitchUp}
         />
       }{" "}
       {/* Stack Settings */}
