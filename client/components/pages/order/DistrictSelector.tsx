@@ -5,6 +5,7 @@ import { FormControl, InputLabel } from "@mui/material";
 import {
   CoordinateToString,
   DistrictSelectionOnChangeFn,
+  Coordinate,
 } from "../../../utils/my-types";
 
 type Location = {
@@ -18,10 +19,6 @@ interface DistrictLocation extends Location {
 
 type DistrictLocations = DistrictLocation[];
 
-interface DistrictSelectorProps {
-  onChangeFn: DistrictSelectionOnChangeFn;
-}
-
 const dl1 = { lat: 1.29027, lng: 103.851959, alias: "Center of Singapore" };
 const dl2 = {
   lat: 1.3204021738781062,
@@ -34,14 +31,23 @@ const districtLocations = [dl1, dl2];
 const coordinateToString: CoordinateToString = ([lat, lng]) =>
   JSON.stringify([lat, lng]);
 
+interface DistrictSelectorProps {
+  onChangeFn: DistrictSelectionOnChangeFn;
+  value: Coordinate;
+}
+
 const DistrictSelector: React.FC<DistrictSelectorProps> = ({
   onChangeFn = () => {},
+  value,
 }) => {
   return (
     <FormControl>
       <InputLabel id="demo-simple-select-label">Location</InputLabel>
 
-      <Select onChange={onChangeFn} defaultValue={""}>
+      <Select
+        onChange={onChangeFn}
+        value={!!value ? coordinateToString(value) : ""}
+      >
         {districtLocations.map(({ lat, lng, alias }) => {
           const value = coordinateToString([lat, lng]);
           return (

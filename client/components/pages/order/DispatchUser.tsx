@@ -1,5 +1,8 @@
+/// <reference path="../../types/svg.d.ts" />
+
 import * as React from "react";
 
+import _StdButton from "../../Buttons/_StdButton";
 import DistrictSelector from "./DistrictSelector";
 import SelectableMenuedOutlets from "./SelectableMenuedOutlets";
 import MenuSelection from "./MenuSelection";
@@ -53,14 +56,7 @@ import {
   Location,
 } from "../../../utils/my-types";
 
-import {
-  Switch,
-  Box,
-  ButtonGroup,
-  Button,
-  TextField,
-  Container,
-} from "@mui/material";
+import { Switch, Box, ButtonGroup, Button } from "@mui/material";
 
 interface EndLocationProps {
   updateEndLocation: (_: Coordinate) => void;
@@ -156,6 +152,8 @@ interface StackOptionsProps {
   currentLocation: Coordinate;
   outletLocation: Coordinate;
   radiusChange: (_: number) => void;
+  awaiting: boolean;
+  saveOrderAndSubmitStackFn: TrulyImpure;
 }
 
 const StackOptions: React.FC<StackOptionsProps> = ({
@@ -172,15 +170,18 @@ const StackOptions: React.FC<StackOptionsProps> = ({
   currentLocation,
   outletLocation,
   radiusChange = (_) => {},
+  awaiting,
+  saveOrderAndSubmitStackFn,
 }) => {
   console.log(`[FC StackOptions] `);
+  console.log(`[awaiting] ${awaiting}`);
   const isWindow = stackWindow > 0;
 
-  return (
+  return awaiting === true ? (
+    <></>
+  ) : (
     <>
-      {/* <Box sx={{ color: isWindow ? "text.primary" : "black" }}>
-        Stack Options
-      </Box> */}
+      {/* Stack Master Control */}
       {
         <Switch
           checked={isWindow}
@@ -193,6 +194,7 @@ const StackOptions: React.FC<StackOptionsProps> = ({
           }}
         />
       }{" "}
+      {/* Stack Settings */}
       {isWindow ? (
         <>
           <div>
@@ -284,6 +286,12 @@ const StackOptions: React.FC<StackOptionsProps> = ({
                   <div>{stackRadius}</div>
                 </>
               )}
+
+              {/* Stack Submission */}
+              <_StdButton
+                onClickFn={saveOrderAndSubmitStackFn}
+                text={"Save Order and Create Stack"}
+              />
             </>
           )}
         </>
@@ -340,6 +348,11 @@ const DispatchUser: React.FC<DispatchUserProps> = ({ client }) => {
   console.log(`[FC DispatchUser]`);
   const [state, setState] = React.useState(initState());
 
+  const [awaiting, setAwaiting] =
+    React.useState(
+      false
+    ); /** set to true if next state is dependent on server response */
+
   const [selectableMenuedOutlets, setSelectableMenuedOutlets] =
     React.useState<MenuedOutlets>(resetSltbMOs());
   const [selectedMenuedOutlet, setSelectedMenuedOutlet] =
@@ -356,6 +369,9 @@ const DispatchUser: React.FC<DispatchUserProps> = ({ client }) => {
   const [currentLocation, setCurrentLocation] = React.useState<Coordinate>(
     resetCurrentLocation()
   );
+
+  const [districtCoordinate, setDistrictCoordinate] =
+    React.useState<Coordinate>(null);
 
   React.useEffect(() => {
     console.log(`[effect] selectable menu is dependent on received menu`);
@@ -399,10 +415,13 @@ const DispatchUser: React.FC<DispatchUserProps> = ({ client }) => {
 
   const districtOnChangeFn: DistrictSelectionOnChangeFn = (event) => {
     console.log(`[districtOnChangeFn]`);
-    const coordinate = stringToCoordinate(event.target.value);
+    const coordinateString = event.target.value;
+    const coordinate = stringToCoordinate(coordinateString);
     setSelectableMenuedOutlets(() => resetSltbMOs());
     setSelectedMenuedOutlet(() => resetSltMO());
     setStackWindow(() => resetWindow());
+
+    setDistrictCoordinate(() => coordinate);
 
     client.location.whichOutletsWithMenuNearHere(
       coordinate,
@@ -414,6 +433,25 @@ const DispatchUser: React.FC<DispatchUserProps> = ({ client }) => {
 
   const selectedOutletOnChangeFn = (mo: MenuedOutlet) => {
     setSelectedMenuedOutlet(() => mo);
+  };
+
+  const saveOrderAndSubmitStack = () => {
+    const order = selectableMenu?.filter((item) => item.qty > 0);
+
+    const stackOptions = {
+      stackWindow,
+      stackEndLocation,
+      stackRadius,
+    };
+
+    setAwaiting(() => true);
+
+    console.log(
+      `[stubbing send] ${JSON.stringify(order)} ${JSON.stringify(stackOptions)}`
+    );
+    setTimeout(() => {
+      setAwaiting(() => false);
+    }, 1000);
   };
 
   const add: BinaryOperation = (a: number, diff: number) => a + diff;
@@ -443,55 +481,63 @@ const DispatchUser: React.FC<DispatchUserProps> = ({ client }) => {
   const itemQtyDecFn = (qty: number, mi: SelectableMenuItem) => {
     itemQtyChange(qty, mi, minus);
   };
-  console.log(`[FC DispatchUser] before returning`);
+  console.log(`[FC DispatchUser] before returning state: ${state}`);
 
   return (
     <>
       {state === DispatchSequence.STORE ? (
-        <>
-          <DistrictSelector onChangeFn={districtOnChangeFn}></DistrictSelector>
-          {selectedMenuedOutlet === null ? (
-            selectableMenuedOutlets ? (
-              <SelectableMenuedOutlets
-                selectableMenuedOutlets={selectableMenuedOutlets}
-                onClick={selectedOutletOnChangeFn}
-              />
+        !awaiting && (
+          <>
+            <DistrictSelector
+              value={districtCoordinate}
+              onChangeFn={districtOnChangeFn}
+            ></DistrictSelector>
+            {/**  */}
+            {selectedMenuedOutlet === null ? (
+              selectableMenuedOutlets ? (
+                <SelectableMenuedOutlets
+                  selectableMenuedOutlets={selectableMenuedOutlets}
+                  onClick={selectedOutletOnChangeFn}
+                />
+              ) : (
+                <>Choose a district! Neary outlets will be shown. </>
+              )
             ) : (
-              <>Choose a district! Neary outlets will be shown. </>
-            )
-          ) : (
-            <>
-              <SelectOutletDescription outlet={selectedMenuedOutlet.outlet} />
-              <MenuSelection
-                onClickInc={itemQtyIncFn}
-                onClickDec={itemQtyDecFn}
-                selectableMenu={selectableMenu}
-              />
-              <StackOptions
-                stackWindow={stackWindow}
-                stackEndLocation={stackEndLocation}
-                stackRadius={stackRadius}
-                onSwitchUp={() => setStackWindow(() => 1)}
-                onSwitchDown={() => setStackWindow(() => 0)}
-                incWindow={() => setStackWindow((prev) => prev + 1)}
-                decWindow={() => setStackWindow((prev) => prev - 1)}
-                updateEndLocation={(newC) => {
-                  console.log(`new end location ${JSON.stringify(newC)}`);
-                  setEndLocation(() => newC);
-                }}
-                client={client}
-                selectedMenuedOutlet={selectedMenuedOutlet}
-                currentLocation={currentLocation}
-                outletLocation={[
-                  selectedMenuedOutlet.outlet.lat,
-                  selectedMenuedOutlet.outlet.lng,
-                ]}
-                radiusChange={(n) => setStackRadius((_) => n)}
-              ></StackOptions>
-            </>
-          )}
-          <></>
-        </>
+              <>
+                <SelectOutletDescription outlet={selectedMenuedOutlet.outlet} />
+                <MenuSelection
+                  onClickInc={itemQtyIncFn}
+                  onClickDec={itemQtyDecFn}
+                  selectableMenu={selectableMenu}
+                />
+                <StackOptions
+                  stackWindow={stackWindow}
+                  stackEndLocation={stackEndLocation}
+                  stackRadius={stackRadius}
+                  onSwitchUp={() => setStackWindow(() => 1)}
+                  onSwitchDown={() => setStackWindow(() => 0)}
+                  incWindow={() => setStackWindow((prev) => prev + 1)}
+                  decWindow={() => setStackWindow((prev) => prev - 1)}
+                  updateEndLocation={(newC) => {
+                    console.log(`new end location ${JSON.stringify(newC)}`);
+                    setEndLocation(() => newC);
+                  }}
+                  client={client}
+                  selectedMenuedOutlet={selectedMenuedOutlet}
+                  currentLocation={currentLocation}
+                  outletLocation={[
+                    selectedMenuedOutlet.outlet.lat,
+                    selectedMenuedOutlet.outlet.lng,
+                  ]}
+                  radiusChange={(n) => setStackRadius((_) => n)}
+                  awaiting={awaiting}
+                  saveOrderAndSubmitStackFn={saveOrderAndSubmitStack}
+                ></StackOptions>
+              </>
+            )}
+            <></>
+          </>
+        )
       ) : (
         <></>
       )}

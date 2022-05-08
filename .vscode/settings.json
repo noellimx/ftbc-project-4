@@ -3,10 +3,11 @@
     "editor.defaultFormatter": "vscode.typescript-language-features"
   },
   "editor.formatOnSave": false,
-  "editor.formatOnPaste": true,
+  "editor.formatOnPaste": false,
   "editor.minimap.enabled": false,
   "editor.tabSize": 2,
   "editor.wordWrap": "on",
   "typescript.format.enable": false,
-  "html.format.contentUnformatted": ""
+  "html.format.contentUnformatted": "",
+  "typescript.tsdk": "/usr/local/bin/tsc"
 }
