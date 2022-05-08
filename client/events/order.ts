@@ -1,90 +1,67 @@
-// import {
-//   UpLinkSub,
-//   ChannelReceive,
-//   UserPassSubmitFn,
-//   AuthenticationTrigger,
-//   AuthenticationStatus,
-// } from "../utils/my-types";
-// import { getAccessToken, storeAccessToken } from "../operations/authentication";
-// import { authenticationStatusInjector , authenticationMessageInjector} from "../state/authentication";
+import {
+  Transition_DispatchUserOrder,
+  OrderFlow,
+  OrderSequence,
+  SaveOrderAndCreateStackAndAddOrderToStack,
+  OrderTrigger,
+  Transition_FindingStack,
+  Collection,
+} from "../utils/my-types";
+import { Store } from "@reduxjs/toolkit";
+import { orderStatusInjector } from "../state/order";
+import { Socket } from "socket.io-client";
 
-// interface LoginRequestReceive {
-//   accessToken: string;
-//   msg: string;
-// }
+const uplinkOrder: (_: Socket, __: Store) => OrderTrigger = (io, store) => {
+  const transit = (_: OrderSequence) => {
+    const injection = orderStatusInjector(_);
+    store.dispatch(injection);
+  };
 
-// const uplink: UpLinkSub<AuthenticationTrigger> = (io, store) => {
-//   console.log("[uplinkAuthentication] attaching");
+  const transitToOrder_Ordering = () => {
+    transit({
+      kind: OrderFlow.DISPATCH_USER_ORDER,
+      transition: Transition_DispatchUserOrder.ORDERING,
+    });
+  };
 
-//   const isValidToken = (chanRcv: ChannelReceive<boolean>) => {
-//     const token = getAccessToken();
-//     console.log(`[isValidToken] sending token -> ${token}`);
-//     io.emit("is-token-valid", token, (response: boolean) => {
-//       console.log(`[is-token-valid] := ${response}`);
-//       chanRcv(response);
-//     });
-//   };
+  const transitToOrder_Stacking = () => {
+    console.log(`[transitToOrder_Stacking]`);
+    transit({
+      kind: OrderFlow.DISPATCH_USER_ORDER,
+      transition: Transition_DispatchUserOrder.STACKING,
+    });
+  };
 
-//   const updateValidToken = () => {
-//     isValidToken(() => {});
-//   };
+  const transitToStackFinding_ = () => {
+    transit({
+      kind: OrderFlow.FIND_STACK,
+      transition: Transition_FindingStack.NOT_IMPLEMENTED,
+    });
+  };
 
-//   const presentToken = (n = 5) => {
-//     if (n == 0) {
-//       console.error(
-//         "Server not responding regularly to authentication protocol."
-//       );
-//       return;
-//     }
-//     isValidToken((is) => {
-//       if (is === true) {
-//         store.dispatch(authenticationStatusInjector(AuthenticationStatus.TRUE));
-//       } else if (is === false) {
-//         store.dispatch(authenticationStatusInjector(AuthenticationStatus.FALSE));
-//       } else {
-//         setTimeout(
-//           () => {
-//             store.dispatch(
-//               authenticationStatusInjector(AuthenticationStatus.UNCERTAIN)
-//             );
-//             presentToken(n - 1);
-//           },
+  const saveOrderAndCreateStackAndAddOrderToStack: SaveOrderAndCreateStackAndAddOrderToStack =
+    async ({ order, stackOptions }) => {
+      console.log(`client.order.saveOrderAndCreateStackAndAddOrderToStack`);
+      setTimeout(() => {
+        io.emit(
+          "request-add-order-to-new-stack",
+          { order, stackOptions },
+          ({ config, orders }: Collection) => {
+            console.log(`request-add-order-to-new-stack `);
+            console.log(config);
+            console.log(orders);
+            const diff = config.stackingTil - new Date().getTime();
+            console.log(diff);
+            transitToOrder_Stacking();
+          }
+        );
+      }, 1000);
+    };
+  return {
+    transitToOrder_Ordering,
+    transitToStackFinding_,
+    saveOrderAndCreateStackAndAddOrderToStack,
+  };
+};
 
-//           1000
-//         );
-//       }
-//     });
-//   };
-
-//   const login: UserPassSubmitFn = (username, password) => {
-//     io.emit(
-//       "login-request",
-//       { username, password },
-//       (authResponse: LoginRequestReceive) => {
-//         console.log(
-//           `[clientAuth requestLogin] Obtained token ${JSON.stringify(
-//             authResponse
-//           )}`
-//         );
-//         const { accessToken, msg } = authResponse;
-//         const currentToken = storeAccessToken(accessToken);
-//         console.log(`[clientAuth] stored token := ${currentToken}`);
-//          store.dispatch(
-//            authenticationMessageInjector(msg)
-//          );
-
-//         presentToken(1);
-//       }
-//     );
-
-//     return null;
-//   };
-
-//   return {
-//     updateValidToken,
-//     presentToken,
-//     login,
-//   };
-// };
-
-// export default uplinkAuthentication;
+export default uplinkOrder;

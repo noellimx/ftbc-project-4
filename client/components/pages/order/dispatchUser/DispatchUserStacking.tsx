@@ -27,17 +27,12 @@ import {
 } from "../../../../utils/my-types";
 import { useSelector } from "react-redux";
 
-
-
 interface ThisComponentProps {
-  client: Client
+  client: Client;
 }
 
-const ThisComponent:React.FC<ThisComponentProps> = () => {
-
-
-  return <>Stacking</>
-}
-
+const ThisComponent: React.FC<ThisComponentProps> = () => {
+  return <>Stacking</>;
+};
 
 export default ThisComponent;

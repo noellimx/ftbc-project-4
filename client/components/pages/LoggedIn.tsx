@@ -39,7 +39,13 @@ const Order: React.FC<OrderOptionsProps> = ({ client }) => {
       ></_StdButton>
     </Grid>
   ) : sequence.kind === OrderFlow.DISPATCH_USER_ORDER ? (
-    sequence.transition === Transition_DispatchUserOrder.ORDERING ? <DispatchUserOrdering client={client} /> : sequence.transition === Transition_DispatchUserOrder.STACKING ? <DispatchUserStacking client={client} /> : <>Unimplemented</>
+    sequence.transition === Transition_DispatchUserOrder.ORDERING ? (
+      <DispatchUserOrdering client={client} />
+    ) : sequence.transition === Transition_DispatchUserOrder.STACKING ? (
+      <DispatchUserStacking client={client} />
+    ) : (
+      <>Unimplemented</>
+    )
   ) : sequence.kind === OrderFlow.FIND_STACK ? (
     <>Stack</>
   ) : (

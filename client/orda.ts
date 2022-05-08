@@ -1,79 +1,26 @@
 import uplinkGeneral from "./events/general";
 import uplinkAuthentication from "./events/authentication";
-
+import uplinkOrder from "./events/order";
 import {
   Transition_DispatchUserOrder,
   OrderFlow,
   OrderSequence,
   UpLink,
   Coordinate,
-  Outlet,SaveOrderAndCreateStackAndAddOrderToStack,
+  Outlet,
+  SaveOrderAndCreateStackAndAddOrderToStack,
   MenuedOutlets,
-  Menu,OrderTrigger,
+  Menu,
+  OrderTrigger,
   Location,
   Address,
-  Transition_FindingStack,Collection
+  Transition_FindingStack,
+  Collection,
 } from "./utils/my-types";
 import { Store } from "@reduxjs/toolkit";
 import { orderStatusInjector } from "./state/order";
 import { Socket } from "socket.io-client";
 import axios from "axios";
-
-const orderEvents : (_:Socket, __:Store) => OrderTrigger = (io,store) => {
-  const transit = (_: OrderSequence) => {
-    const injection = orderStatusInjector(_);
-    store.dispatch(injection);
-  };
-
-  const transitToOrder_Ordering = () => {
-    transit({
-      kind: OrderFlow.DISPATCH_USER_ORDER,
-      transition: Transition_DispatchUserOrder.ORDERING,
-    });
-  };
-
-
-    const transitToOrder_Stacking = () => {
-
-      console.log(`[transitToOrder_Stacking]`)
-    transit({
-      kind: OrderFlow.DISPATCH_USER_ORDER,
-      transition: Transition_DispatchUserOrder.STACKING,
-    });
-  };
-
-
-
-  const transitToStackFinding_ = () => {
-    transit({
-      kind: OrderFlow.FIND_STACK,
-      transition: Transition_FindingStack.NOT_IMPLEMENTED,
-    });
-  };
-
-
-  const saveOrderAndCreateStackAndAddOrderToStack:SaveOrderAndCreateStackAndAddOrderToStack = async ({order, stackOptions}) => {
-
-    console.log(`client.order.saveOrderAndCreateStackAndAddOrderToStack`)
-    setTimeout(()=>{
-      io.emit("request-add-order-to-new-stack",{order, stackOptions}, ({config, orders}:Collection) => {
-        console.log(`request-add-order-to-new-stack `) 
-        console.log(config)
-        console.log(orders)
-        const diff =config.stackingTil - new Date().getTime() ;
-        console.log(diff)
-        transitToOrder_Stacking()
-      } )
-    },
-    1000
-    )
-
-  }
-  return {
-    transitToOrder_Ordering,
-    transitToStackFinding_,saveOrderAndCreateStackAndAddOrderToStack
-  };
-};
 
 const outletN_001: Outlet = {
   lat: 1.3199679250274892,
@@ -187,7 +134,7 @@ const locationEvents = (io: Socket, store: Store) => {
 const newClient: UpLink = (io, store) => {
   const general = uplinkGeneral(io, store);
   const authentication = uplinkAuthentication(io, store);
-  const order = orderEvents(io,store);
+  const order = uplinkOrder(io, store);
   const location = locationEvents(io, store);
 
   return {

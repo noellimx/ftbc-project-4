@@ -180,7 +180,9 @@ const DispatchUser: React.FC<DispatchUserProps> = ({ client }) => {
   const saveOrderAndCreateStackAndAddOrderToStack = async () => {
     setAwaiting(() => true);
 
-    const order = selectableMenu ? selectableMenu?.filter((item) => item.qty > 0) : [];
+    const order = selectableMenu
+      ? selectableMenu?.filter((item) => item.qty > 0)
+      : [];
 
     const stackOptions = {
       stackWindow,
@@ -188,13 +190,14 @@ const DispatchUser: React.FC<DispatchUserProps> = ({ client }) => {
       stackRadius,
     };
 
-
     console.log(
       `[stubbing send] ${JSON.stringify(order)} ${JSON.stringify(stackOptions)}`
     );
 
-    client.order.saveOrderAndCreateStackAndAddOrderToStack({stackOptions, order})
-
+    client.order.saveOrderAndCreateStackAndAddOrderToStack({
+      stackOptions,
+      order,
+    });
   };
 
   const add: BinaryOperation = (a: number, diff: number) => a + diff;
@@ -275,7 +278,9 @@ const DispatchUser: React.FC<DispatchUserProps> = ({ client }) => {
                   ]}
                   radiusChange={(n) => setStackRadius((_) => n)}
                   awaiting={awaiting}
-                  saveOrderAndCreateStackAndAddOrderToStackFn={saveOrderAndCreateStackAndAddOrderToStack}
+                  saveOrderAndCreateStackAndAddOrderToStackFn={
+                    saveOrderAndCreateStackAndAddOrderToStack
+                  }
                 ></StackOptions>
               </>
             )}
