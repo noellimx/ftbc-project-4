@@ -23,7 +23,7 @@ const App: React.FC<AppProps> = ({ client }) => {
 
   return (
     <>
-      <Grid direction="column" alignItems="center" justifyContent="center">
+      <Grid sx={{flexDirection:"column"}} alignItems="center" justifyContent="center">
         {authenticationStatus === AuthenticationStatus.UNCERTAIN ? (
           <div>Uncertain User</div>
         ) : authenticationStatus === AuthenticationStatus.FALSE ? (

@@ -25,6 +25,8 @@ import {
   Transition_DispatchUserOrder,
   OrderFlow,
 } from "../../../../utils/my-types";
+
+import { Grid } from "@mui/material";
 import { useSelector } from "react-redux";
 
 interface SelectOutletDescriptionProps {
@@ -236,13 +238,12 @@ const DispatchUser: React.FC<DispatchUserProps> = ({ client }) => {
         !awaiting && (
           <>
             <DistrictSelector
-
-            
+          
               value={districtCoordinate}
               onChangeFn={districtOnChangeFn}
             ></DistrictSelector>
             {!districtCoordinate && (
-              <>Choose a district! Neary outlets will be shown. </>
+              <>Choose a district! Nearby outlets will be shown. </>
             )}
             {/**  */}
             {!selectedMenuedOutlet ? (
@@ -252,39 +253,65 @@ const DispatchUser: React.FC<DispatchUserProps> = ({ client }) => {
               />
             ) : (
               <>
-                <SelectOutletDescription outlet={selectedMenuedOutlet.outlet} />
-                <MenuSelection
-                  isReadOnlyOrder={isReadOnlyOrder}
-                  toggleReadOnly={toggleReadOnlyOrder}
-                  onClickInc={itemQtyIncFn}
-                  onClickDec={itemQtyDecFn}
-                  selectableMenu={selectableMenu}
-                />
-                <StackOptions
-                  stackWindow={stackWindow}
-                  stackEndLocation={stackEndLocation}
-                  stackRadius={stackRadius}
-                  onSwitchUp={() => setStackWindow(() => 1)}
-                  onSwitchDown={() => setStackWindow(() => 0)}
-                  incWindow={() => setStackWindow((prev) => prev + 1)}
-                  decWindow={() => setStackWindow((prev) => prev - 1)}
-                  updateEndLocation={(newC) => {
-                    console.log(`new end location ${JSON.stringify(newC)}`);
-                    setEndLocation(() => newC);
+                <Grid
+                  display="flex"
+                  alignItems="center"
+                  
+                  justifyContent="flex-start"
+                  sx={{
+                    flexDirection:"column",
+                    mt: 1,
+                    height: "auto",
                   }}
-                  client={client}
-                  selectedMenuedOutlet={selectedMenuedOutlet}
-                  currentLocation={currentLocation}
-                  outletLocation={[
-                    selectedMenuedOutlet.outlet.lat,
-                    selectedMenuedOutlet.outlet.lng,
-                  ]}
-                  radiusChange={(n) => setStackRadius((_) => n)}
-                  awaiting={awaiting}
-                  saveOrderAndCreateStackAndAddOrderToStackFn={
-                    saveOrderAndCreateStackAndAddOrderToStack
-                  }
-                ></StackOptions>
+                >
+                  <Grid sx={{width: "100%", mt : 1, display: "flex",alignItems:"center",  flexDirection:"column",justifyContent: "center", color: "text.primary"}}>
+
+                  
+                    <Grid display="flex">
+                    <> {selectedMenuedOutlet.outlet.name }</>
+                    </Grid>
+
+                    <Grid display="flex">
+                    <> {selectedMenuedOutlet.outlet.buildingNumber } |  {selectedMenuedOutlet.outlet.streetName } | {selectedMenuedOutlet.outlet.postalCode }</>
+                    </Grid>
+
+                  </Grid>
+                  <MenuSelection
+                    isReadOnlyOrder={isReadOnlyOrder}
+                    toggleReadOnly={toggleReadOnlyOrder}
+                    onClickInc={itemQtyIncFn}
+                    onClickDec={itemQtyDecFn}
+                    selectableMenu={selectableMenu}
+                  />
+                  
+                </Grid>
+
+                <StackOptions
+                    stackWindow={stackWindow}
+                    stackEndLocation={stackEndLocation}
+                    stackRadius={stackRadius}
+                    onSwitchUp={() => setStackWindow(() => 1)}
+                    onSwitchDown={() => setStackWindow(() => 0)}
+                    incWindow={() => setStackWindow((prev) => prev + 1)}
+                    decWindow={() => setStackWindow((prev) => prev - 1)}
+                    updateEndLocation={(newC) => {
+                      console.log(`new end location ${JSON.stringify(newC)}`);
+                      setEndLocation(() => newC);
+                    }}
+                    client={client}
+                    selectedMenuedOutlet={selectedMenuedOutlet}
+                    currentLocation={currentLocation}
+                    outletLocation={[
+                      selectedMenuedOutlet.outlet.lat,
+                      selectedMenuedOutlet.outlet.lng,
+                    ]}
+                    radiusChange={(n) => setStackRadius((_) => n)}
+                    awaiting={awaiting}
+                    saveOrderAndCreateStackAndAddOrderToStackFn={
+                      saveOrderAndCreateStackAndAddOrderToStack
+                    }
+                  ></StackOptions>
+
               </>
             )}
             <></>

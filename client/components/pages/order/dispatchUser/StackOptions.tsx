@@ -16,7 +16,7 @@ import {
 } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 
-import { Slider } from "@mui/material";
+import { Grid, Slider } from "@mui/material";
 
 import {
   TrulyImpure,
@@ -78,14 +78,17 @@ const StackOptions: React.FC<StackOptionsProps> = ({
     <>
       {/* Stack Master Control */}
       {
-        <Switch
+        <Grid sx={{display:"flex",justifyContent:"center", alignItems:"center", textAlign:"center", width:"90%"}}>
+        <Grid>New Stack</Grid>
+        <Grid><Switch
           checked={isWindow}
           onClick={isWindow ? onSwitchDown : onSwitchUp}
-        />
+        /></Grid>
+        </Grid>
       }{" "}
       {/* Stack Settings */}
       {isWindow ? (
-        <>
+        <Grid>
           <div>
             <ButtonGroup>
               <Button
@@ -183,7 +186,7 @@ const StackOptions: React.FC<StackOptionsProps> = ({
               />
             </>
           )}
-        </>
+        </Grid>
       ) : (
         <></>
       )}

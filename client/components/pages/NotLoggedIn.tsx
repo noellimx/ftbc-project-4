@@ -1,18 +1,30 @@
 /// <reference path="../../components/types/png.d.ts" />
 
-
 import * as React from "react";
 
 import { TextField } from "@mui/material";
 import Grid from "@mui/material/Grid";
-import Box from "@mui/material/Box"
+import Box from "@mui/material/Box";
 import _StdButton from "../Buttons/_StdButton";
 import { Client, TheState } from "../../utils/my-types";
 import { useSelector } from "react-redux";
 
-
 import logoPng from "../../static/logo.png";
 
+export const LogoBox = () => (
+  <Box
+    display="flex"
+    alignItems="center"
+    justifyContent="center"
+    component="img"
+    sx={{
+      height: "auto",
+      width: 0.5,
+    }}
+    alt="The house from the offer."
+    src={logoPng}
+  />
+);
 
 interface NotLoggedInProps {
   client: Client;
@@ -27,30 +39,17 @@ const NotLoggedIn: React.FC<NotLoggedInProps> = ({ client }) => {
   );
   return (
     <>
-
-
-
-
       <Grid
-        direction="column"
         display="flex"
         alignItems="center"
         justifyContent="center"
         sx={{
           height: "100vh",
-    
+        flexDirection:"column"
+
         }}
       >
-        <Box display="flex" alignItems="center" justifyContent="center"
-        component="img"
-        sx={{
-          height: "auto",
-          width:  0.5,
-    
-        }}
-        alt="The house from the offer."
-        src={logoPng}
-      />
+        <LogoBox />
 
         <Grid>
           <Grid display="flex" alignItems="center" justifyContent="center">
@@ -71,8 +70,6 @@ const NotLoggedIn: React.FC<NotLoggedInProps> = ({ client }) => {
             display="flex"
             alignItems="center"
             justifyContent="center"
-
-            
           >
             <TextField
               label="password"
@@ -88,9 +85,14 @@ const NotLoggedIn: React.FC<NotLoggedInProps> = ({ client }) => {
             />
           </Grid>
 
-          <Grid sx={{
-              mt: 2
-            }} display="flex" alignItems="center" justifyContent="center">
+          <Grid
+            sx={{
+              mt: 2,
+            }}
+            display="flex"
+            alignItems="center"
+            justifyContent="center"
+          >
             <_StdButton
               text={"Login"}
               onClickFn={() => {

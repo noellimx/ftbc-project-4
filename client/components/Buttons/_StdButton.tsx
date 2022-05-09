@@ -8,13 +8,12 @@ interface StdButtonProps {
   onClickFn: TrulyImpure;
   text: string;
 
-  sx? :any;
+  sx?: any;
 }
 const _StdButton: React.FC<StdButtonProps> = ({
   text,
   onClickFn = () => {},
-  sx
-
+  sx,
 }) => {
   return (
     <Button sx={sx} variant="outlined" disableElevation onClick={onClickFn}>

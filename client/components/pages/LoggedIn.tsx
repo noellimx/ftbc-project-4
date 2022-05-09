@@ -16,6 +16,8 @@ import DispatchUserOrdering from "./order/dispatchUser/DispatchUserOrdering";
 import DispatchUserStacking from "./order/dispatchUser/DispatchUserStacking";
 import FindStackUserSetup from "./order/findingStackUser/FindStackUserSetup";
 
+import { LogoBox } from "./NotLoggedIn";
+
 interface OrderOptionsProps {
   client: Client;
 }
@@ -25,26 +27,30 @@ const Order: React.FC<OrderOptionsProps> = ({ client }) => {
     (state: TheState) => state.orderSequence
   );
   return sequence.kind === OrderFlow.NIL ? (
-    <Grid direction="column"
-    display="flex"
-    alignItems="center"
-    justifyContent="center"
-    sx={{
-      height: "100vh",
-
-    } }>
+    <Grid
+     
+      display="flex"
+      alignItems="center"
+      justifyContent="center"
+      sx={{
+        flexDirection:"column",
+        height: "100vh",
+      }}
+    >
+      <LogoBox />
       <_StdButton
+        sx={{
+          mt: 4,
+        }}
         text={"Order"}
         onClickFn={() => {
           client.order.transitToOrder_Ordering();
         }}
       ></_StdButton>
       <_StdButton
-      sx={{
-        mt: 1,
-  
-      } }
-
+        sx={{
+          mt: 1,
+        }}
         text={"Find Stack"}
         onClickFn={() => {
           client.order.transitToStackFinding_();
