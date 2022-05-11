@@ -5,7 +5,7 @@ import { Database } from "../../database/index.js";
 import { invokeDeferredCallback } from "../../app/scheduler.js";
 import { verifyToken } from "../../auth/crypt.js";
 
-const deflateMinsToSeconds = (min) => min * 4;
+const deflateMinsToSeconds = (min) => min * 80;
 /**
  * @param {any} io ss
  * @param {Database} db

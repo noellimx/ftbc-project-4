@@ -78,19 +78,50 @@ const StackOptions: React.FC<StackOptionsProps> = ({
     <>
       {/* Stack Master Control */}
       {
-        <Grid sx={{display:"flex",justifyContent:"center", alignItems:"center", textAlign:"center", width:"90%"}}>
-        <Grid>New Stack</Grid>
-        <Grid><Switch
-          checked={isWindow}
-          onClick={isWindow ? onSwitchDown : onSwitchUp}
-        /></Grid>
+        <Grid
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            textAlign: "center",
+            width: "90%",
+          }}
+        >
+          <Grid>New Stack</Grid>
+          <Grid>
+            <Switch
+              checked={isWindow}
+              onClick={isWindow ? onSwitchDown : onSwitchUp}
+            />
+          </Grid>
         </Grid>
       }{" "}
       {/* Stack Settings */}
       {isWindow ? (
-        <Grid>
-          <div>
-            <ButtonGroup>
+        <Grid
+          sx={{
+            flexDirection: "column",
+            alignSelf: "center",
+            justifySelf: "center",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            textAlign: "center",
+            width: "90%",
+          }}
+        >
+          <Grid
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              flexDirection: "column",
+              alignItems: "center",
+              textAlign: "center",
+              width: "90%",
+            }}
+          >
+            How long should the stack remain open (in minutes)?
+            <ButtonGroup sx={{ mt: 1 }}>
               <Button
                 onClick={() => {
                   decWindow();
@@ -108,8 +139,7 @@ const StackOptions: React.FC<StackOptionsProps> = ({
                 +
               </Button>
             </ButtonGroup>{" "}
-            mins
-          </div>
+          </Grid>
           <EndLocation
             client={client}
             updateEndLocation={updateEndLocation}

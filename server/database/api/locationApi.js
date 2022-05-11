@@ -107,9 +107,8 @@ const newDbLocationApi = (Outlet, District, Collection, Sequelize) => {
     });
     console.table(nbs);
     console.table(nbs.length);
-    console.log(nbss_.length);
 
-    const candOut = nbss_.map((c) => {
+    const candOut = nbs.map((c) => {
       const {
         outletName,
         stackEndLocation,

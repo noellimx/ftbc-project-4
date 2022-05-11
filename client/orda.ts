@@ -18,7 +18,7 @@ import axios from "axios";
 
 const outlet_001: Outlet = {
   lat: 1.3198983747743869,
-  lng:  103.8440153554115,
+  lng: 103.8440153554115,
   postalCode: "307683",
   streetName: "Thomson Road",
   buildingNumber: 238,
@@ -33,8 +33,6 @@ const menuOfOutlet_001: Menu = [
   { description: "Cheese Balls", price: 2.2 },
 ];
 
-
-
 const outlet_002: Outlet = {
   lat: 1.3177859704941652,
   lng: 103.84346936993025,
@@ -45,12 +43,12 @@ const outlet_002: Outlet = {
 };
 
 const menuOfOutlet_002: Menu = [
-  { description: "Chicken Thigh", price:4 },
+  { description: "Chicken Thigh", price: 4 },
   { description: "Chicken Breast", price: 5 },
   { description: "Ginger Rice", price: 3 },
   { description: "Soup", price: 2.2 },
-  { description: "Roast Set", price: 7},
-  { description: "Steam Set", price: 7},
+  { description: "Roast Set", price: 7 },
+  { description: "Steam Set", price: 7 },
 ];
 
 const outlet_003: Outlet = {
@@ -70,7 +68,6 @@ const menuOfOutlet_003: Menu = [
   { description: "Yam", price: 1.7 },
   { description: "Niangao", price: 1 },
 ];
-
 
 const outlet_004: Outlet = {
   lat: 1.3325614730158255,

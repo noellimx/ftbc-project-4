@@ -16,11 +16,12 @@ import "leaflet/dist/leaflet.css";
 import { outletIcon, endLocationIcon, currentLocationIcon } from "../Iconz";
 
 import BoundSetter from "./BoundSetter";
-interface ThisComponentProps {
+import { Grid } from "@mui/material";
+interface CollectionStackProps {
   client: Client;
 }
 
-const ThisComponent: React.FC<ThisComponentProps> = () => {
+const StackProps: React.FC<CollectionStackProps> = () => {
   const collection = useSelector<TheState, Collection>(
     (state) => state.collection
   );
@@ -87,10 +88,17 @@ const ThisComponent: React.FC<ThisComponentProps> = () => {
 
             {collection.orders.map((order) => {
               return (
-                <>
-                  {order.username}| {order.isCollected} | {order.order} |{" "}
-                  {order.dropOffPoint}
-                </>
+                <Grid
+                  key={`${order.username}| {order.isCollected} | {order.order}`}
+                >
+                  <>
+                    <Grid>
+                      {`${order.username}| ${order.isCollected} | ${order.order}`}
+                    </Grid>
+
+                    <Grid>{order.dropOffPoint}</Grid>
+                  </>
+                </Grid>
               );
             })}
           </>
@@ -104,4 +112,4 @@ const ThisComponent: React.FC<ThisComponentProps> = () => {
   );
 };
 
-export default ThisComponent;
+export default StackProps;

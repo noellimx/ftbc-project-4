@@ -32,7 +32,7 @@ const DistrictSelector: React.FC<DistrictSelectorProps> = ({
   return (
     <>
       <Box
-      sx={{mt: "30%"}}
+        sx={{ mt: "30%" }}
         display={"flex"}
         alignItems="center"
         justifyContent="center"

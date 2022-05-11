@@ -238,7 +238,6 @@ const DispatchUser: React.FC<DispatchUserProps> = ({ client }) => {
         !awaiting && (
           <>
             <DistrictSelector
-          
               value={districtCoordinate}
               onChangeFn={districtOnChangeFn}
             ></DistrictSelector>
@@ -256,25 +255,36 @@ const DispatchUser: React.FC<DispatchUserProps> = ({ client }) => {
                 <Grid
                   display="flex"
                   alignItems="center"
-                  
                   justifyContent="flex-start"
                   sx={{
-                    flexDirection:"column",
+                    flexDirection: "column",
                     mt: 1,
                     height: "auto",
                   }}
                 >
-                  <Grid sx={{width: "100%", mt : 1, display: "flex",alignItems:"center",  flexDirection:"column",justifyContent: "center", color: "text.primary"}}>
-
-                  
+                  <Grid
+                    sx={{
+                      width: "100%",
+                      mt: 1,
+                      display: "flex",
+                      alignItems: "center",
+                      flexDirection: "column",
+                      justifyContent: "center",
+                      color: "text.primary",
+                    }}
+                  >
                     <Grid display="flex">
-                    <> {selectedMenuedOutlet.outlet.name }</>
+                      <> {selectedMenuedOutlet.outlet.name}</>
                     </Grid>
 
                     <Grid display="flex">
-                    <> {selectedMenuedOutlet.outlet.buildingNumber } |  {selectedMenuedOutlet.outlet.streetName } | {selectedMenuedOutlet.outlet.postalCode }</>
+                      <>
+                        {" "}
+                        {selectedMenuedOutlet.outlet.buildingNumber} |{" "}
+                        {selectedMenuedOutlet.outlet.streetName} |{" "}
+                        {selectedMenuedOutlet.outlet.postalCode}
+                      </>
                     </Grid>
-
                   </Grid>
                   <MenuSelection
                     isReadOnlyOrder={isReadOnlyOrder}
@@ -283,10 +293,19 @@ const DispatchUser: React.FC<DispatchUserProps> = ({ client }) => {
                     onClickDec={itemQtyDecFn}
                     selectableMenu={selectableMenu}
                   />
-                  
                 </Grid>
 
-                <StackOptions
+                <Grid
+                  display="flex"
+                  alignItems="center"
+                  justifyContent="flex-start"
+                  sx={{
+                    flexDirection: "column",
+                    mt: 1,
+                    height: "auto",
+                  }}
+                >
+                  <StackOptions
                     stackWindow={stackWindow}
                     stackEndLocation={stackEndLocation}
                     stackRadius={stackRadius}
@@ -311,7 +330,7 @@ const DispatchUser: React.FC<DispatchUserProps> = ({ client }) => {
                       saveOrderAndCreateStackAndAddOrderToStack
                     }
                   ></StackOptions>
-
+                </Grid>
               </>
             )}
             <></>

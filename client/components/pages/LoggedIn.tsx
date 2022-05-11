@@ -28,12 +28,11 @@ const Order: React.FC<OrderOptionsProps> = ({ client }) => {
   );
   return sequence.kind === OrderFlow.NIL ? (
     <Grid
-     
       display="flex"
       alignItems="center"
       justifyContent="center"
       sx={{
-        flexDirection:"column",
+        flexDirection: "column",
         height: "100vh",
       }}
     >

@@ -45,8 +45,7 @@ const NotLoggedIn: React.FC<NotLoggedInProps> = ({ client }) => {
         justifyContent="center"
         sx={{
           height: "100vh",
-        flexDirection:"column"
-
+          flexDirection: "column",
         }}
       >
         <LogoBox />

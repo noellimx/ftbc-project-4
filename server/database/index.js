@@ -22,8 +22,8 @@ export class Database extends DbModel {
     console.log();
     console.log();
     /** Users */
-    const username = "u";
-    const password = "u";
+    const username = "dave";
+    const password = "1";
     console.log(
       await this.auth.registerUser({
         username,
@@ -34,9 +34,9 @@ export class Database extends DbModel {
 
     console.log(
       await this.auth.registerUser({
-        username: "v",
-        plainPassword: "v",
-        password2: "v",
+        username: "sally",
+        plainPassword: "1",
+        password2: "1",
       })
     );
 
