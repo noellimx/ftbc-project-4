@@ -37,3 +37,34 @@ y 146924.54
     const pivotCoordinate2 =  [1.3533394648595565, 103.83463824076635]
 
 {"Y":150667.07065930215,"X":11558819.055665882}
+
+
+
+
+
+
+https://lucid.app/lucidchart/71168ced-34b0-4a48-87f0-1e3e77e8b6be/edit?invitationId=inv_ec5cf113-40a3-447b-b200-c752bf69b7b2
+
+### Network / Controller
+
+`npm run server-dev` run and watch server.
+
+### Client
+
+`npm run client-dev-build` build and watch client.
+
+Features/Principles retained:
+
+- Mapping of last known user of socketio session.
+- Three Way Event: notify-request-serve secured route flow. server will not send intended data on first emit. Server will only signal to client there is fresh data, and client will have to present its token for the said data to be served.
+
+Recurring Requirements:
+
+[ ] If an invalid (revoked/ expired/ out-of-scope etc) token is presented, the server should notify the sender as such.
+[ ] if a valid token is presented,
+
+`createdb p4` create db
+
+to read
+
+[ ] https://github.com/facebook/react/issues/14476#issuecomment-471199055
