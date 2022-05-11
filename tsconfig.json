@@ -8,5 +8,9 @@
     "allowJs": true,
     "moduleResolution": "node",
     "forceConsistentCasingInFileNames": true
-  }
+  },
+  "include": [
+    "client/components/types/svg.d.ts",
+    "client/components/types/haversine-offset.d.ts"
+  ]
 }

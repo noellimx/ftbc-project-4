@@ -1,90 +1,80 @@
-// import {
-//   UpLinkSub,
-//   ChannelReceive,
-//   UserPassSubmitFn,
-//   AuthenticationTrigger,
-//   AuthenticationStatus,
-// } from "../utils/my-types";
-// import { getAccessToken, storeAccessToken } from "../operations/authentication";
-// import { authenticationStatusInjector , authenticationMessageInjector} from "../state/authentication";
+import {
+  Transition_DispatchUserOrder,
+  OrderFlow,
+  OrderSequence,
+  SaveOrderAndCreateStackAndAddOrderToStack,
+  OrderTrigger,
+  Transition_FindingStack,
+  Collection,
+} from "../utils/my-types";
 
-// interface LoginRequestReceive {
-//   accessToken: string;
-//   msg: string;
-// }
+import { getAccessToken } from "../operations/authentication";
+import { Store } from "@reduxjs/toolkit";
+import { orderStatusInjector, newCollectionInjector } from "../state/order";
+import { Socket } from "socket.io-client";
 
-// const uplink: UpLinkSub<AuthenticationTrigger> = (io, store) => {
-//   console.log("[uplinkAuthentication] attaching");
+const uplinkOrder: (_: Socket, __: Store) => OrderTrigger = (io, store) => {
+  io.on("times-up", () => {
+    console.log("TIMES UP, TIME TO SEND COLLECTION");
+  });
+  const _transit = (_: OrderSequence) => {
+    const injection = orderStatusInjector(_);
+    store.dispatch(injection);
+  };
 
-//   const isValidToken = (chanRcv: ChannelReceive<boolean>) => {
-//     const token = getAccessToken();
-//     console.log(`[isValidToken] sending token -> ${token}`);
-//     io.emit("is-token-valid", token, (response: boolean) => {
-//       console.log(`[is-token-valid] := ${response}`);
-//       chanRcv(response);
-//     });
-//   };
+  const _newCollection = (collection: Collection) => {
+    const injection = newCollectionInjector(collection);
+    store.dispatch(injection);
+  };
 
-//   const updateValidToken = () => {
-//     isValidToken(() => {});
-//   };
+  const transitToOrder_Ordering = () => {
+    _transit({
+      kind: OrderFlow.DISPATCH_USER_ORDER,
+      transition: Transition_DispatchUserOrder.ORDERING,
+    });
+  };
 
-//   const presentToken = (n = 5) => {
-//     if (n == 0) {
-//       console.error(
-//         "Server not responding regularly to authentication protocol."
-//       );
-//       return;
-//     }
-//     isValidToken((is) => {
-//       if (is === true) {
-//         store.dispatch(authenticationStatusInjector(AuthenticationStatus.TRUE));
-//       } else if (is === false) {
-//         store.dispatch(authenticationStatusInjector(AuthenticationStatus.FALSE));
-//       } else {
-//         setTimeout(
-//           () => {
-//             store.dispatch(
-//               authenticationStatusInjector(AuthenticationStatus.UNCERTAIN)
-//             );
-//             presentToken(n - 1);
-//           },
+  const transitToOrder_Stacking = () => {
+    console.log(`[transitToOrder_Stacking]`);
+    _transit({
+      kind: OrderFlow.DISPATCH_USER_ORDER,
+      transition: Transition_DispatchUserOrder.STACKING,
+    });
+  };
 
-//           1000
-//         );
-//       }
-//     });
-//   };
+  const transitToStackFinding_ = () => {
+    _transit({
+      kind: OrderFlow.FIND_STACK,
+      transition: Transition_FindingStack.NOT_IMPLEMENTED,
+    });
+  };
 
-//   const login: UserPassSubmitFn = (username, password) => {
-//     io.emit(
-//       "login-request",
-//       { username, password },
-//       (authResponse: LoginRequestReceive) => {
-//         console.log(
-//           `[clientAuth requestLogin] Obtained token ${JSON.stringify(
-//             authResponse
-//           )}`
-//         );
-//         const { accessToken, msg } = authResponse;
-//         const currentToken = storeAccessToken(accessToken);
-//         console.log(`[clientAuth] stored token := ${currentToken}`);
-//          store.dispatch(
-//            authenticationMessageInjector(msg)
-//          );
+  const saveOrderAndCreateStackAndAddOrderToStack: SaveOrderAndCreateStackAndAddOrderToStack =
+    async ({ order, stackOptions }) => {
+      console.log(`client.order.saveOrderAndCreateStackAndAddOrderToStack`);
+      setTimeout(() => {
+        io.emit(
+          "request-add-order-to-new-stack",
+          { order, stackOptions },
+          getAccessToken(),
+          (collection: Collection) => {
+            const { config, orders } = collection;
+            console.log(`request-add-order-to-new-stack `);
+            console.log(config);
+            console.log(orders);
+            const diff = config.stackingTil - new Date().getTime();
+            console.log(diff);
+            _newCollection(collection);
+            transitToOrder_Stacking();
+          }
+        );
+      }, 1000);
+    };
+  return {
+    transitToOrder_Ordering,
+    transitToStackFinding_,
+    saveOrderAndCreateStackAndAddOrderToStack,
+  };
+};
 
-//         presentToken(1);
-//       }
-//     );
-
-//     return null;
-//   };
-
-//   return {
-//     updateValidToken,
-//     presentToken,
-//     login,
-//   };
-// };
-
-// export default uplinkAuthentication;
+export default uplinkOrder;

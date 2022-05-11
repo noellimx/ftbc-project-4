@@ -3,12 +3,13 @@ import {
   authenticationStatusPipe,
   authenticationMessagePipe,
 } from "./authentication";
-import { orderSequencePipe } from "./order";
+import { collectionPipe, orderSequencePipe } from "./order";
 const pipeSink = {
   ping: pingPipe,
   authenticationStatus: authenticationStatusPipe,
   authenticationMessage: authenticationMessagePipe,
   orderSequence: orderSequencePipe,
+  collection: collectionPipe,
 };
 
 export default pipeSink;

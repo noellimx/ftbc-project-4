@@ -3,7 +3,7 @@
 import { configureStore, Store } from "@reduxjs/toolkit";
 
 import io from "./connection/connection";
-import newClient from "./events";
+import newClient from "./orda";
 import pipeSink from "./state/pipe-sink";
 
 /** Imports [UI] */
@@ -25,6 +25,8 @@ import { TheState } from "./utils/my-types";
  */
 
 // State Uplink To Server
+
+// TODO: Complete type definition
 const store: Store<TheState> = configureStore({
   reducer: pipeSink,
   preloadedState: { ping: 0 },

@@ -7,4 +7,5 @@
 
 npm run db:drop
 npm run db:create
+psql -d p4 -f ./dev.sql
 npm run db:migrate

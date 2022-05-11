@@ -1,1 +1,4 @@
-DROP DATABASE IF EXISTS react_development;
+
+
+
+CREATE EXTENSION postgis;
